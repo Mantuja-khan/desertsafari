@@ -448,16 +448,17 @@ function Index() {
                     }`}
                 >
                   {item}
-                  {(item === "Desert Safari" || item === "City Tours") && (
+                  {/* Dropdowns temporarily hidden per request */}
+                  {/* {(item === "Desert Safari" || item === "City Tours") && (
                     <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180 text-[#E4B564]" />
-                  )}
+                  )} */}
                   {activeTab === item && (
                     <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#E4B564]" />
                   )}
                 </a>
 
-                {/* Desert Safari Hover Dropdown */}
-                {item === "Desert Safari" && (
+                {/* Desert Safari Hover Dropdown (Temporarily Disabled) */}
+                {false && item === "Desert Safari" && (
                   <div className="absolute top-full left-0 pt-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[250px] before:content-[''] before:absolute before:-top-6 before:left-0 before:w-full before:h-6">
                     <div className="bg-[#051E1A] border-2 border-[#E4B564]/70 rounded-lg shadow-[0_15px_35px_rgba(0,0,0,0.95)] py-2 overflow-hidden opacity-100 bg-opacity-100">
                       {desertSafariSubmenu.map((sub, i) => (
@@ -473,8 +474,8 @@ function Index() {
                   </div>
                 )}
 
-                {/* City Tours Hover Dropdown */}
-                {item === "City Tours" && (
+                {/* City Tours Hover Dropdown (Temporarily Disabled) */}
+                {false && item === "City Tours" && (
                   <div className="absolute top-full left-0 pt-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[220px] before:content-[''] before:absolute before:-top-6 before:left-0 before:w-full before:h-6">
                     <div className="bg-[#051E1A] border-2 border-[#E4B564]/70 rounded-lg shadow-[0_15px_35px_rgba(0,0,0,0.95)] py-2 overflow-hidden opacity-100 bg-opacity-100">
                       {cityToursSubmenu.map((sub, i) => (
