@@ -458,13 +458,13 @@ function Index() {
 
                 {/* Desert Safari Hover Dropdown */}
                 {item === "Desert Safari" && (
-                  <div className="absolute top-[85%] left-0 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[240px]">
-                    <div className="bg-[#051E1A] border border-[#E4B564]/40 rounded-lg shadow-2xl py-2 overflow-hidden opacity-100">
+                  <div className="absolute top-full left-0 pt-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[250px] before:content-[''] before:absolute before:-top-6 before:left-0 before:w-full before:h-6">
+                    <div className="bg-[#051E1A] border-2 border-[#E4B564]/70 rounded-lg shadow-[0_15px_35px_rgba(0,0,0,0.95)] py-2 overflow-hidden opacity-100 bg-opacity-100">
                       {desertSafariSubmenu.map((sub, i) => (
                         <a
                           key={i}
                           href="#packages"
-                          className="block px-4 py-2.5 text-xs font-semibold text-white hover:text-[#E4B564] hover:bg-[#0D3B33] transition-colors border-b border-[#E4B564]/10 last:border-b-0 font-sans"
+                          className="block px-4 py-2.5 text-xs font-semibold text-white hover:text-[#E4B564] hover:bg-[#0D3B33] transition-colors border-b border-[#E4B564]/15 last:border-b-0 font-sans"
                         >
                           {sub}
                         </a>
@@ -475,13 +475,13 @@ function Index() {
 
                 {/* City Tours Hover Dropdown */}
                 {item === "City Tours" && (
-                  <div className="absolute top-[85%] left-0 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[210px]">
-                    <div className="bg-[#051E1A] border border-[#E4B564]/40 rounded-lg shadow-2xl py-2 overflow-hidden opacity-100">
+                  <div className="absolute top-full left-0 pt-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[220px] before:content-[''] before:absolute before:-top-6 before:left-0 before:w-full before:h-6">
+                    <div className="bg-[#051E1A] border-2 border-[#E4B564]/70 rounded-lg shadow-[0_15px_35px_rgba(0,0,0,0.95)] py-2 overflow-hidden opacity-100 bg-opacity-100">
                       {cityToursSubmenu.map((sub, i) => (
                         <a
                           key={i}
                           href="#attractions"
-                          className="block px-4 py-2.5 text-xs font-semibold text-white hover:text-[#E4B564] hover:bg-[#0D3B33] transition-colors border-b border-[#E4B564]/10 last:border-b-0 font-sans"
+                          className="block px-4 py-2.5 text-xs font-semibold text-white hover:text-[#E4B564] hover:bg-[#0D3B33] transition-colors border-b border-[#E4B564]/15 last:border-b-0 font-sans"
                         >
                           {sub}
                         </a>
