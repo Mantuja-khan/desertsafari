@@ -17,7 +17,8 @@ import {
   Navigation,
   CheckCircle2,
 } from "lucide-react";
-import { BlogHeader } from "../../components/BlogHeader";
+import { SiteHeader } from "../../components/SiteHeader";
+import { SiteFooter } from "../../components/SiteFooter";
 import { TextReveal } from "../../components/TextReveal";
 
 export const Route = createFileRoute("/contact/")({
@@ -82,7 +83,7 @@ function ContactPage() {
   return (
     <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white">
       {/* Actual Website Navbar */}
-      <BlogHeader activeNav="Contact" />
+      <SiteHeader activeNav="Contact" />
 
       {/* =========================================================
           HERO BANNER MATCHING IMAGE
@@ -107,17 +108,13 @@ function ContactPage() {
           </span>
 
           {/* Heading with Word-by-Word Text Reveal */}
-          <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight mb-4 drop-shadow-md">
-            <span className="reveal-word font-bold text-white" style={{ animationDelay: "0.2s" }}>
-              Contact{" "}
-            </span>
-            <span
-              className="reveal-word font-bold text-[#F3C472]"
-              style={{ animationDelay: "0.4s" }}
-            >
-              Us
-            </span>
-          </h1>
+          <TextReveal
+            text="Contact Us"
+            as="h1"
+            className="font-serif text-5xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight mb-4 drop-shadow-md"
+            delay={0.1}
+            stagger={0.08}
+          />
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base md:text-lg text-white/90 max-w-2xl leading-relaxed font-sans drop-shadow-sm animate-fade-in-up delay-200">
@@ -475,39 +472,8 @@ function ContactPage() {
         </div>
       </section>
 
-      {/* =========================================================
-          FOOTER MATCHING HOMEPAGE
-      ========================================================= */}
-      <footer className="bg-[#0D3B33] text-white border-t border-[#C68A36]/30">
-        <div className="max-w-[1360px] mx-auto px-4 sm:px-8 py-12 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-white/70">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#E4B564] flex items-center justify-center text-[#0D3B33] font-serif font-bold text-lg">
-              D
-            </div>
-            <span className="font-serif text-lg text-white font-bold tracking-wider">
-              DESERT JOURNEY DXB
-            </span>
-          </div>
-          <div>© 2026 Desert Journey DXB. All rights reserved.</div>
-          <div className="flex items-center gap-6">
-            <Link to="/" className="hover:text-[#E4B564] transition-colors">
-              Home
-            </Link>
-            <Link to="/#packages" className="hover:text-[#E4B564] transition-colors">
-              Packages
-            </Link>
-            <Link to="/blog" className="hover:text-[#E4B564] transition-colors">
-              Blogs
-            </Link>
-            <Link
-              to="/contact"
-              className="hover:text-[#E4B564] transition-colors text-[#E4B564] font-semibold"
-            >
-              Contact
-            </Link>
-          </div>
-        </div>
-      </footer>
+      {/* Same Website Footer */}
+      <SiteFooter />
     </div>
   );
 }

@@ -10,7 +10,8 @@ import {
   Linkedin,
   MessageCircle,
 } from "lucide-react";
-import { BlogHeader } from "../../components/BlogHeader";
+import { SiteHeader } from "../../components/SiteHeader";
+import { SiteFooter } from "../../components/SiteFooter";
 import { BlogSidebar } from "../../components/BlogSidebar";
 import { RelatedBlogsCarousel } from "../../components/RelatedBlogsCarousel";
 import { TextReveal } from "../../components/TextReveal";
@@ -45,7 +46,7 @@ function BlogPostDetailPage() {
   return (
     <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white">
       {/* Blog Navigation Header (matching actual website navbar) */}
-      <BlogHeader activeNav="Blogs" />
+      <SiteHeader activeNav="Blogs" />
 
       {/* =========================================================
           HERO BANNER WITH BREADCRUMB, TITLE, META & DESERT SUNSET BG
@@ -285,39 +286,8 @@ function BlogPostDetailPage() {
         </div>
       </main>
 
-      {/* =========================================================
-          FOOTER MATCHING HOMEPAGE
-      ========================================================= */}
-      <footer className="bg-[#0D3B33] text-white border-t border-[#C68A36]/30 mt-16">
-        <div className="max-w-[1360px] mx-auto px-4 sm:px-8 py-12 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-white/70">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#E4B564] flex items-center justify-center text-[#0D3B33] font-serif font-bold text-lg">
-              D
-            </div>
-            <span className="font-serif text-lg text-white font-bold tracking-wider">
-              DESERT JOURNEY DXB
-            </span>
-          </div>
-          <div>© 2026 Desert Journey DXB. All rights reserved.</div>
-          <div className="flex items-center gap-6">
-            <Link to="/" className="hover:text-[#E4B564] transition-colors">
-              Home
-            </Link>
-            <Link to="/#packages" className="hover:text-[#E4B564] transition-colors">
-              Packages
-            </Link>
-            <Link
-              to="/blog"
-              className="hover:text-[#E4B564] transition-colors text-[#E4B564] font-semibold"
-            >
-              Blogs
-            </Link>
-            <Link to="/#contact" className="hover:text-[#E4B564] transition-colors">
-              Contact
-            </Link>
-          </div>
-        </div>
-      </footer>
+      {/* Same Website Footer */}
+      <SiteFooter />
     </div>
   );
 }

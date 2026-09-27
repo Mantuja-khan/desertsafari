@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import heroVideo from "../assets/Untitledvideo.mp4";
 import { BLOG_POSTS } from "../data/blogs";
+import { CITY_TOURS } from "../data/cityTours";
+import { DESERT_SAFARIS } from "../data/desertSafaris";
 import { BlogCard } from "../components/BlogCard";
 import { TextReveal } from "../components/TextReveal";
 import {
@@ -59,7 +61,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Desert Journey DXB | Dubai Desert Safari" },
       {
         property: "og:description",
-        content: "Dare the Dunes. Experience the Magic. Book your desert safari & city tours.",
+        content: "Conquer the Dunes. Experience the Magic. Book your desert safari & city tours.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -416,18 +418,20 @@ function ScrollReveal({
 
 function Index() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileCityToursOpen, setMobileCityToursOpen] = useState(false);
+  const [mobileSafariOpen, setMobileSafariOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Home");
   const [reviewIndex, setReviewIndex] = useState(0);
 
   const navItems = [
-    "Home",
-    "Desert Safari",
-    "City Tours",
-    "Packages",
-    "Gallery",
-    "Blogs",
-    "About Us",
-    "Contact",
+    { name: "Home", href: "/", isRoute: true },
+    { name: "About Us", href: "/about", isRoute: true },
+    { name: "Desert Safari", href: "/desert-safari", isRoute: true, hasSafariDropdown: true },
+    { name: "City Tours", href: "/city-tours", isRoute: true, hasCityDropdown: true },
+    { name: "Packages", href: "/#packages", isRoute: false },
+    { name: "Blogs", href: "/blog", isRoute: true },
+    { name: "Gallery", href: "/#gallery", isRoute: false },
+    { name: "Contact", href: "/contact", isRoute: true },
   ];
 
   return (
@@ -468,47 +472,121 @@ function Index() {
 
           {/* Desktop Nav Links */}
           <nav className="hidden lg:flex items-center gap-7 font-sans text-xs tracking-wider">
-            {navItems.map((item) => (
-              <div key={item} className="relative group py-6 flex items-center">
-                {item === "Blogs" ? (
-                  <Link
-                    to="/blog"
-                    className={`relative transition-colors flex items-center gap-1 ${
-                      activeTab === item
-                        ? "text-[#E4B564] font-semibold"
-                        : "text-white/80 hover:text-[#E4B564]"
-                    }`}
-                  >
-                    {item}
-                  </Link>
-                ) : (
-                  <a
-                    href={`#${item.toLowerCase().replace(/\s+/g, "")}`}
-                    onClick={() => setActiveTab(item)}
-                    className={`relative transition-colors flex items-center gap-1 ${
-                      activeTab === item
-                        ? "text-[#E4B564] font-semibold"
-                        : "text-white/80 hover:text-[#E4B564]"
-                    }`}
-                  >
-                    {item}
-                    {activeTab === item && (
-                      <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#E4B564]" />
-                    )}
-                  </a>
-                )}
-              </div>
-            ))}
+            {navItems.map((item) => {
+              const isActive = activeTab === item.name;
+
+              return (
+                <div key={item.name} className="relative group py-6 flex items-center">
+                  {item.isRoute ? (
+                    <Link
+                      to={item.href}
+                      onClick={() => setActiveTab(item.name)}
+                      className={`relative transition-colors flex items-center gap-1 ${
+                        isActive
+                          ? "text-[#E4B564] font-semibold"
+                          : "text-white/80 hover:text-[#E4B564]"
+                      }`}
+                    >
+                      <span>{item.name}</span>
+                      {(item.hasSafariDropdown || item.hasCityDropdown) && (
+                        <ChevronDown className="w-3.5 h-3.5 text-[#E4B564] transition-transform duration-200 group-hover:rotate-180" />
+                      )}
+                      {isActive && (
+                        <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#E4B564]" />
+                      )}
+                    </Link>
+                  ) : (
+                    <a
+                      href={item.href}
+                      onClick={() => setActiveTab(item.name)}
+                      className={`relative transition-colors flex items-center gap-1 ${
+                        isActive
+                          ? "text-[#E4B564] font-semibold"
+                          : "text-white/80 hover:text-[#E4B564]"
+                      }`}
+                    >
+                      <span>{item.name}</span>
+                      {isActive && (
+                        <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#E4B564]" />
+                      )}
+                    </a>
+                  )}
+
+                  {/* Desert Safari Simple White Background Dropdown (NO Border Styling) */}
+                  {item.hasSafariDropdown && (
+                    <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[310px]">
+                      <div className="bg-white rounded-2xl shadow-2xl py-3 px-1 overflow-hidden border-0">
+                        <div className="px-4 py-2 border-b border-gray-100 mb-1 flex items-center justify-between">
+                          <Link
+                            to="/desert-safari"
+                            className="text-[11px] font-bold text-[#C68A36] uppercase tracking-wider hover:underline"
+                          >
+                            All Desert Safari Packages →
+                          </Link>
+                        </div>
+                        {DESERT_SAFARIS.map((safari) => (
+                          <Link
+                            key={safari.id}
+                            to="/desert-safari/$slug"
+                            params={{ slug: safari.slug }}
+                            className="block px-4 py-2.5 text-xs text-gray-800 hover:text-[#C68A36] hover:bg-amber-50/60 rounded-lg transition-colors font-sans"
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium">{safari.title}</span>
+                              <span className="text-[11px] font-bold text-[#C68A36]">
+                                {safari.price}
+                              </span>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* City Tours Simple White Background Dropdown (NO Border Styling) */}
+                  {item.hasCityDropdown && (
+                    <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[310px]">
+                      <div className="bg-white rounded-2xl shadow-2xl py-3 px-1 overflow-hidden border-0">
+                        <div className="px-4 py-2 border-b border-gray-100 mb-1 flex items-center justify-between">
+                          <Link
+                            to="/city-tours"
+                            className="text-[11px] font-bold text-[#C68A36] uppercase tracking-wider hover:underline"
+                          >
+                            All City Tours Packages →
+                          </Link>
+                        </div>
+                        {CITY_TOURS.map((tour) => (
+                          <Link
+                            key={tour.id}
+                            to="/city-tours/$slug"
+                            params={{ slug: tour.slug }}
+                            className="block px-4 py-2.5 text-xs text-gray-800 hover:text-[#C68A36] hover:bg-amber-50/60 rounded-lg transition-colors font-sans"
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium">{tour.title}</span>
+                              <span className="text-[11px] font-bold text-[#C68A36]">
+                                {tour.price}
+                              </span>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </nav>
 
           {/* Right Header Action Controls */}
           <div className="hidden lg:flex items-center gap-4">
-            <button
+            <Link
+              to="/blog"
               className="p-2 text-white/80 hover:text-[#E4B564] transition-colors"
               aria-label="Search"
             >
               <Search className="w-4 h-4" />
-            </button>
+            </Link>
             <a
               href="#packages"
               className="bg-[#E4B564] text-[#0D3B33] font-sans font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xs flex items-center gap-2 hover:bg-[#E8C88B] transition-all shadow-md"
@@ -521,7 +599,7 @@ function Index() {
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-white"
+            className="lg:hidden p-2 text-white hover:text-[#E4B564]"
             aria-label="Toggle Navigation"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -530,58 +608,107 @@ function Index() {
 
         {/* Mobile Dropdown Nav */}
         {mobileMenuOpen && (
-          <div className="lg:hidden absolute top-24 inset-x-0 bg-[#0D3B33] border-b border-[#E4B564]/30 z-50 p-6 flex flex-col gap-4 text-white animate-fade-in-up max-h-[80vh] overflow-y-auto">
+          <div className="lg:hidden absolute top-24 inset-x-0 bg-[#0D3B33] border-b border-[#E4B564]/30 z-50 p-6 flex flex-col gap-3 text-white animate-fade-in-up max-h-[80vh] overflow-y-auto shadow-2xl">
             {navItems.map((item) => (
-              <div key={item} className="flex flex-col">
-                {item === "Blogs" ? (
-                  <Link
-                    to="/blog"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-lg font-serif tracking-wide hover:text-[#E4B564] flex items-center justify-between"
-                  >
-                    {item}
-                  </Link>
-                ) : (
-                  <a
-                    href={`#${item.toLowerCase().replace(/\s+/g, "")}`}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-lg font-serif tracking-wide hover:text-[#E4B564] flex items-center justify-between"
-                  >
-                    {item}
-                    {(item === "Desert Safari" || item === "City Tours") && (
-                      <ChevronDown className="w-4 h-4 text-[#E4B564]" />
-                    )}
-                  </a>
-                )}
+              <div key={item.name} className="flex flex-col border-b border-white/10 pb-2">
+                <div className="flex items-center justify-between">
+                  {item.isRoute ? (
+                    <Link
+                      to={item.href}
+                      onClick={() => {
+                        if (!item.hasCityDropdown && !item.hasSafariDropdown) {
+                          setMobileMenuOpen(false);
+                        }
+                      }}
+                      className="text-base font-serif tracking-wide hover:text-[#E4B564] py-1"
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <a
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-base font-serif tracking-wide hover:text-[#E4B564] py-1"
+                    >
+                      {item.name}
+                    </a>
+                  )}
+
+                  {item.hasSafariDropdown && (
+                    <button
+                      type="button"
+                      onClick={() => setMobileSafariOpen(!mobileSafariOpen)}
+                      className="p-2 text-[#E4B564]"
+                    >
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform ${
+                          mobileSafariOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+                  )}
+
+                  {item.hasCityDropdown && (
+                    <button
+                      type="button"
+                      onClick={() => setMobileCityToursOpen(!mobileCityToursOpen)}
+                      className="p-2 text-[#E4B564]"
+                    >
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform ${
+                          mobileCityToursOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+                  )}
+                </div>
 
                 {/* Mobile Submenu for Desert Safari */}
-                {item === "Desert Safari" && (
+                {item.hasSafariDropdown && mobileSafariOpen && (
                   <div className="pl-4 pt-2 flex flex-col gap-2 border-l border-[#E4B564]/30 my-2">
-                    {desertSafariSubmenu.map((sub, i) => (
-                      <a
-                        key={i}
-                        href="#packages"
+                    <Link
+                      to="/desert-safari"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-xs text-[#E4B564] font-bold mb-1"
+                    >
+                      • View All Desert Safari Packages →
+                    </Link>
+                    {DESERT_SAFARIS.map((safari) => (
+                      <Link
+                        key={safari.id}
+                        to="/desert-safari/$slug"
+                        params={{ slug: safari.slug }}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="text-sm text-white/80 hover:text-[#E4B564]"
+                        className="text-xs text-white/80 hover:text-[#E4B564] flex items-center justify-between py-1"
                       >
-                        • {sub}
-                      </a>
+                        <span>• {safari.title}</span>
+                        <span className="text-[10px] text-[#E4B564]">{safari.price}</span>
+                      </Link>
                     ))}
                   </div>
                 )}
 
                 {/* Mobile Submenu for City Tours */}
-                {item === "City Tours" && (
+                {item.hasCityDropdown && mobileCityToursOpen && (
                   <div className="pl-4 pt-2 flex flex-col gap-2 border-l border-[#E4B564]/30 my-2">
-                    {cityToursSubmenu.map((sub, i) => (
-                      <a
-                        key={i}
-                        href="#attractions"
+                    <Link
+                      to="/city-tours"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-xs text-[#E4B564] font-bold mb-1"
+                    >
+                      • View All City Tours →
+                    </Link>
+                    {CITY_TOURS.map((t) => (
+                      <Link
+                        key={t.id}
+                        to="/city-tours/$slug"
+                        params={{ slug: t.slug }}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="text-sm text-white/80 hover:text-[#E4B564]"
+                        className="text-xs text-white/80 hover:text-[#E4B564] flex items-center justify-between py-1"
                       >
-                        • {sub}
-                      </a>
+                        <span>• {t.title}</span>
+                        <span className="text-[10px] text-[#E4B564]">{t.price}</span>
+                      </Link>
                     ))}
                   </div>
                 )}
@@ -590,8 +717,9 @@ function Index() {
             <a
               href="#packages"
               onClick={() => setMobileMenuOpen(false)}
-              className="bg-[#E4B564] text-[#0D3B33] font-bold uppercase text-center py-3 rounded mt-2"
+              className="bg-[#E4B564] text-[#0D3B33] font-bold uppercase text-center py-3 rounded mt-2 flex items-center justify-center gap-2 shadow-md"
             >
+              <Calendar className="w-4 h-4" />
               Book Now
             </a>
           </div>
@@ -1322,12 +1450,12 @@ function Index() {
               <span className="font-script text-2xl text-[#D4A353] hidden md:block">
                 More Than a Trip A Story to Tell
               </span>
-              <a
-                href="#map"
+              <Link
+                to="/city-tours"
                 className="bg-white border border-[#D4A353]/50 text-[#0D3B33] font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-full hover:bg-[#D4A353] hover:text-white transition-all shadow-xs"
               >
                 View All Tours →
-              </a>
+              </Link>
             </div>
           </ScrollReveal>
 
@@ -1335,68 +1463,78 @@ function Index() {
           <ScrollReveal direction="right">
             {/* 3 Tall Attraction Cards Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {toursData.map((tour, idx) => (
-                <div
-                  key={idx}
-                  className="tour-card group flex flex-col justify-between p-8 text-white"
-                >
-                  {/* Background Image */}
-                  <img
-                    src={tour.image}
-                    alt={tour.title}
-                    className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 z-0"
-                  />
+              {toursData.map((tour, idx) => {
+                const tourSlug =
+                  idx === 0
+                    ? "sharing-dubai-city-tour"
+                    : idx === 1
+                      ? "sharing-abu-dhabi-city-tour"
+                      : "thrilling-hatta-tour";
 
-                  {/* Dark Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/30 z-1" />
+                return (
+                  <div
+                    key={idx}
+                    className="tour-card group flex flex-col justify-between p-8 text-white"
+                  >
+                    {/* Background Image */}
+                    <img
+                      src={tour.image}
+                      alt={tour.title}
+                      className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 z-0"
+                    />
 
-                  {/* Top Category Tag */}
-                  <div className="relative z-10">
-                    <span className="text-[9px] tracking-[0.2em] font-bold uppercase text-[#E4B564] bg-black/50 px-3 py-1 rounded-xs backdrop-blur-xs">
-                      {tour.tag}
-                    </span>
-                  </div>
+                    {/* Dark Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/30 z-1" />
 
-                  {/* Bottom Card Content Overlay */}
-                  <div className="relative z-10 flex flex-col justify-end mt-auto">
-                    <h3 className="font-serif text-3xl sm:text-4xl font-bold text-white mb-2">
-                      {tour.title}
-                    </h3>
-
-                    {/* Price Tag */}
-                    <div className="flex items-baseline gap-2 mb-6">
-                      <span className="text-xs uppercase text-white/70">starting from</span>
-                      <span className="font-serif text-4xl font-bold text-[#E4B564]">
-                        {tour.price}
+                    {/* Top Category Tag */}
+                    <div className="relative z-10">
+                      <span className="text-[9px] tracking-[0.2em] font-bold uppercase text-[#E4B564] bg-black/50 px-3 py-1 rounded-xs backdrop-blur-xs">
+                        {tour.tag}
                       </span>
-                      <span className="text-xs text-white/80">AED / pax</span>
                     </div>
 
-                    {/* Bullet Inclusions List */}
-                    <ul className="space-y-2 mb-8 border-t border-white/20 pt-4">
-                      {tour.inclusions.map((item, i) => (
-                        <li key={i} className="flex items-center gap-2 text-xs text-white/90">
-                          <Check className="w-4 h-4 text-[#E4B564] shrink-0" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    {/* Bottom Card Content Overlay */}
+                    <div className="relative z-10 flex flex-col justify-end mt-auto">
+                      <h3 className="font-serif text-3xl sm:text-4xl font-bold text-white mb-2">
+                        {tour.title}
+                      </h3>
 
-                    {/* Gold CTA Button */}
-                    <a
-                      href="#map"
-                      className="btn-gold w-full text-center justify-center py-4 text-xs font-bold uppercase tracking-wider mb-4"
-                    >
-                      BOOK NOW &nbsp; →
-                    </a>
+                      {/* Price Tag */}
+                      <div className="flex items-baseline gap-2 mb-6">
+                        <span className="text-xs uppercase text-white/70">starting from</span>
+                        <span className="font-serif text-4xl font-bold text-[#E4B564]">
+                          {tour.price}
+                        </span>
+                        <span className="text-xs text-white/80">AED / pax</span>
+                      </div>
 
-                    {/* Footer Tag */}
-                    <p className="text-[8px] tracking-[0.2em] uppercase text-center text-white/60 font-semibold border-t border-white/10 pt-3">
-                      {tour.footerTag}
-                    </p>
+                      {/* Bullet Inclusions List */}
+                      <ul className="space-y-2 mb-8 border-t border-white/20 pt-4">
+                        {tour.inclusions.map((item, i) => (
+                          <li key={i} className="flex items-center gap-2 text-xs text-white/90">
+                            <Check className="w-4 h-4 text-[#E4B564] shrink-0" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      {/* Gold CTA Button */}
+                      <Link
+                        to="/city-tours/$slug"
+                        params={{ slug: tourSlug }}
+                        className="btn-gold w-full text-center justify-center py-4 text-xs font-bold uppercase tracking-wider mb-4 block"
+                      >
+                        BOOK NOW &nbsp; →
+                      </Link>
+
+                      {/* Footer Tag */}
+                      <p className="text-[8px] tracking-[0.2em] uppercase text-center text-white/60 font-semibold border-t border-white/10 pt-3">
+                        {tour.footerTag}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Bottom Script Watermark */}
@@ -1565,12 +1703,12 @@ function Index() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#attractions"
+                  <Link
+                    to="/city-tours"
                     className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
                   >
                     <span className="text-[#E4B564] font-bold">›</span> City Tour Packages
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <Link
@@ -1581,12 +1719,12 @@ function Index() {
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="#aboutus"
+                  <Link
+                    to="/about"
                     className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
                   >
                     <span className="text-[#E4B564] font-bold">›</span> About Us
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a

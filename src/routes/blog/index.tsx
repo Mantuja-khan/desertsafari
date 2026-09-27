@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { Search, FileText, Lightbulb, Compass, Tent, Map, Utensils, Filter } from "lucide-react";
-import { BlogHeader } from "../../components/BlogHeader";
+import { SiteHeader } from "../../components/SiteHeader";
+import { SiteFooter } from "../../components/SiteFooter";
 import { BlogCard } from "../../components/BlogCard";
 import { BlogSidebar } from "../../components/BlogSidebar";
 import { BLOG_CATEGORIES, BLOG_POSTS } from "../../data/blogs";
 import { useAllBlogsWithStats } from "../../hooks/useBlogStats";
+import { TextReveal } from "../../components/TextReveal";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
@@ -57,7 +59,7 @@ function BlogPage() {
   return (
     <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white">
       {/* Header Navigation matching actual website navbar */}
-      <BlogHeader activeNav="Blogs" />
+      <SiteHeader activeNav="Blogs" />
 
       {/* =========================================================
           HERO BANNER (Desert Sunrise with Jeep & Camels Silhouette)
@@ -82,17 +84,13 @@ function BlogPage() {
           </span>
 
           {/* Heading with word-by-word reveal */}
-          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight mb-4 drop-shadow-md">
-            <span className="reveal-word font-bold text-white" style={{ animationDelay: "0.2s" }}>
-              Desert Safari{" "}
-            </span>
-            <span
-              className="reveal-word font-bold text-[#F3C472]"
-              style={{ animationDelay: "0.4s" }}
-            >
-              Blog
-            </span>
-          </h1>
+          <TextReveal
+            text="Desert Safari Blog"
+            as="h1"
+            className="font-serif text-4xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight mb-4 drop-shadow-md"
+            delay={0.1}
+            stagger={0.08}
+          />
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base md:text-lg text-white/90 max-w-2xl leading-relaxed mb-8 font-sans drop-shadow-sm">
@@ -230,39 +228,8 @@ function BlogPage() {
         </div>
       </main>
 
-      {/* =========================================================
-          FOOTER MATCHING HOMEPAGE
-      ========================================================= */}
-      <footer className="bg-[#0D3B33] text-white border-t border-[#C68A36]/30 mt-16">
-        <div className="max-w-[1360px] mx-auto px-4 sm:px-8 py-12 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-white/70">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#E4B564] flex items-center justify-center text-[#0D3B33] font-serif font-bold text-lg">
-              D
-            </div>
-            <span className="font-serif text-lg text-white font-bold tracking-wider">
-              DESERT JOURNEY DXB
-            </span>
-          </div>
-          <div>© 2026 Desert Journey DXB. All rights reserved.</div>
-          <div className="flex items-center gap-6">
-            <Link to="/" className="hover:text-[#E4B564] transition-colors">
-              Home
-            </Link>
-            <Link to="/#packages" className="hover:text-[#E4B564] transition-colors">
-              Packages
-            </Link>
-            <Link
-              to="/blog"
-              className="hover:text-[#E4B564] transition-colors text-[#E4B564] font-semibold"
-            >
-              Blogs
-            </Link>
-            <Link to="/#contact" className="hover:text-[#E4B564] transition-colors">
-              Contact
-            </Link>
-          </div>
-        </div>
-      </footer>
+      {/* Same Website Footer */}
+      <SiteFooter />
     </div>
   );
 }
