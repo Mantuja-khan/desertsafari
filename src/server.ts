@@ -44,8 +44,81 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+import {
+  getAllBlogs,
+  getBlogBySlug,
+  incrementBlogView,
+  toggleBlogLike,
+  getBlogCategories,
+} from "./server/blogService";
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    const url = new URL(request.url);
+
+    // REST API Endpoints for Blogs
+    if (url.pathname.startsWith("/api/blogs")) {
+      const headers = {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      };
+
+      if (request.method === "OPTIONS") {
+        return new Response(null, { headers, status: 204 });
+      }
+
+      // GET /api/blogs/categories
+      if (url.pathname === "/api/blogs/categories") {
+        const categories = getBlogCategories();
+        return new Response(JSON.stringify(categories), { headers });
+      }
+
+      // POST /api/blogs/:slug/view
+      const viewMatch = url.pathname.match(/^\/api\/blogs\/([^/]+)\/view$/);
+      if (viewMatch && request.method === "POST") {
+        const slug = viewMatch[1];
+        const result = incrementBlogView(slug);
+        return new Response(JSON.stringify(result), { headers });
+      }
+
+      // POST /api/blogs/:slug/like
+      const likeMatch = url.pathname.match(/^\/api\/blogs\/([^/]+)\/like$/);
+      if (likeMatch && request.method === "POST") {
+        const slug = likeMatch[1];
+        let action: "like" | "unlike" = "like";
+        try {
+          const body = await request.json();
+          if (body?.action === "unlike") action = "unlike";
+        } catch {
+          // default to like
+        }
+        const result = toggleBlogLike(slug, action);
+        return new Response(JSON.stringify(result), { headers });
+      }
+
+      // GET /api/blogs/:slug
+      const singleMatch = url.pathname.match(/^\/api\/blogs\/([^/]+)$/);
+      if (singleMatch && request.method === "GET") {
+        const slug = singleMatch[1];
+        const post = getBlogBySlug(slug);
+        if (!post) {
+          return new Response(JSON.stringify({ error: "Post not found" }), {
+            headers,
+            status: 404,
+          });
+        }
+        return new Response(JSON.stringify(post), { headers });
+      }
+
+      // GET /api/blogs
+      if (url.pathname === "/api/blogs" && request.method === "GET") {
+        const blogs = getAllBlogs();
+        return new Response(JSON.stringify(blogs), { headers });
+      }
+    }
+
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);

@@ -1,13 +1,14 @@
 # Pixel Perfect Pages
 
-Here is some image for my website home page design 
-- 1st image :- Hero section 
-- 2nd image :- Short about section 
-- 3rd image :- package plans 
-- 4th image :- customer review 
-5 :- Exclusive attraction packages 
-6th image :- footer 
-in this all image please create a website with same styling , same font size , same color pallete , and same everything , so please create the website with same like images and make sure the image should be responsive for all screen
+Here is some image for my website home page design
+
+- 1st image :- Hero section
+- 2nd image :- Short about section
+- 3rd image :- package plans
+- 4th image :- customer review
+  5 :- Exclusive attraction packages
+  6th image :- footer
+  in this all image please create a website with same styling , same font size , same color pallete , and same everything , so please create the website with same like images and make sure the image should be responsive for all screen
 
 This project was built with [Lovable](https://lovable.dev).
 

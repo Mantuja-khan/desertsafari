@@ -1,6 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import heroVideo from "../assets/Untitledvideo.mp4";
+import { BLOG_POSTS } from "../data/blogs";
+import { BlogCard } from "../components/BlogCard";
+import { TextReveal } from "../components/TextReveal";
 import {
   ArrowLeft,
   ArrowRight,
@@ -71,7 +74,12 @@ function Logo({ className = "" }: { className?: string }) {
     <a href="#top" className={`flex items-center gap-3 text-white no-underline group ${className}`}>
       <div className="flex flex-col items-center">
         {/* Dune Emblem */}
-        <svg className="w-8 h-6 text-[#E4B564]" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          className="w-8 h-6 text-[#E4B564]"
+          viewBox="0 0 40 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path d="M20 2L28 14H12L20 2Z" fill="#E4B564" opacity="0.9" />
           <path d="M20 6L34 22H6L20 6Z" fill="#D4A353" opacity="0.6" />
           <path d="M2 22H38" stroke="#E4B564" strokeWidth="2" strokeLinecap="round" />
@@ -316,7 +324,14 @@ function DottedSquare({ className = "" }: { className?: string }) {
       viewBox="0 0 100 100"
       fill="currentColor"
     >
-      <pattern id="dot-matrix-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <pattern
+        id="dot-matrix-pattern"
+        x="0"
+        y="0"
+        width="20"
+        height="20"
+        patternUnits="userSpaceOnUse"
+      >
         <circle cx="5" cy="5" r="3" />
       </pattern>
       <rect width="100" height="100" fill="url(#dot-matrix-pattern)" />
@@ -336,7 +351,10 @@ function HeroVideoBackground() {
       className="absolute inset-0 w-full h-full object-cover object-center z-0 scale-105 transition-transform duration-1000"
     >
       <source src={heroVideo} type="video/mp4" />
-      <source src="https://assets.mixkit.co/videos/preview/mixkit-riding-a-quad-bike-in-the-desert-41584-large.mp4" type="video/mp4" />
+      <source
+        src="https://assets.mixkit.co/videos/preview/mixkit-riding-a-quad-bike-in-the-desert-41584-large.mp4"
+        type="video/mp4"
+      />
       <img
         src="/hero_bg.jpg"
         alt="Dubai Desert Sunset background"
@@ -369,9 +387,8 @@ function ScrollReveal({
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
-
     if (ref.current) {
       observer.observe(ref.current);
     }
@@ -402,10 +419,22 @@ function Index() {
   const [activeTab, setActiveTab] = useState("Home");
   const [reviewIndex, setReviewIndex] = useState(0);
 
-  const navItems = ["Home", "Desert Safari", "City Tours", "Packages", "Gallery", "Blogs", "About Us", "Contact"];
+  const navItems = [
+    "Home",
+    "Desert Safari",
+    "City Tours",
+    "Packages",
+    "Gallery",
+    "Blogs",
+    "About Us",
+    "Contact",
+  ];
 
   return (
-    <main id="top" className="min-h-screen bg-[#F8F5EF] text-[#1D2523] selection:bg-[#E4B564] selection:text-[#0D3B33]">
+    <main
+      id="top"
+      className="min-h-screen bg-[#F8F5EF] text-[#1D2523] selection:bg-[#E4B564] selection:text-[#0D3B33]"
+    >
       {/* Pure Floating WhatsApp Icon Button */}
       <a
         href="https://wa.me/971582639173"
@@ -441,54 +470,32 @@ function Index() {
           <nav className="hidden lg:flex items-center gap-7 font-sans text-xs tracking-wider">
             {navItems.map((item) => (
               <div key={item} className="relative group py-6 flex items-center">
-                <a
-                  href={`#${item.toLowerCase().replace(/\s+/g, "")}`}
-                  onClick={() => setActiveTab(item)}
-                  className={`relative transition-colors flex items-center gap-1 ${activeTab === item ? "text-[#E4B564] font-semibold" : "text-white/80 hover:text-[#E4B564]"
+                {item === "Blogs" ? (
+                  <Link
+                    to="/blog"
+                    className={`relative transition-colors flex items-center gap-1 ${
+                      activeTab === item
+                        ? "text-[#E4B564] font-semibold"
+                        : "text-white/80 hover:text-[#E4B564]"
                     }`}
-                >
-                  {item}
-                  {/* Dropdowns temporarily hidden per request */}
-                  {/* {(item === "Desert Safari" || item === "City Tours") && (
-                    <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180 text-[#E4B564]" />
-                  )} */}
-                  {activeTab === item && (
-                    <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#E4B564]" />
-                  )}
-                </a>
-
-                {/* Desert Safari Hover Dropdown (Temporarily Disabled) */}
-                {false && item === "Desert Safari" && (
-                  <div className="absolute top-full left-0 pt-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[250px] before:content-[''] before:absolute before:-top-6 before:left-0 before:w-full before:h-6">
-                    <div className="bg-[#051E1A] border-2 border-[#E4B564]/70 rounded-lg shadow-[0_15px_35px_rgba(0,0,0,0.95)] py-2 overflow-hidden opacity-100 bg-opacity-100">
-                      {desertSafariSubmenu.map((sub, i) => (
-                        <a
-                          key={i}
-                          href="#packages"
-                          className="block px-4 py-2.5 text-xs font-semibold text-white hover:text-[#E4B564] hover:bg-[#0D3B33] transition-colors border-b border-[#E4B564]/15 last:border-b-0 font-sans"
-                        >
-                          {sub}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* City Tours Hover Dropdown (Temporarily Disabled) */}
-                {false && item === "City Tours" && (
-                  <div className="absolute top-full left-0 pt-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[220px] before:content-[''] before:absolute before:-top-6 before:left-0 before:w-full before:h-6">
-                    <div className="bg-[#051E1A] border-2 border-[#E4B564]/70 rounded-lg shadow-[0_15px_35px_rgba(0,0,0,0.95)] py-2 overflow-hidden opacity-100 bg-opacity-100">
-                      {cityToursSubmenu.map((sub, i) => (
-                        <a
-                          key={i}
-                          href="#attractions"
-                          className="block px-4 py-2.5 text-xs font-semibold text-white hover:text-[#E4B564] hover:bg-[#0D3B33] transition-colors border-b border-[#E4B564]/15 last:border-b-0 font-sans"
-                        >
-                          {sub}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
+                  >
+                    {item}
+                  </Link>
+                ) : (
+                  <a
+                    href={`#${item.toLowerCase().replace(/\s+/g, "")}`}
+                    onClick={() => setActiveTab(item)}
+                    className={`relative transition-colors flex items-center gap-1 ${
+                      activeTab === item
+                        ? "text-[#E4B564] font-semibold"
+                        : "text-white/80 hover:text-[#E4B564]"
+                    }`}
+                  >
+                    {item}
+                    {activeTab === item && (
+                      <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#E4B564]" />
+                    )}
+                  </a>
                 )}
               </div>
             ))}
@@ -496,7 +503,10 @@ function Index() {
 
           {/* Right Header Action Controls */}
           <div className="hidden lg:flex items-center gap-4">
-            <button className="p-2 text-white/80 hover:text-[#E4B564] transition-colors" aria-label="Search">
+            <button
+              className="p-2 text-white/80 hover:text-[#E4B564] transition-colors"
+              aria-label="Search"
+            >
               <Search className="w-4 h-4" />
             </button>
             <a
@@ -523,14 +533,26 @@ function Index() {
           <div className="lg:hidden absolute top-24 inset-x-0 bg-[#0D3B33] border-b border-[#E4B564]/30 z-50 p-6 flex flex-col gap-4 text-white animate-fade-in-up max-h-[80vh] overflow-y-auto">
             {navItems.map((item) => (
               <div key={item} className="flex flex-col">
-                <a
-                  href={`#${item.toLowerCase().replace(/\s+/g, "")}`}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-lg font-serif tracking-wide hover:text-[#E4B564] flex items-center justify-between"
-                >
-                  {item}
-                  {(item === "Desert Safari" || item === "City Tours") && <ChevronDown className="w-4 h-4 text-[#E4B564]" />}
-                </a>
+                {item === "Blogs" ? (
+                  <Link
+                    to="/blog"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-lg font-serif tracking-wide hover:text-[#E4B564] flex items-center justify-between"
+                  >
+                    {item}
+                  </Link>
+                ) : (
+                  <a
+                    href={`#${item.toLowerCase().replace(/\s+/g, "")}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-lg font-serif tracking-wide hover:text-[#E4B564] flex items-center justify-between"
+                  >
+                    {item}
+                    {(item === "Desert Safari" || item === "City Tours") && (
+                      <ChevronDown className="w-4 h-4 text-[#E4B564]" />
+                    )}
+                  </a>
+                )}
 
                 {/* Mobile Submenu for Desert Safari */}
                 {item === "Desert Safari" && (
@@ -629,7 +651,10 @@ function Index() {
 
           {/* Subtext */}
           <p className="font-sans text-sm md:text-base text-white/95 max-w-3xl font-medium leading-relaxed mt-3 mb-8 animate-fade-in-up delay-700 drop-shadow-md">
-            Indulge in the untamed beauty of the desert with our exclusive safaris where opulence meets adventure. Glide over the dunes in a private 4×4, sip champagne under a fiery sunset, and unwind in a royal-style camp with gourmet dining. The desert isn’t just wild; it’s wonderfully lavish
+            Indulge in the untamed beauty of the desert with our exclusive safaris where opulence
+            meets adventure. Glide over the dunes in a private 4×4, sip champagne under a fiery
+            sunset, and unwind in a royal-style camp with gourmet dining. The desert isn’t just
+            wild; it’s wonderfully lavish
           </p>
 
           {/* Call to Actions */}
@@ -651,7 +676,9 @@ function Index() {
 
         {/* Left Side Number Indicator */}
         <div className="absolute left-8 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-4 text-xs font-mono text-white/50 z-10 animate-fade-in-up delay-500">
-          <span className="text-[#E4B564] font-bold text-sm border-b border-[#E4B564] pb-1">01</span>
+          <span className="text-[#E4B564] font-bold text-sm border-b border-[#E4B564] pb-1">
+            01
+          </span>
           <span>02</span>
           <span>03</span>
           <span>04</span>
@@ -689,8 +716,12 @@ function Index() {
                 <Car className="w-5 h-5" />
               </div>
               <div className="text-left">
-                <h4 className="font-serif text-base font-semibold text-white leading-tight">Thrilling Desert Safari</h4>
-                <p className="text-[10px] text-white/70 tracking-wider">4x4 Dune Bashing & Sandboarding</p>
+                <h4 className="font-serif text-base font-semibold text-white leading-tight">
+                  Thrilling Desert Safari
+                </h4>
+                <p className="text-[10px] text-white/70 tracking-wider">
+                  4x4 Dune Bashing & Sandboarding
+                </p>
               </div>
             </div>
 
@@ -700,7 +731,9 @@ function Index() {
                 <Compass className="w-5 h-5" />
               </div>
               <div className="text-left">
-                <h4 className="font-serif text-base font-semibold text-white leading-tight">Authentic Camel Rides</h4>
+                <h4 className="font-serif text-base font-semibold text-white leading-tight">
+                  Authentic Camel Rides
+                </h4>
                 <p className="text-[10px] text-white/70 tracking-wider">Sunset Caravan Trails</p>
               </div>
             </div>
@@ -711,7 +744,9 @@ function Index() {
                 <FlameKindling className="w-5 h-5" />
               </div>
               <div className="text-left">
-                <h4 className="font-serif text-base font-semibold text-white leading-tight">Traditional Bedouin Camp</h4>
+                <h4 className="font-serif text-base font-semibold text-white leading-tight">
+                  Traditional Bedouin Camp
+                </h4>
                 <p className="text-[10px] text-white/70 tracking-wider">BBQ Dinner & Live Shows</p>
               </div>
             </div>
@@ -722,8 +757,12 @@ function Index() {
                 <Building className="w-5 h-5" />
               </div>
               <div className="text-left">
-                <h4 className="font-serif text-base font-semibold text-white leading-tight">Explore Dubai City Tours</h4>
-                <p className="text-[10px] text-white/70 tracking-wider">Iconic Landmarks & Heritage</p>
+                <h4 className="font-serif text-base font-semibold text-white leading-tight">
+                  Explore Dubai City Tours
+                </h4>
+                <p className="text-[10px] text-white/70 tracking-wider">
+                  Iconic Landmarks & Heritage
+                </p>
               </div>
             </div>
           </div>
@@ -739,10 +778,11 @@ function Index() {
         <DottedSquare className="absolute bottom-12 right-12 z-0 opacity-40" />
 
         <div className="section-shell grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
-
           {/* Left Column: Visuals & Tilted Polaroids (Scrolls from Left) */}
-          <ScrollReveal direction="left" className="lg:col-span-6 relative flex flex-col items-center">
-
+          <ScrollReveal
+            direction="left"
+            className="lg:col-span-6 relative flex flex-col items-center"
+          >
             {/* Top Tag Annotations */}
             <div className="w-full flex justify-between text-[10px] tracking-[0.25em] text-[#6B7672] uppercase mb-4">
               <span>MORE THAN A TRIP</span>
@@ -765,27 +805,41 @@ function Index() {
 
               {/* Slider Arrows */}
               <div className="absolute bottom-6 right-6 flex items-center gap-3 text-white/70">
-                <button className="hover:text-[#E4B564] transition-colors"><ArrowLeft className="w-4 h-4" /></button>
+                <button className="hover:text-[#E4B564] transition-colors">
+                  <ArrowLeft className="w-4 h-4" />
+                </button>
                 <span className="w-8 h-[1px] bg-white/40" />
-                <button className="hover:text-[#E4B564] transition-colors"><ArrowRight className="w-4 h-4" /></button>
+                <button className="hover:text-[#E4B564] transition-colors">
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
             </div>
 
             {/* Overlapping Dark Teal Block with 2 Tilted Polaroids */}
             <div className="absolute right-[-20px] md:right-[-40px] top-1/2 -translate-y-1/2 hidden sm:flex flex-col gap-6 z-20">
-
               {/* Polaroid 1 (Top Tilted Left) */}
               <div className="polaroid-card w-48 -rotate-6 shadow-2xl border border-white">
-                <img src="/polaroid_camel.jpg" alt="Camel caravan ride sunset" className="w-full h-36 object-cover rounded-xs" />
-                <p className="font-script text-lg text-center text-[#1D2523] mt-2 font-semibold">Authentic Experiences</p>
+                <img
+                  src="/polaroid_camel.jpg"
+                  alt="Camel caravan ride sunset"
+                  className="w-full h-36 object-cover rounded-xs"
+                />
+                <p className="font-script text-lg text-center text-[#1D2523] mt-2 font-semibold">
+                  Authentic Experiences
+                </p>
               </div>
 
               {/* Polaroid 2 (Bottom Tilted Right) */}
               <div className="polaroid-card w-48 rotate-6 shadow-2xl border border-white mt-[-20px]">
-                <img src="/polaroid_camp.jpg" alt="Bedouin luxury camp night" className="w-full h-36 object-cover rounded-xs" />
-                <p className="font-script text-lg text-center text-[#1D2523] mt-2 font-semibold">Arabian Hospitality</p>
+                <img
+                  src="/polaroid_camp.jpg"
+                  alt="Bedouin luxury camp night"
+                  className="w-full h-36 object-cover rounded-xs"
+                />
+                <p className="font-script text-lg text-center text-[#1D2523] mt-2 font-semibold">
+                  Arabian Hospitality
+                </p>
               </div>
-
             </div>
 
             {/* Bottom Subtitle Tag */}
@@ -795,15 +849,23 @@ function Index() {
           </ScrollReveal>
 
           {/* Right Column: About Content (Scrolls from Right) */}
-          <ScrollReveal direction="right" className="lg:col-span-6 flex flex-col items-start pl-0 lg:pl-6">
-
+          <ScrollReveal
+            direction="right"
+            className="lg:col-span-6 flex flex-col items-start pl-0 lg:pl-6"
+          >
             {/* Arch Stamp Badge Top Right */}
             <div className="self-end mb-4">
               <div className="stamp-badge">
                 <Palmtree className="w-6 h-6 text-[#D4A353]" />
-                <span className="text-[8px] tracking-[0.2em] uppercase text-[#0D3B33] font-bold">EXPLORE</span>
-                <span className="text-[7px] tracking-[0.15em] uppercase text-[#6B7672]">EXPERIENCE</span>
-                <span className="text-[7px] tracking-[0.15em] uppercase text-[#6B7672]">BELONG</span>
+                <span className="text-[8px] tracking-[0.2em] uppercase text-[#0D3B33] font-bold">
+                  EXPLORE
+                </span>
+                <span className="text-[7px] tracking-[0.15em] uppercase text-[#6B7672]">
+                  EXPERIENCE
+                </span>
+                <span className="text-[7px] tracking-[0.15em] uppercase text-[#6B7672]">
+                  BELONG
+                </span>
               </div>
             </div>
 
@@ -813,18 +875,25 @@ function Index() {
               <span className="w-12 h-[1px] bg-[#D4A353]" />
             </div>
 
-            {/* Heading */}
-            <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0D3B33] leading-[1.1] mb-6">
+            {/* Heading with Word-by-Word Text Reveal */}
+            <TextReveal
+              as="h2"
+              className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0D3B33] leading-[1.1] mb-6"
+            >
               Your Gateway to an <br />
               Extraordinary <em className="gold-italic">Dubai Adventure</em>
-            </h2>
+            </TextReveal>
 
             {/* Body Text */}
             <p className="font-sans text-sm text-[#4A5550] leading-relaxed mb-4">
-              At DesertJourneyDXB, we believe travel is more than just a destination — it’s an experience that stays with you forever. From thrilling desert safaris and breathtaking city tours to authentic Arabian hospitality, we create unforgettable moments that let you discover the real beauty of Dubai.
+              At DesertJourneyDXB, we believe travel is more than just a destination — it’s an
+              experience that stays with you forever. From thrilling desert safaris and breathtaking
+              city tours to authentic Arabian hospitality, we create unforgettable moments that let
+              you discover the real beauty of Dubai.
             </p>
             <p className="font-sans text-sm text-[#4A5550] leading-relaxed mb-8">
-              Join us for a journey where adventure, culture and luxury come together in the most extraordinary way.
+              Join us for a journey where adventure, culture and luxury come together in the most
+              extraordinary way.
             </p>
 
             {/* Discover Story Button */}
@@ -832,7 +901,6 @@ function Index() {
               DISCOVER OUR STORY &nbsp; →
             </a>
           </ScrollReveal>
-
         </div>
       </section>
 
@@ -844,18 +912,25 @@ function Index() {
         <DottedSquare className="absolute top-10 right-10 z-0 opacity-40" />
 
         <div className="section-shell relative z-10">
-
           {/* Top Header Row (Scrolls from Left) */}
-          <ScrollReveal direction="left" className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <ScrollReveal
+            direction="left"
+            className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6"
+          >
             <div>
-              <span className="font-script text-2xl text-[#D4A353] block mb-1">Adventure Awaits</span>
+              <span className="font-script text-2xl text-[#D4A353] block mb-1">
+                Adventure Awaits
+              </span>
               <div className="section-subtitle mb-2">
                 <span>POPULAR PACKAGES</span>
                 <span className="w-8 h-[1px] bg-[#D4A353]" />
               </div>
-              <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0D3B33]">
+              <TextReveal
+                as="h2"
+                className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0D3B33]"
+              >
                 Choose Your <em className="gold-italic">Desert Experience</em>
-              </h2>
+              </TextReveal>
               <p className="text-sm text-[#6B7672] mt-2">
                 Thrilling adventures, authentic culture and unforgettable memories.
               </p>
@@ -871,7 +946,10 @@ function Index() {
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
-              <a href="#attractions" className="text-xs font-bold uppercase tracking-wider text-[#0D3B33] hover:text-[#D4A353] flex items-center gap-1 transition-colors">
+              <a
+                href="#attractions"
+                className="text-xs font-bold uppercase tracking-wider text-[#0D3B33] hover:text-[#D4A353] flex items-center gap-1 transition-colors"
+              >
                 View All Packages →
               </a>
             </div>
@@ -879,7 +957,6 @@ function Index() {
 
           {/* 3 Detailed Package Cards Grid (Scrolls from Right) */}
           <ScrollReveal direction="right">
-
             {/* 3 Detailed Package Cards Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {packagesData.map((pkg) => (
@@ -903,12 +980,13 @@ function Index() {
 
                     {/* Top Right Badge */}
                     <span
-                      className={`absolute top-4 right-4 text-[9px] tracking-wider font-bold uppercase px-3 py-1 rounded-xs flex items-center gap-1.5 shadow-md ${pkg.badgeType === "green"
-                        ? "bg-[#145248] text-white"
-                        : pkg.badgeType === "gold"
-                          ? "bg-[#E4B564] text-[#0D3B33]"
-                          : "bg-[#0D3B33] text-white"
-                        }`}
+                      className={`absolute top-4 right-4 text-[9px] tracking-wider font-bold uppercase px-3 py-1 rounded-xs flex items-center gap-1.5 shadow-md ${
+                        pkg.badgeType === "green"
+                          ? "bg-[#145248] text-white"
+                          : pkg.badgeType === "gold"
+                            ? "bg-[#E4B564] text-[#0D3B33]"
+                            : "bg-[#0D3B33] text-white"
+                      }`}
                     >
                       {pkg.badgeType === "green" && <Sun className="w-3 h-3 text-[#E4B564]" />}
                       {pkg.badgeType === "gold" && <Crown className="w-3 h-3 text-[#0D3B33]" />}
@@ -954,9 +1032,7 @@ function Index() {
                         <span className="text-[10px] font-bold text-[#6B7672] uppercase tracking-wider block mb-1">
                           ENTERTAINMENT SHOWS:
                         </span>
-                        <span className="text-xs font-semibold text-[#0D3B33]">
-                          {pkg.shows}
-                        </span>
+                        <span className="text-xs font-semibold text-[#0D3B33]">{pkg.shows}</span>
                       </div>
 
                       {/* Action Button */}
@@ -988,14 +1064,11 @@ function Index() {
 
             {/* Bottom Watermarks */}
             <div className="flex justify-between items-center text-[10px] tracking-[0.25em] text-[#6B7672] uppercase mt-8 border-t border-[#E5E0D6] pt-4">
-              <span className="flex items-center gap-2">
-                DUBAI BEYOND ORDINARY
-              </span>
+              <span className="flex items-center gap-2">DUBAI BEYOND ORDINARY</span>
               <span className="font-script text-xl text-[#D4A353] capitalize tracking-normal">
                 Explore Dream Discover
               </span>
             </div>
-
           </ScrollReveal>
         </div>
       </section>
@@ -1003,7 +1076,10 @@ function Index() {
       {/* ==========================================
           SECTION 4: WHAT OUR GUESTS SAY (TESTIMONIALS)
       ========================================== */}
-      <section id="reviews" className="py-16 relative min-h-[620px] flex flex-col justify-between text-white overflow-hidden">
+      <section
+        id="reviews"
+        className="py-16 relative min-h-[620px] flex flex-col justify-between text-white overflow-hidden"
+      >
         {/* Background Image (User Uploaded Desert Sunset Image) */}
         <img
           src="/guest_reviews_bg.jpg"
@@ -1018,11 +1094,15 @@ function Index() {
         <DottedSquare className="absolute top-12 left-10 z-1 opacity-30 text-white" />
 
         <div className="relative z-10 section-shell h-full flex flex-col justify-between">
-
           {/* Top Row Titles & Badges (Scrolls from Left) */}
-          <ScrollReveal direction="left" className="w-full flex flex-col items-center text-center mb-8">
+          <ScrollReveal
+            direction="left"
+            className="w-full flex flex-col items-center text-center mb-8"
+          >
             <div className="w-full flex justify-between text-[10px] tracking-[0.25em] text-white/60 uppercase mb-2">
-              <span className="font-script text-2xl text-[#E4B564] capitalize tracking-normal">More Than a Trip A Story to Tell</span>
+              <span className="font-script text-2xl text-[#E4B564] capitalize tracking-normal">
+                More Than a Trip A Story to Tell
+              </span>
               <span>T E S T I M O N I A L S ———</span>
             </div>
 
@@ -1030,8 +1110,12 @@ function Index() {
             <div className="self-end hidden md:block -mt-8 mb-4">
               <div className="stamp-badge border-white/30 text-white">
                 <Palmtree className="w-5 h-5 text-[#E4B564]" />
-                <span className="text-[7px] tracking-[0.2em] uppercase font-bold">DUBAI EXPERIENCES</span>
-                <span className="text-[6px] tracking-[0.15em] uppercase opacity-70">UNFORGETTABLE JOURNEYS</span>
+                <span className="text-[7px] tracking-[0.2em] uppercase font-bold">
+                  DUBAI EXPERIENCES
+                </span>
+                <span className="text-[6px] tracking-[0.15em] uppercase opacity-70">
+                  UNFORGETTABLE JOURNEYS
+                </span>
               </div>
             </div>
 
@@ -1046,10 +1130,22 @@ function Index() {
             {/* Google Rating Score Banner */}
             <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/20">
               <svg className="w-5 h-5" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                <path
+                  fill="#4285F4"
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                />
+                <path
+                  fill="#34A853"
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                />
+                <path
+                  fill="#FBBC05"
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                />
+                <path
+                  fill="#EA4335"
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                />
               </svg>
               <span className="font-bold text-white text-sm">Excellent</span>
               <div className="flex text-[#FFD700] text-sm">
@@ -1057,7 +1153,9 @@ function Index() {
                   <span key={i}>{star}</span>
                 ))}
               </div>
-              <span className="text-xs text-white/80">Based on <strong>628 reviews</strong></span>
+              <span className="text-xs text-white/80">
+                Based on <strong>628 reviews</strong>
+              </span>
             </div>
           </ScrollReveal>
 
@@ -1065,7 +1163,11 @@ function Index() {
           <ScrollReveal direction="right" className="relative my-8">
             {/* Slider Navigation Arrows */}
             <button
-              onClick={() => setReviewIndex((reviewIndex - 1 + testimonialsData.length) % testimonialsData.length)}
+              onClick={() =>
+                setReviewIndex(
+                  (reviewIndex - 1 + testimonialsData.length) % testimonialsData.length,
+                )
+              }
               className="absolute left-[-20px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/20 hover:bg-[#E4B564] hover:text-[#0D3B33] text-white backdrop-blur-md flex items-center justify-center transition-all shadow-lg"
               aria-label="Previous Review"
             >
@@ -1092,19 +1194,29 @@ function Index() {
                     <div>
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-full ${item.avatarBg} text-white font-bold text-sm flex items-center justify-center shadow-md shrink-0`}>
+                          <div
+                            className={`w-10 h-10 rounded-full ${item.avatarBg} text-white font-bold text-sm flex items-center justify-center shadow-md shrink-0`}
+                          >
                             {item.initial}
                           </div>
                           <div>
-                            <h4 className="font-bold text-sm leading-tight text-[#0D3B33]">{item.name}</h4>
+                            <h4 className="font-bold text-sm leading-tight text-[#0D3B33]">
+                              {item.name}
+                            </h4>
                             <span className="text-[10px] text-[#6B7672]">{item.time}</span>
                           </div>
                         </div>
 
                         {/* Google Verified Icon */}
                         <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
-                          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                          <path
+                            fill="#4285F4"
+                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                          />
+                          <path
+                            fill="#34A853"
+                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                          />
                         </svg>
                       </div>
 
@@ -1119,9 +1231,7 @@ function Index() {
                       </div>
 
                       {/* Review Text */}
-                      <p className="text-xs text-[#4A5550] leading-relaxed italic">
-                        "{item.text}"
-                      </p>
+                      <p className="text-xs text-[#4A5550] leading-relaxed italic">"{item.text}"</p>
                     </div>
 
                     {/* Bottom Quote Mark */}
@@ -1145,19 +1255,27 @@ function Index() {
           <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-6 py-6 border-t border-white/20 text-center">
             <div>
               <span className="font-serif text-2xl font-bold text-white block">1000+</span>
-              <span className="text-[9px] tracking-widest text-[#E4B564] uppercase font-semibold">HAPPY TRAVELERS</span>
+              <span className="text-[9px] tracking-widest text-[#E4B564] uppercase font-semibold">
+                HAPPY TRAVELERS
+              </span>
             </div>
             <div>
               <span className="font-serif text-2xl font-bold text-white block">4.9/5</span>
-              <span className="text-[9px] tracking-widest text-[#E4B564] uppercase font-semibold">GOOGLE RATING</span>
+              <span className="text-[9px] tracking-widest text-[#E4B564] uppercase font-semibold">
+                GOOGLE RATING
+              </span>
             </div>
             <div>
               <span className="font-serif text-2xl font-bold text-white block">TRUSTED</span>
-              <span className="text-[9px] tracking-widest text-[#E4B564] uppercase font-semibold">TRAVEL PARTNER</span>
+              <span className="text-[9px] tracking-widest text-[#E4B564] uppercase font-semibold">
+                TRAVEL PARTNER
+              </span>
             </div>
             <div>
               <span className="font-serif text-2xl font-bold text-white block">MEMORABLE</span>
-              <span className="text-[9px] tracking-widest text-[#E4B564] uppercase font-semibold">EXPERIENCES</span>
+              <span className="text-[9px] tracking-widest text-[#E4B564] uppercase font-semibold">
+                EXPERIENCES
+              </span>
             </div>
           </div>
 
@@ -1175,9 +1293,11 @@ function Index() {
         <DottedSquare className="absolute top-12 left-12 z-0 opacity-40" />
 
         <div className="section-shell relative z-10">
-
           {/* Header Row (Scrolls from Left) */}
-          <ScrollReveal direction="left" className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <ScrollReveal
+            direction="left"
+            className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6"
+          >
             <div>
               <div className="w-full flex justify-between text-[10px] tracking-[0.25em] text-[#6B7672] uppercase mb-2">
                 <span>DUBAI • ABU DHABI • HATTA AND BEYOND</span>
@@ -1186,11 +1306,15 @@ function Index() {
                 <span>EXPLORE BEYOND THE DESERT</span>
                 <span className="w-8 h-[1px] bg-[#D4A353]" />
               </div>
-              <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0D3B33]">
+              <TextReveal
+                as="h2"
+                className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0D3B33]"
+              >
                 Exclusive <em className="gold-italic">Attraction Packages</em>
-              </h2>
+              </TextReveal>
               <p className="text-sm text-[#6B7672] mt-2">
-                Discover iconic destinations, cultural experiences and breathtaking landscapes with our handpicked tour packages.
+                Discover iconic destinations, cultural experiences and breathtaking landscapes with
+                our handpicked tour packages.
               </p>
             </div>
 
@@ -1209,11 +1333,13 @@ function Index() {
 
           {/* 3 Tall Attraction Cards Grid (Scrolls from Right) */}
           <ScrollReveal direction="right">
-
             {/* 3 Tall Attraction Cards Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {toursData.map((tour, idx) => (
-                <div key={idx} className="tour-card group flex flex-col justify-between p-8 text-white">
+                <div
+                  key={idx}
+                  className="tour-card group flex flex-col justify-between p-8 text-white"
+                >
                   {/* Background Image */}
                   <img
                     src={tour.image}
@@ -1240,7 +1366,9 @@ function Index() {
                     {/* Price Tag */}
                     <div className="flex items-baseline gap-2 mb-6">
                       <span className="text-xs uppercase text-white/70">starting from</span>
-                      <span className="font-serif text-4xl font-bold text-[#E4B564]">{tour.price}</span>
+                      <span className="font-serif text-4xl font-bold text-[#E4B564]">
+                        {tour.price}
+                      </span>
                       <span className="text-xs text-white/80">AED / pax</span>
                     </div>
 
@@ -1255,7 +1383,10 @@ function Index() {
                     </ul>
 
                     {/* Gold CTA Button */}
-                    <a href="#map" className="btn-gold w-full text-center justify-center py-4 text-xs font-bold uppercase tracking-wider mb-4">
+                    <a
+                      href="#map"
+                      className="btn-gold w-full text-center justify-center py-4 text-xs font-bold uppercase tracking-wider mb-4"
+                    >
                       BOOK NOW &nbsp; →
                     </a>
 
@@ -1277,9 +1408,66 @@ function Index() {
       </section>
 
       {/* ==========================================
+          SECTION: LATEST BLOG POSTS & TRAVEL TIPS (SHOWS EXACTLY 3 POSTS)
+      ========================================== */}
+      <section
+        id="blogs"
+        className="py-24 bg-white border-t border-[#EDE7D9] relative overflow-hidden"
+      >
+        {/* Background Dotted Matrix Square */}
+        <DottedSquare className="absolute top-10 right-10 z-0 opacity-30" />
+
+        <div className="section-shell relative z-10">
+          {/* Header row with Title & "View More Blogs" Button */}
+          <ScrollReveal
+            direction="up"
+            className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6"
+          >
+            <div>
+              <span className="text-xs uppercase tracking-[0.3em] text-[#C68A36] font-bold block mb-2">
+                OUR BLOG & GUIDES
+              </span>
+              <TextReveal
+                as="h2"
+                className="font-serif text-4xl sm:text-5xl text-[#0D3B33] leading-tight"
+              >
+                Desert Safari <em className="gold-italic">Blog & Travel Tips</em>
+              </TextReveal>
+              <p className="text-sm text-[#5A5449] mt-2 max-w-xl">
+                Travel tips, guides, experiences and everything you need to know about exploring the
+                magical deserts.
+              </p>
+            </div>
+
+            <Link
+              to="/blog"
+              className="bg-[#C68A36] hover:bg-[#B3792A] text-white font-sans font-bold text-xs uppercase tracking-wider px-7 py-3.5 rounded-xl flex items-center gap-2 transition-all shadow-md hover:shadow-lg active:scale-95 shrink-0 self-start md:self-auto"
+            >
+              <span>View More Blogs</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </ScrollReveal>
+
+          {/* 3 Blog Cards Grid (Responsive Grid + Mobile Touch Drag) */}
+          <ScrollReveal direction="up" delay={200}>
+            <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 pb-4 md:pb-0 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
+              {BLOG_POSTS.slice(0, 3).map((post) => (
+                <div key={post.id} className="min-w-[290px] sm:min-w-[320px] md:min-w-0 flex-1">
+                  <BlogCard post={post} />
+                </div>
+              ))}
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ==========================================
           GOOGLE MAP LOCATION SECTION (REPLACING OLD FOOTER CTA)
       ========================================== */}
-      <section id="map" className="py-20 bg-[#FAF7F2] border-t border-[#E5E0D6] relative overflow-hidden">
+      <section
+        id="map"
+        className="py-20 bg-[#FAF7F2] border-t border-[#E5E0D6] relative overflow-hidden"
+      >
         {/* Background Dotted Matrix Square */}
         <DottedSquare className="absolute top-6 left-6 z-0 opacity-40" />
 
@@ -1288,11 +1476,12 @@ function Index() {
             <span className="text-xs uppercase tracking-[0.3em] text-[#D4A353] font-bold block mb-2">
               OUR DUBAI LOCATION
             </span>
-            <h2 className="font-serif text-4xl sm:text-5xl text-[#0D3B33] mb-4">
+            <TextReveal as="h2" className="font-serif text-4xl sm:text-5xl text-[#0D3B33] mb-4">
               Visit Our <em className="gold-italic">Dubai Office</em>
-            </h2>
+            </TextReveal>
             <p className="text-sm text-[#4A5550] leading-relaxed">
-              Micron Technical Services, Karama Zabeel Street, Montana Building, 304 - Dubai - United Arab Emirates
+              Micron Technical Services, Karama Zabeel Street, Montana Building, 304 - Dubai -
+              United Arab Emirates
             </p>
           </div>
 
@@ -1328,17 +1517,19 @@ function Index() {
         {/* Gradient Overlay Matching Image 1 Dark Styling */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#051E1A] via-[#072B25]/90 to-[#0A332C]/80 z-1" />
 
-        <ScrollReveal direction="up" className="relative z-10 w-full max-w-[1340px] mx-auto px-6 pt-16 pb-8">
-
+        <ScrollReveal
+          direction="up"
+          className="relative z-10 w-full max-w-[1340px] mx-auto px-6 pt-16 pb-8"
+        >
           {/* Main 4 Columns Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-[#E4B564]/20">
-
             {/* Column 1: Brand & Social (3 cols) */}
             <div className="lg:col-span-3 flex flex-col items-start pr-4 border-r-0 lg:border-r border-[#E4B564]/20">
               <FooterLogo />
 
               <p className="text-xs text-white/70 leading-relaxed mt-6 mb-6">
-                Experience the magic of Dubai with unforgettable desert safaris, city tours and authentic Arabian hospitality.
+                Experience the magic of Dubai with unforgettable desert safaris, city tours and
+                authentic Arabian hospitality.
               </p>
 
               {/* Social Icons Row */}
@@ -1366,27 +1557,50 @@ function Index() {
               <h4 className="font-serif text-xl font-bold text-white mb-6">Useful Links</h4>
               <ul className="space-y-3 text-xs text-white/80 font-sans">
                 <li>
-                  <a href="#packages" className="hover:text-[#E4B564] transition-colors flex items-center gap-2">
+                  <a
+                    href="#packages"
+                    className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
+                  >
                     <span className="text-[#E4B564] font-bold">›</span> Desert Safari Packages
                   </a>
                 </li>
                 <li>
-                  <a href="#attractions" className="hover:text-[#E4B564] transition-colors flex items-center gap-2">
+                  <a
+                    href="#attractions"
+                    className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
+                  >
                     <span className="text-[#E4B564] font-bold">›</span> City Tour Packages
                   </a>
                 </li>
                 <li>
-                  <a href="#aboutus" className="hover:text-[#E4B564] transition-colors flex items-center gap-2">
+                  <Link
+                    to="/blog"
+                    className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
+                  >
+                    <span className="text-[#E4B564] font-bold">›</span> Desert Safari Blog & Guides
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href="#aboutus"
+                    className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
+                  >
                     <span className="text-[#E4B564] font-bold">›</span> About Us
                   </a>
                 </li>
                 <li>
-                  <a href="#map" className="hover:text-[#E4B564] transition-colors flex items-center gap-2">
+                  <a
+                    href="#map"
+                    className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
+                  >
                     <span className="text-[#E4B564] font-bold">›</span> Terms & Conditions
                   </a>
                 </li>
                 <li>
-                  <a href="#map" className="hover:text-[#E4B564] transition-colors flex items-center gap-2">
+                  <a
+                    href="#map"
+                    className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
+                  >
                     <span className="text-[#E4B564] font-bold">›</span> Privacy Policy
                   </a>
                 </li>
@@ -1401,16 +1615,17 @@ function Index() {
                   <div className="w-8 h-8 rounded-full border border-[#E4B564]/40 flex items-center justify-center text-[#E4B564] shrink-0 mt-0.5">
                     <MapPin className="w-4 h-4" />
                   </div>
-                  <span className="leading-snug">
-                    324, Nextcare Building, Al Karama, Dubai
-                  </span>
+                  <span className="leading-snug">324, Nextcare Building, Al Karama, Dubai</span>
                 </li>
 
                 <li className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full border border-[#E4B564]/40 flex items-center justify-center text-[#E4B564] shrink-0">
                     <Mail className="w-4 h-4" />
                   </div>
-                  <a href="mailto:desertjourneydxb@gmail.com" className="hover:text-[#E4B564] transition-colors">
+                  <a
+                    href="mailto:desertjourneydxb@gmail.com"
+                    className="hover:text-[#E4B564] transition-colors"
+                  >
                     desertjourneydxb@gmail.com
                   </a>
                 </li>
@@ -1461,18 +1676,17 @@ function Index() {
                 </svg>
               </div>
             </div>
-
           </div>
 
           {/* Bottom Copyright Bar */}
           <div className="flex flex-col md:flex-row items-center justify-between pt-6 text-[10px] text-white/60 tracking-wider">
-            <div>
-              © 2025 NextTrip Travel LLC | All Rights Reserved
-            </div>
+            <div>© 2025 NextTrip Travel LLC | All Rights Reserved</div>
 
             <div className="flex items-center gap-2 text-[#E4B564] my-3 md:my-0">
               <Palmtree className="w-4 h-4" />
-              <span className="text-white/80 font-semibold tracking-[0.2em]">EXPLORE &nbsp;|&nbsp; DISCOVER &nbsp;|&nbsp; EXPERIENCE</span>
+              <span className="text-white/80 font-semibold tracking-[0.2em]">
+                EXPLORE &nbsp;|&nbsp; DISCOVER &nbsp;|&nbsp; EXPERIENCE
+              </span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -1480,7 +1694,6 @@ function Index() {
               <span>DUBAI BEYOND ORDINARY</span>
             </div>
           </div>
-
         </ScrollReveal>
       </footer>
     </main>
