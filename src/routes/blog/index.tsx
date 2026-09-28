@@ -1,6 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
-import { Search, FileText, Lightbulb, Compass, Tent, Map, Utensils, Filter } from "lucide-react";
+import {
+  Search,
+  FileText,
+  Lightbulb,
+  Compass,
+  Tent,
+  Map,
+  Utensils,
+  Filter,
+  Sparkles,
+} from "lucide-react";
 import { SiteHeader } from "../../components/SiteHeader";
 import { SiteFooter } from "../../components/SiteFooter";
 import { BlogCard } from "../../components/BlogCard";
@@ -8,6 +18,7 @@ import { BlogSidebar } from "../../components/BlogSidebar";
 import { BLOG_CATEGORIES, BLOG_POSTS } from "../../data/blogs";
 import { useAllBlogsWithStats } from "../../hooks/useBlogStats";
 import { TextReveal } from "../../components/TextReveal";
+import { useLanguage } from "../../lib/i18n";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
@@ -33,14 +44,19 @@ const ICON_MAP: Record<string, typeof FileText> = {
 };
 
 function BlogPage() {
+  const { t, getLocalizedBlog } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Fetch blogs with actual live views & likes from backend API
   const allBlogs = useAllBlogsWithStats(BLOG_POSTS);
 
+  const localizedBlogs = useMemo(() => {
+    return allBlogs.map((b) => getLocalizedBlog(b));
+  }, [allBlogs, getLocalizedBlog]);
+
   const filteredPosts = useMemo(() => {
-    return allBlogs.filter((post) => {
+    return localizedBlogs.filter((post) => {
       const matchesCategory = selectedCategory === "all" || post.categorySlug === selectedCategory;
       const matchesSearch =
         searchQuery.trim() === "" ||
@@ -50,26 +66,26 @@ function BlogPage() {
 
       return matchesCategory && matchesSearch;
     });
-  }, [allBlogs, selectedCategory, searchQuery]);
+  }, [localizedBlogs, selectedCategory, searchQuery]);
 
   const handleHeroSearch = (e: React.FormEvent) => {
     e.preventDefault();
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white">
+    <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white page-fade-in">
       {/* Header Navigation matching actual website navbar */}
       <SiteHeader activeNav="Blogs" />
 
       {/* =========================================================
           HERO BANNER (Desert Sunrise with Jeep & Camels Silhouette)
       ========================================================= */}
-      <section className="relative min-h-[380px] sm:min-h-[440px] flex items-center justify-center text-center overflow-hidden">
-        {/* Background Image */}
+      <section className="relative min-h-[420px] sm:min-h-[480px] flex items-center justify-center text-center overflow-hidden pt-28 pb-14 sm:pt-36 sm:pb-18">
+        {/* Background Image with Zoom Animation */}
         <img
           src="/hero_bg.jpg"
           alt="Desert Safari Sunrise with Jeep Dune Bashing"
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          className="absolute inset-0 w-full h-full object-cover object-center scale-105 transition-transform duration-1000"
         />
 
         {/* Warm Golden / Amber Gradient Overlay */}
@@ -77,15 +93,15 @@ function BlogPage() {
         <div className="absolute inset-0 bg-radial from-transparent via-[#7C4A15]/30 to-black/80 z-0" />
 
         {/* Hero Content */}
-        <div className="relative z-10 max-w-4xl mx-auto px-4 py-16 flex flex-col items-center">
+        <div className="relative z-10 max-w-4xl mx-auto px-4 py-8 flex flex-col items-center">
           {/* Tag */}
-          <span className="text-xs sm:text-sm uppercase tracking-[0.35em] text-[#F3C472] font-bold mb-3">
-            OUR BLOG
+          <span className="text-xs sm:text-sm uppercase tracking-[0.35em] text-[#F3C472] font-bold mb-3 animate-fade-in-up">
+            {t("navBlogs")}
           </span>
 
           {/* Heading with word-by-word reveal */}
           <TextReveal
-            text="Desert Safari Blog"
+            text={t("latestTravelInsights")}
             as="h1"
             className="font-serif text-4xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight mb-4 drop-shadow-md"
             delay={0.1}
@@ -93,15 +109,14 @@ function BlogPage() {
           />
 
           {/* Subtitle */}
-          <p className="text-sm sm:text-base md:text-lg text-white/90 max-w-2xl leading-relaxed mb-8 font-sans drop-shadow-sm">
-            Travel tips, guides, experiences and everything you need to know about exploring the
-            magical deserts.
+          <p className="text-sm sm:text-base md:text-lg text-white/90 max-w-2xl leading-relaxed mb-8 font-sans drop-shadow-sm animate-fade-in-up delay-200">
+            {t("blogDescription")}
           </p>
 
-          {/* Central Hero Search Bar */}
+          {/* Central Hero Search Bar with Subtle Floating Glow */}
           <form
             onSubmit={handleHeroSearch}
-            className="w-full max-w-2xl bg-white rounded-full p-1.5 sm:p-2 shadow-2xl flex items-center gap-2 border border-white/40"
+            className="w-full max-w-2xl bg-white rounded-none p-1.5 sm:p-2 shadow-2xl flex items-center gap-2 border border-white/40 animate-fade-in-up delay-300 transition-all focus-within:ring-2 focus-within:ring-[#C68A36]/50"
           >
             <div className="relative flex-1 flex items-center pl-4 sm:pl-5">
               <Search className="w-5 h-5 text-stone-400 shrink-0" />
@@ -109,15 +124,15 @@ function BlogPage() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search blog posts..."
+                placeholder={t("searchPosts")}
                 className="w-full bg-transparent border-none py-2.5 sm:py-3 pl-3 pr-4 text-xs sm:text-sm text-stone-800 placeholder-stone-400 focus:outline-none"
               />
             </div>
             <button
               type="submit"
-              className="bg-[#C68A36] hover:bg-[#B3792A] text-white text-xs sm:text-sm font-bold uppercase tracking-wider px-6 sm:px-8 py-3 rounded-full transition-all shadow-md active:scale-95 shrink-0"
+              className="bg-[#C68A36] hover:bg-[#B3792A] text-white text-xs sm:text-sm font-bold uppercase tracking-wider px-6 sm:px-8 py-3 rounded-none transition-all shadow-md active:scale-95 shrink-0 hover:shadow-lg cursor-pointer"
             >
-              Search
+              {t("searchPosts")}
             </button>
           </form>
         </div>
@@ -137,10 +152,10 @@ function BlogPage() {
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.slug)}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-none text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer ${
                     isSelected
-                      ? "bg-[#C68A36] text-white shadow-md shadow-[#C68A36]/20"
-                      : "bg-[#FAF7F2] text-[#555047] hover:bg-[#F2ECE0] hover:text-[#C68A36] border border-[#E8DFC8]"
+                      ? "bg-[#C68A36] text-white shadow-md shadow-[#C68A36]/25 scale-105"
+                      : "bg-[#FAF7F2] text-[#555047] hover:bg-[#F2ECE0] hover:text-[#C68A36] border border-[#E8DFC8] hover:scale-102"
                   }`}
                 >
                   <Icon className={`w-4 h-4 ${isSelected ? "text-white" : "text-[#8C877D]"}`} />
@@ -161,7 +176,7 @@ function BlogPage() {
           <div className="lg:col-span-8 flex flex-col">
             {/* Active Filter Notice if searching or filtering */}
             {(selectedCategory !== "all" || searchQuery) && (
-              <div className="flex items-center justify-between bg-white border border-[#EDE7D9] rounded-xl px-5 py-3 mb-8 text-xs sm:text-sm text-[#555047]">
+              <div className="flex items-center justify-between bg-white border border-[#EDE7D9] rounded-none px-5 py-3 mb-8 text-xs sm:text-sm text-[#555047] animate-fade-in-up">
                 <div className="flex items-center gap-2">
                   <Filter className="w-4 h-4 text-[#C68A36]" />
                   <span>
@@ -179,7 +194,7 @@ function BlogPage() {
                     setSelectedCategory("all");
                     setSearchQuery("");
                   }}
-                  className="text-[#C68A36] font-bold hover:underline"
+                  className="text-[#C68A36] font-bold hover:underline cursor-pointer"
                 >
                   Reset
                 </button>
@@ -187,7 +202,7 @@ function BlogPage() {
             )}
 
             {filteredPosts.length === 0 ? (
-              <div className="bg-white rounded-2xl p-12 text-center border border-[#EDE7D9] my-8">
+              <div className="bg-white rounded-none p-12 text-center border border-[#EDE7D9] my-8 animate-fade-in-up">
                 <p className="text-lg font-serif text-[#333] mb-3">No blog posts found</p>
                 <p className="text-sm text-[#777] mb-6">
                   Try adjusting your search query or choosing a different category.
@@ -197,23 +212,29 @@ function BlogPage() {
                     setSelectedCategory("all");
                     setSearchQuery("");
                   }}
-                  className="bg-[#C68A36] text-white text-xs font-bold uppercase tracking-wider px-6 py-2.5 rounded-lg"
+                  className="bg-[#C68A36] text-white text-xs font-bold uppercase tracking-wider px-6 py-2.5 rounded-none hover:bg-[#B3792A] transition-all cursor-pointer shadow-md"
                 >
-                  View All Posts
+                  {t("viewMore")}
                 </button>
               </div>
             ) : (
-              /* Blog Posts Grid */
+              /* Blog Posts Grid with Staggered Entrance */
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-                {filteredPosts.map((post) => (
-                  <BlogCard key={post.id} post={post} />
+                {filteredPosts.map((post, idx) => (
+                  <div
+                    key={post.id}
+                    className="animate-fade-in-up"
+                    style={{ animationDelay: `${0.1 + (idx % 6) * 0.1}s` }}
+                  >
+                    <BlogCard post={post} />
+                  </div>
                 ))}
               </div>
             )}
           </div>
 
           {/* Right Sidebar Column (4 cols) */}
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-4 animate-fade-in-up delay-300">
             <BlogSidebar
               activeCategory={selectedCategory}
               onSelectCategory={(slug) => setSelectedCategory(slug)}
@@ -233,3 +254,4 @@ function BlogPage() {
     </div>
   );
 }
+

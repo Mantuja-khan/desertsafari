@@ -2,8 +2,11 @@ import { Link } from "@tanstack/react-router";
 import { Calendar, Eye, ArrowRight } from "lucide-react";
 import type { BlogPost } from "../data/blogs";
 import { useBlogStats } from "../hooks/useBlogStats";
+import { useLanguage } from "../lib/i18n";
 
 export function BlogCard({ post, className = "" }: { post: BlogPost; className?: string }) {
+  const { t, getLocalizedBlog } = useLanguage();
+  const localizedPost = getLocalizedBlog(post);
   const { views } = useBlogStats(post.slug, post.likes, post.views);
 
   return (
@@ -13,8 +16,8 @@ export function BlogCard({ post, className = "" }: { post: BlogPost; className?:
       {/* Thumbnail Container */}
       <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
         <img
-          src={post.image}
-          alt={post.title}
+          src={localizedPost.image}
+          alt={localizedPost.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
         />
@@ -22,7 +25,7 @@ export function BlogCard({ post, className = "" }: { post: BlogPost; className?:
         {/* Category Badge overlay */}
         <div className="absolute top-4 left-4 z-10">
           <span className="inline-block bg-[#C68A36] text-white text-[10px] font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-md shadow-md">
-            {post.categoryBadge}
+            {localizedPost.categoryBadge}
           </span>
         </div>
       </div>
@@ -30,11 +33,11 @@ export function BlogCard({ post, className = "" }: { post: BlogPost; className?:
       {/* Card Content Body */}
       <div className="p-6 flex-1 flex flex-col justify-between">
         <div>
-          {/* Date & Views Meta Row (removed min read and likes button) */}
+          {/* Date & Views Meta Row */}
           <div className="flex items-center gap-4 text-xs text-[#8A857B] mb-3 font-sans">
             <span className="flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5 text-[#C68A36]" />
-              {post.date}
+              {localizedPost.date}
             </span>
             <span className="flex items-center gap-1.5">
               <Eye className="w-3.5 h-3.5 text-[#C68A36]" />
@@ -44,14 +47,14 @@ export function BlogCard({ post, className = "" }: { post: BlogPost; className?:
 
           {/* Title */}
           <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#1F2421] leading-snug mb-3 group-hover:text-[#C68A36] transition-colors line-clamp-2">
-            <Link to="/blog/$slug" params={{ slug: post.slug }}>
-              {post.title}
+            <Link to="/blog/$slug" params={{ slug: localizedPost.slug }}>
+              {localizedPost.title}
             </Link>
           </h3>
 
           {/* Excerpt - Exactly 2 lines */}
           <p className="text-[#68645D] text-xs sm:text-sm leading-relaxed mb-6 line-clamp-2 font-sans">
-            {post.excerpt}
+            {localizedPost.excerpt}
           </p>
         </div>
 
@@ -59,10 +62,10 @@ export function BlogCard({ post, className = "" }: { post: BlogPost; className?:
         <div className="pt-3 border-t border-stone-100 flex items-center justify-between">
           <Link
             to="/blog/$slug"
-            params={{ slug: post.slug }}
+            params={{ slug: localizedPost.slug }}
             className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#C68A36] hover:text-[#9F671E] group/link transition-colors"
           >
-            <span>Read More</span>
+            <span>{t("readMore", "Read More")}</span>
             <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1.5 transition-transform duration-200" />
           </Link>
           <span className="text-[11px] text-[#8A857B] font-medium">{views}</span>

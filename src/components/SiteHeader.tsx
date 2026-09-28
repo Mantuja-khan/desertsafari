@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X, Calendar, Search, ChevronDown, Palmtree } from "lucide-react";
+import { Menu, X, Calendar, ChevronDown } from "lucide-react";
 import { CITY_TOURS } from "../data/cityTours";
 import { DESERT_SAFARIS } from "../data/desertSafaris";
+import { LanguageSelector } from "./LanguageSelector";
+import { useLanguage } from "../lib/i18n";
 
 // Unified Logo Component matching header aesthetics
 export function AppLogo({ className = "" }: { className?: string }) {
@@ -33,20 +35,33 @@ export function SiteHeader({ activeNav = "Home" }: { activeNav?: string }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSafariOpen, setMobileSafariOpen] = useState(false);
   const [mobileCityToursOpen, setMobileCityToursOpen] = useState(false);
+  const { t } = useLanguage();
 
   const navItems = [
-    { name: "Home", href: "/", isRoute: true },
-    { name: "About Us", href: "/about", isRoute: true },
-    { name: "Desert Safari", href: "/desert-safari", isRoute: true, hasSafariDropdown: true },
-    { name: "City Tours", href: "/city-tours", isRoute: true, hasCityDropdown: true },
-    { name: "Packages", href: "/#packages", isRoute: false },
-    { name: "Blogs", href: "/blog", isRoute: true },
-    { name: "Gallery", href: "/#gallery", isRoute: false },
-    { name: "Contact", href: "/contact", isRoute: true },
+    { name: t("home", "Home"), href: "/", isRoute: true, key: "home" },
+    { name: t("aboutUs", "About Us"), href: "/about", isRoute: true, key: "about" },
+    {
+      name: t("desertSafari", "Desert Safari"),
+      href: "/desert-safari",
+      isRoute: true,
+      hasSafariDropdown: true,
+      key: "desert-safari",
+    },
+    {
+      name: t("cityTours", "City Tours"),
+      href: "/city-tours",
+      isRoute: true,
+      hasCityDropdown: true,
+      key: "city-tours",
+    },
+    { name: t("packages", "Packages"), href: "/#packages", isRoute: false, key: "packages" },
+    { name: t("blogs", "Blogs"), href: "/blog", isRoute: true, key: "blogs" },
+    { name: t("gallery", "Gallery"), href: "/#gallery", isRoute: false, key: "gallery" },
+    { name: t("contact", "Contact"), href: "/contact", isRoute: true, key: "contact" },
   ];
 
   return (
-    <header className="relative z-50 w-full bg-[#0D3B33] border-b border-white/20 text-white shadow-xl transition-all">
+    <header className="absolute top-0 inset-x-0 z-50 w-full bg-transparent border-b border-white/20 text-white transition-all">
       <div className="max-w-[1340px] mx-auto px-6 h-24 flex items-center justify-between">
         {/* Brand Logo */}
         <AppLogo />
@@ -55,19 +70,20 @@ export function SiteHeader({ activeNav = "Home" }: { activeNav?: string }) {
         <nav className="hidden lg:flex items-center gap-7 font-sans text-xs tracking-wider">
           {navItems.map((item) => {
             const isItemActive =
+              activeNav.toLowerCase() === item.key.toLowerCase() ||
               activeNav.toLowerCase() === item.name.toLowerCase() ||
-              (item.name === "Blogs" && activeNav.toLowerCase() === "blog") ||
-              (item.name === "About Us" && activeNav.toLowerCase() === "about");
+              (item.key === "blogs" && activeNav.toLowerCase() === "blog") ||
+              (item.key === "about" && activeNav.toLowerCase() === "about us");
 
             return (
-              <div key={item.name} className="relative group py-6 flex items-center">
+              <div key={item.key} className="relative group py-6 flex items-center">
                 {item.isRoute ? (
                   <Link
                     to={item.href}
                     className={`relative transition-colors flex items-center gap-1.5 ${
                       isItemActive
                         ? "text-[#E4B564] font-semibold"
-                        : "text-white/80 hover:text-[#E4B564]"
+                        : "text-white/85 hover:text-[#E4B564]"
                     }`}
                   >
                     <span>{item.name}</span>
@@ -84,7 +100,7 @@ export function SiteHeader({ activeNav = "Home" }: { activeNav?: string }) {
                     className={`relative transition-colors flex items-center gap-1.5 ${
                       isItemActive
                         ? "text-[#E4B564] font-semibold"
-                        : "text-white/80 hover:text-[#E4B564]"
+                        : "text-white/85 hover:text-[#E4B564]"
                     }`}
                   >
                     <span>{item.name}</span>
@@ -94,16 +110,16 @@ export function SiteHeader({ activeNav = "Home" }: { activeNav?: string }) {
                   </a>
                 )}
 
-                {/* Desert Safari Simple White Background Dropdown (NO Border Styling) */}
+                {/* Desert Safari Simple White Background Dropdown */}
                 {item.hasSafariDropdown && (
-                  <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[310px]">
-                    <div className="bg-white rounded-2xl shadow-2xl py-3 px-1 overflow-hidden border-0">
+                  <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] min-w-[310px]">
+                    <div className="bg-white rounded-none shadow-2xl py-3 px-1 overflow-hidden border border-gray-200">
                       <div className="px-4 py-2 border-b border-gray-100 mb-1 flex items-center justify-between">
                         <Link
                           to="/desert-safari"
                           className="text-[11px] font-bold text-[#C68A36] uppercase tracking-wider hover:underline"
                         >
-                          All Desert Safari Packages →
+                          {t("allDesertSafari", "All Desert Safari Packages →")}
                         </Link>
                       </div>
                       {DESERT_SAFARIS.map((safari) => (
@@ -111,7 +127,7 @@ export function SiteHeader({ activeNav = "Home" }: { activeNav?: string }) {
                           key={safari.id}
                           to="/desert-safari/$slug"
                           params={{ slug: safari.slug }}
-                          className="block px-4 py-2.5 text-xs text-gray-800 hover:text-[#C68A36] hover:bg-amber-50/60 rounded-lg transition-colors font-sans"
+                          className="block px-4 py-2.5 text-xs text-gray-800 hover:text-[#C68A36] hover:bg-amber-50/60 rounded-none transition-colors font-sans"
                         >
                           <div className="flex items-center justify-between">
                             <span className="font-medium">{safari.title}</span>
@@ -125,16 +141,16 @@ export function SiteHeader({ activeNav = "Home" }: { activeNav?: string }) {
                   </div>
                 )}
 
-                {/* City Tours Simple White Background Dropdown (NO Border Styling) */}
+                {/* City Tours Simple White Background Dropdown */}
                 {item.hasCityDropdown && (
-                  <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[310px]">
-                    <div className="bg-white rounded-2xl shadow-2xl py-3 px-1 overflow-hidden border-0">
+                  <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] min-w-[310px]">
+                    <div className="bg-white rounded-none shadow-2xl py-3 px-1 overflow-hidden border border-gray-200">
                       <div className="px-4 py-2 border-b border-gray-100 mb-1 flex items-center justify-between">
                         <Link
                           to="/city-tours"
                           className="text-[11px] font-bold text-[#C68A36] uppercase tracking-wider hover:underline"
                         >
-                          All City Tours Packages →
+                          {t("allCityTours", "All City Tours Packages →")}
                         </Link>
                       </div>
                       {CITY_TOURS.map((tour) => (
@@ -142,7 +158,7 @@ export function SiteHeader({ activeNav = "Home" }: { activeNav?: string }) {
                           key={tour.id}
                           to="/city-tours/$slug"
                           params={{ slug: tour.slug }}
-                          className="block px-4 py-2.5 text-xs text-gray-800 hover:text-[#C68A36] hover:bg-amber-50/60 rounded-lg transition-colors font-sans"
+                          className="block px-4 py-2.5 text-xs text-gray-800 hover:text-[#C68A36] hover:bg-amber-50/60 rounded-none transition-colors font-sans"
                         >
                           <div className="flex items-center justify-between">
                             <span className="font-medium">{tour.title}</span>
@@ -160,32 +176,31 @@ export function SiteHeader({ activeNav = "Home" }: { activeNav?: string }) {
           })}
         </nav>
 
-        {/* Right Header Action Controls */}
-        <div className="hidden lg:flex items-center gap-4">
-          <Link
-            to="/blog"
-            className="p-2 text-white/80 hover:text-[#E4B564] transition-colors"
-            aria-label="Search"
-          >
-            <Search className="w-4 h-4" />
-          </Link>
+        {/* Right Header Action Controls: Language Selector + Book Now */}
+        <div className="hidden lg:flex items-center gap-3">
+          {/* Language Selector matching uploaded UI */}
+          <LanguageSelector />
+
           <a
             href="/#packages"
-            className="bg-[#E4B564] hover:bg-[#E8C88B] text-[#0D3B33] font-sans font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xs flex items-center gap-2 transition-all shadow-md active:scale-95"
+            className="bg-[#E4B564] hover:bg-[#E8C88B] text-[#0D3B33] font-sans font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-none flex items-center gap-2 transition-all shadow-md active:scale-95"
           >
             <Calendar className="w-4 h-4" />
-            Book Now
+            {t("bookNow", "Book Now")}
           </a>
         </div>
 
-        {/* Mobile Menu Toggle Button */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden p-2 text-white hover:text-[#E4B564]"
-          aria-label="Toggle Navigation"
-        >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        {/* Mobile Header Controls */}
+        <div className="lg:hidden flex items-center gap-2">
+          <LanguageSelector />
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 text-white hover:text-[#E4B564]"
+            aria-label="Toggle Navigation"
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Dropdown Menu */}
@@ -305,7 +320,7 @@ export function SiteHeader({ activeNav = "Home" }: { activeNav?: string }) {
           <a
             href="/#packages"
             onClick={() => setMobileMenuOpen(false)}
-            className="bg-[#E4B564] text-[#0D3B33] font-bold uppercase text-center py-3 rounded mt-2 flex items-center justify-center gap-2"
+            className="bg-[#E4B564] text-[#0D3B33] font-bold uppercase text-center py-3 rounded-none mt-2 flex items-center justify-center gap-2"
           >
             <Calendar className="w-4 h-4" />
             Book Now

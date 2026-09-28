@@ -24,15 +24,17 @@ import {
 import { SiteHeader } from "../../components/SiteHeader";
 import { SiteFooter } from "../../components/SiteFooter";
 import { TextReveal } from "../../components/TextReveal";
+import { TourSectionTabs } from "../../components/TourSectionTabs";
 import { CITY_TOURS, type CityTour } from "../../data/cityTours";
+import { useLanguage } from "../../lib/i18n";
 
 export const Route = createFileRoute("/city-tours/$slug")({
   head: ({ params }) => {
-    const tour = CITY_TOURS.find((t) => t.slug === params.slug) || CITY_TOURS[0];
+    const tour = CITY_TOURS.find((t) => t.slug === params.slug) || (CITY_TOURS[0] as CityTour);
     return {
       meta: [
-        { title: `${tour.title} | Desert Journey DXB` },
-        { name: "description", content: tour.description },
+        { title: `${tour?.title || "City Tour"} | Desert Journey DXB` },
+        { name: "description", content: tour?.description || "" },
       ],
     };
   },
@@ -48,12 +50,14 @@ const ICON_MAP: Record<string, typeof Car> = {
 
 function CityTourDetailPage() {
   const { slug } = useParams({ from: "/city-tours/$slug" });
+  const { t, getLocalizedTourData } = useLanguage();
 
-  const tour: CityTour = CITY_TOURS.find((t) => t.slug === slug) || CITY_TOURS[0];
+  const baseTour: CityTour = (CITY_TOURS.find((t) => t.slug === slug) || CITY_TOURS[0])!;
+  const tour: CityTour = getLocalizedTourData(baseTour.slug, baseTour) as CityTour;
 
   const [adults, setAdults] = useState(1);
   const [infants, setInfants] = useState(0);
-  const [selectedPkg, setSelectedPkg] = useState(tour.type);
+  const [selectedPkg, setSelectedPkg] = useState<string>(tour.type);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
 
@@ -66,7 +70,7 @@ function CityTourDetailPage() {
   const [month, setMonth] = useState("09");
   const [year, setYear] = useState("2026");
 
-  const otherTours = CITY_TOURS.filter((t) => t.id !== tour.id).slice(0, 4);
+  const otherTours = CITY_TOURS.filter((t) => t.id !== baseTour.id).slice(0, 4);
 
   const handleBooking = (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,14 +79,14 @@ function CityTourDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white">
+    <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white page-fade-in">
       {/* Website Navigation Header */}
       <SiteHeader activeNav="City Tours" />
 
       {/* =========================================================
           HERO BANNER MATCHING IMAGE 3
       ========================================================= */}
-      <section className="relative min-h-[460px] sm:min-h-[520px] flex items-center overflow-hidden text-white py-12">
+      <section className="relative min-h-[480px] sm:min-h-[540px] flex items-center overflow-hidden text-white pt-28 pb-12 sm:pt-36 sm:pb-16">
         {/* Background Dubai Skyline */}
         <img
           src={tour.image}
@@ -122,11 +126,11 @@ function CityTourDetailPage() {
             <div className="flex flex-wrap items-center gap-3 text-xs font-semibold">
               <div className="flex items-center gap-1.5 bg-[#C68A36]/90 text-white px-3.5 py-1.5 rounded-md backdrop-blur-xs">
                 <Flame className="w-3.5 h-3.5 fill-current" />
-                <span>BestSeller</span>
+                <span>{t("bestseller")}</span>
               </div>
               <div className="flex items-center gap-1.5 bg-emerald-600/90 text-white px-3.5 py-1.5 rounded-md backdrop-blur-xs">
                 <Award className="w-3.5 h-3.5 fill-current" />
-                <span>2025 Traveller&apos;s Choice</span>
+                <span>{t("travellerChoice")}</span>
               </div>
               <div className="flex items-center gap-1.5 bg-black/50 text-white/90 px-3.5 py-1.5 rounded-md border border-white/20">
                 <MapPin className="w-3.5 h-3.5 text-[#F3C472]" />
@@ -178,11 +182,14 @@ function CityTourDetailPage() {
       <main className="flex-1 max-w-[1360px] mx-auto px-4 sm:px-8 py-12 sm:py-16 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
           {/* LEFT COLUMN: TOUR DETAILS & ITINERARY (8 COLS) */}
-          <div className="lg:col-span-8 flex flex-col gap-12">
+          <div className="lg:col-span-8 flex flex-col gap-10">
+            {/* Interactive 7 Tags Section (About, Overview, Itenary, Highlights, Know Before You Go, Age Policy, Cancellation Policy) */}
+            <TourSectionTabs tour={tour} isCityTour={true} />
+
             {/* 1. Tour Overview */}
             <section className="bg-white rounded-3xl p-8 border border-[#EDE7D9] shadow-xs">
               <h2 className="font-serif text-3xl font-bold text-[#1F2421] mb-4">
-                Tour <em className="gold-italic">Overview</em>
+                {t("tourOverview")}
               </h2>
               <p className="text-sm sm:text-base text-[#524E46] leading-relaxed mb-8">
                 {tour.description}
@@ -211,7 +218,7 @@ function CityTourDetailPage() {
             {/* 2. Top Attractions */}
             <section>
               <h3 className="font-serif text-3xl font-bold text-[#1F2421] mb-6">
-                Top <em className="gold-italic">Attractions</em>
+                {t("topAttractions")}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
                 {tour.attractions.map((attr, i) => (
@@ -240,7 +247,7 @@ function CityTourDetailPage() {
             {/* 3. Top Itinerary Timeline */}
             <section className="bg-white rounded-3xl p-8 border border-[#EDE7D9] shadow-xs">
               <h3 className="font-serif text-3xl font-bold text-[#1F2421] mb-8">
-                Top <em className="gold-italic">Itinerary</em>
+                {t("topItinerary")}
               </h3>
 
               {/* Timeline Horizontal / Stepper */}
@@ -276,7 +283,7 @@ function CityTourDetailPage() {
               <div className="relative z-10 flex flex-col items-center text-white">
                 <button
                   type="button"
-                  className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border-2 border-white text-white flex items-center justify-center hover:scale-110 transition-transform mb-3 shadow-xl"
+                  className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border-2 border-white text-white flex items-center justify-center hover:scale-110 transition-transform mb-3 shadow-xl cursor-pointer"
                   aria-label="Play video"
                 >
                   <Play className="w-6 h-6 fill-white translate-x-0.5" />
@@ -296,7 +303,7 @@ function CityTourDetailPage() {
                   <div className="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center">
                     <Check className="w-4 h-4" />
                   </div>
-                  <h4 className="font-serif text-xl font-bold text-[#1F2421]">Inclusions</h4>
+                  <h4 className="font-serif text-xl font-bold text-[#1F2421]">{t("inclusions")}</h4>
                 </div>
                 <ul className="space-y-3">
                   {tour.inclusions.map((inc, i) => (
@@ -317,7 +324,7 @@ function CityTourDetailPage() {
                   <div className="w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center">
                     <X className="w-4 h-4" />
                   </div>
-                  <h4 className="font-serif text-xl font-bold text-[#1F2421]">Exclusions</h4>
+                  <h4 className="font-serif text-xl font-bold text-[#1F2421]">{t("exclusions")}</h4>
                 </div>
                 <ul className="space-y-3">
                   {tour.exclusions.map((exc, i) => (
@@ -345,7 +352,7 @@ function CityTourDetailPage() {
                   ♦
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-[#8A857B]">FROM</span>
+                  <span className="text-[10px] uppercase font-bold text-[#8A857B]">{t("from")}</span>
                   <div className="font-serif text-3xl font-bold text-[#C68A36] leading-none">
                     {tour.price}
                   </div>
@@ -365,20 +372,20 @@ function CityTourDetailPage() {
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EDE7D9] shadow-md">
               <div className="flex items-center gap-2 mb-2">
                 <Calendar className="w-5 h-5 text-[#C68A36]" />
-                <h3 className="font-serif text-2xl font-bold text-[#1F2421]">Book Your Tour</h3>
+                <h3 className="font-serif text-2xl font-bold text-[#1F2421]">{t("bookYourTour")}</h3>
               </div>
               <p className="text-xs text-[#7A746B] mb-6">
-                Fill in the details and we&apos;ll get back to you shortly.
+                {t("enterDetails")}
               </p>
 
               {bookingSubmitted ? (
                 <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-center animate-fade-in-up">
                   <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
                   <h4 className="font-serif text-lg font-bold text-emerald-900 mb-1">
-                    Booking Request Sent!
+                    {t("bookingSubmitted")}
                   </h4>
                   <p className="text-xs text-emerald-700">
-                    Our team will confirm your tour reservation via WhatsApp/Email shortly.
+                    {t("bookingSuccessMsg")}
                   </p>
                 </div>
               ) : (
@@ -390,8 +397,8 @@ function CityTourDetailPage() {
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="Your Name *"
-                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3 pl-10 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] transition-all"
+                      placeholder={`${t("yourName")} *`}
+                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-4 py-3 pl-10 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] transition-all"
                     />
                     <User className="w-4 h-4 text-[#8C877D] absolute left-3.5 top-1/2 -translate-y-1/2" />
                   </div>
@@ -403,8 +410,8 @@ function CityTourDetailPage() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Your Email *"
-                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3 pl-10 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] transition-all"
+                      placeholder={`${t("yourEmail")} *`}
+                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-4 py-3 pl-10 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] transition-all"
                     />
                     <Send className="w-4 h-4 text-[#8C877D] absolute left-3.5 top-1/2 -translate-y-1/2" />
                   </div>
@@ -416,8 +423,8 @@ function CityTourDetailPage() {
                       required
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      placeholder="Your Phone Number *"
-                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3 pl-10 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] transition-all"
+                      placeholder={`${t("yourPhone")} *`}
+                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-4 py-3 pl-10 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] transition-all"
                     />
                     <Car className="w-4 h-4 text-[#8C877D] absolute left-3.5 top-1/2 -translate-y-1/2" />
                   </div>
@@ -427,7 +434,7 @@ function CityTourDetailPage() {
                     <select
                       value={selectedPkg}
                       onChange={(e) => setSelectedPkg(e.target.value)}
-                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3 text-xs sm:text-sm text-[#2D2A26] focus:outline-none focus:border-[#C68A36] transition-all appearance-none cursor-pointer"
+                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-4 py-3 text-xs sm:text-sm text-[#2D2A26] focus:outline-none focus:border-[#C68A36] transition-all appearance-none cursor-pointer"
                     >
                       <option value="Private Tour">Private Tour ({tour.price})</option>
                       <option value="Sharing Tour">Sharing Tour (AED 99)</option>
@@ -437,16 +444,16 @@ function CityTourDetailPage() {
 
                   {/* Counters: Adults & Infants */}
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl p-2.5 flex items-center justify-between text-xs">
+                    <div className="bg-[#FAF7F2] border border-[#E5DFD3] rounded-none p-2.5 flex items-center justify-between text-xs">
                       <div>
-                        <span className="font-bold text-[#1F2421] block">Adults *</span>
+                        <span className="font-bold text-[#1F2421] block">{t("adults")} *</span>
                         <span className="text-[10px] text-[#8C877D]">10+ Yrs</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <button
                           type="button"
                           onClick={() => setAdults(Math.max(1, adults - 1))}
-                          className="w-6 h-6 rounded-md bg-white border border-stone-200 font-bold flex items-center justify-center text-stone-700"
+                          className="w-6 h-6 rounded-none bg-white border border-stone-200 font-bold flex items-center justify-center text-stone-700 hover:bg-gray-100 cursor-pointer"
                         >
                           -
                         </button>
@@ -454,23 +461,23 @@ function CityTourDetailPage() {
                         <button
                           type="button"
                           onClick={() => setAdults(adults + 1)}
-                          className="w-6 h-6 rounded-md bg-white border border-stone-200 font-bold flex items-center justify-center text-stone-700"
+                          className="w-6 h-6 rounded-none bg-white border border-stone-200 font-bold flex items-center justify-center text-stone-700 hover:bg-gray-100 cursor-pointer"
                         >
                           +
                         </button>
                       </div>
                     </div>
 
-                    <div className="bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl p-2.5 flex items-center justify-between text-xs">
+                    <div className="bg-[#FAF7F2] border border-[#E5DFD3] rounded-none p-2.5 flex items-center justify-between text-xs">
                       <div>
-                        <span className="font-bold text-[#1F2421] block">Infant</span>
+                        <span className="font-bold text-[#1F2421] block">{t("infants")}</span>
                         <span className="text-[10px] text-[#8C877D]">0-9 Yrs</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <button
                           type="button"
                           onClick={() => setInfants(Math.max(0, infants - 1))}
-                          className="w-6 h-6 rounded-md bg-white border border-stone-200 font-bold flex items-center justify-center text-stone-700"
+                          className="w-6 h-6 rounded-none bg-white border border-stone-200 font-bold flex items-center justify-center text-stone-700 hover:bg-gray-100 cursor-pointer"
                         >
                           -
                         </button>
@@ -478,7 +485,7 @@ function CityTourDetailPage() {
                         <button
                           type="button"
                           onClick={() => setInfants(infants + 1)}
-                          className="w-6 h-6 rounded-md bg-white border border-stone-200 font-bold flex items-center justify-center text-stone-700"
+                          className="w-6 h-6 rounded-none bg-white border border-stone-200 font-bold flex items-center justify-center text-stone-700 hover:bg-gray-100 cursor-pointer"
                         >
                           +
                         </button>
@@ -493,8 +500,8 @@ function CityTourDetailPage() {
                       required
                       value={hotel}
                       onChange={(e) => setHotel(e.target.value)}
-                      placeholder="Street Address / Hotel Name *"
-                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3 pl-10 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] transition-all"
+                      placeholder={`${t("streetAddress")} *`}
+                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-4 py-3 pl-10 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] transition-all"
                     />
                     <MapPin className="w-4 h-4 text-[#8C877D] absolute left-3.5 top-1/2 -translate-y-1/2" />
                   </div>
@@ -505,7 +512,7 @@ function CityTourDetailPage() {
                       <select
                         value={day}
                         onChange={(e) => setDay(e.target.value)}
-                        className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-2 py-2.5 text-xs text-[#2D2A26] focus:outline-none focus:border-[#C68A36] appearance-none"
+                        className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-2 py-2.5 text-xs text-[#2D2A26] focus:outline-none focus:border-[#C68A36] appearance-none"
                       >
                         {Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, "0")).map(
                           (d) => (
@@ -522,7 +529,7 @@ function CityTourDetailPage() {
                       <select
                         value={month}
                         onChange={(e) => setMonth(e.target.value)}
-                        className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-2 py-2.5 text-xs text-[#2D2A26] focus:outline-none focus:border-[#C68A36] appearance-none"
+                        className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-2 py-2.5 text-xs text-[#2D2A26] focus:outline-none focus:border-[#C68A36] appearance-none"
                       >
                         {[
                           "01",
@@ -550,7 +557,7 @@ function CityTourDetailPage() {
                       <select
                         value={year}
                         onChange={(e) => setYear(e.target.value)}
-                        className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-2 py-2.5 text-xs text-[#2D2A26] focus:outline-none focus:border-[#C68A36] appearance-none"
+                        className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-2 py-2.5 text-xs text-[#2D2A26] focus:outline-none focus:border-[#C68A36] appearance-none"
                       >
                         <option value="2026">2026</option>
                         <option value="2027">2027</option>
@@ -562,10 +569,10 @@ function CityTourDetailPage() {
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    className="w-full bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs sm:text-sm py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md active:scale-98 uppercase tracking-wider cursor-pointer"
+                    className="w-full bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs sm:text-sm py-4 px-6 rounded-none flex items-center justify-center gap-2 transition-all shadow-md active:scale-98 uppercase tracking-wider cursor-pointer"
                   >
                     <Send className="w-4 h-4" />
-                    <span>Book Now</span>
+                    <span>{t("bookNow")}</span>
                   </button>
 
                   <p className="text-[11px] text-center text-[#8C877D] flex items-center justify-center gap-1.5 pt-1">
@@ -585,7 +592,7 @@ function CityTourDetailPage() {
               />
               <div>
                 <h4 className="font-serif text-base font-bold text-[#1F2421] leading-tight">
-                  Need a Customized Tour?
+                  {t("needCustomizedTour")}
                 </h4>
                 <p className="text-xs text-[#7A746B] mt-0.5 mb-2">
                   Contact us for special requests or group bookings.
@@ -603,7 +610,7 @@ function CityTourDetailPage() {
             {/* FAQs Widget */}
             <div className="bg-white rounded-3xl p-6 border border-[#EDE7D9] shadow-sm">
               <h4 className="font-serif text-xl font-bold text-[#1F2421] pb-3 mb-4 border-b border-stone-100">
-                Frequently Asked Questions
+                {t("frequentlyAskedQuestions")}
               </h4>
               <div className="space-y-2.5">
                 {tour.faqs.map((faq, index) => {
@@ -643,7 +650,7 @@ function CityTourDetailPage() {
         <div className="max-w-[1360px] mx-auto px-4 sm:px-8">
           <div className="text-center mb-10">
             <h3 className="font-serif text-3xl sm:text-4xl font-bold text-[#1F2421]">
-              Explore More <em className="gold-italic">UAE Tours</em>
+              {t("exploreMoreTours")}
             </h3>
             <p className="text-xs sm:text-sm text-[#7A746B] mt-1">
               Discover our other popular tours and experiences.

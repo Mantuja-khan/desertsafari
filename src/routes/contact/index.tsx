@@ -20,6 +20,7 @@ import {
 import { SiteHeader } from "../../components/SiteHeader";
 import { SiteFooter } from "../../components/SiteFooter";
 import { TextReveal } from "../../components/TextReveal";
+import { useLanguage } from "../../lib/i18n";
 
 export const Route = createFileRoute("/contact/")({
   head: () => ({
@@ -36,6 +37,7 @@ export const Route = createFileRoute("/contact/")({
 });
 
 function ContactPage() {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -81,14 +83,14 @@ function ContactPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white">
+    <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white page-fade-in">
       {/* Actual Website Navbar */}
       <SiteHeader activeNav="Contact" />
 
       {/* =========================================================
           HERO BANNER MATCHING IMAGE
       ========================================================= */}
-      <section className="relative min-h-[380px] sm:min-h-[420px] flex items-center justify-center text-center overflow-hidden">
+      <section className="relative min-h-[420px] sm:min-h-[460px] flex items-center justify-center text-center overflow-hidden pt-28 pb-14 sm:pt-36 sm:pb-18">
         {/* Background Desert Sunrise with 4x4 Jeep & Camels Silhouette */}
         <img
           src="/hero_bg.jpg"
@@ -101,15 +103,15 @@ function ContactPage() {
         <div className="absolute inset-0 bg-radial from-transparent via-[#7C4A15]/30 to-black/80 z-0" />
 
         {/* Hero Central Content */}
-        <div className="relative z-10 max-w-4xl mx-auto px-4 py-16 flex flex-col items-center">
+        <div className="relative z-10 max-w-4xl mx-auto px-4 py-8 flex flex-col items-center">
           {/* Small Top Tag */}
           <span className="text-xs sm:text-sm uppercase tracking-[0.35em] text-[#F3C472] font-bold mb-3 animate-fade-in-up">
-            GET IN TOUCH
+            {t("contactUs")}
           </span>
 
           {/* Heading with Word-by-Word Text Reveal */}
           <TextReveal
-            text="Contact Us"
+            text={t("contactUs")}
             as="h1"
             className="font-serif text-5xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight mb-4 drop-shadow-md"
             delay={0.1}
@@ -118,8 +120,7 @@ function ContactPage() {
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base md:text-lg text-white/90 max-w-2xl leading-relaxed font-sans drop-shadow-sm animate-fade-in-up delay-200">
-            Have questions about our desert safari tours or need help planning your trip? We&apos;re
-            here to help!
+            {t("enterDetails")}
           </p>
         </div>
       </section>
@@ -133,24 +134,23 @@ function ContactPage() {
           <div className="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-10 border border-[#EDE7D9] shadow-md">
             <div className="mb-8">
               <TextReveal
-                text="Send Us a Message"
+                text={t("contactUs")}
                 as="h2"
                 className="font-serif text-2xl sm:text-3xl font-bold text-[#1F2421] mb-2"
               />
               <p className="text-xs sm:text-sm text-[#736E65] leading-relaxed">
-                Fill out the form below and we&apos;ll get back to you as soon as possible.
+                {t("enterDetails")}
               </p>
             </div>
 
             {submitted ? (
-              <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-center animate-fade-in-up">
+              <div className="bg-emerald-50 border border-emerald-200 rounded-none p-6 text-center animate-fade-in-up">
                 <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
                 <h3 className="font-serif text-xl font-bold text-emerald-900 mb-1">
-                  Message Sent Successfully!
+                  {t("bookingSubmitted")}
                 </h3>
                 <p className="text-xs sm:text-sm text-emerald-700">
-                  Thank you for reaching out. Our safari specialists will contact you within 24
-                  hours.
+                  {t("bookingSuccessMsg")}
                 </p>
               </div>
             ) : (
@@ -164,8 +164,8 @@ function ContactPage() {
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Your Name *"
-                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3.5 pl-11 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] focus:bg-white transition-all"
+                      placeholder={`${t("yourName")} *`}
+                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-4 py-3.5 pl-11 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] focus:bg-white transition-all"
                     />
                     <User className="w-4 h-4 text-[#8C877D] absolute left-4 top-1/2 -translate-y-1/2" />
                   </div>
@@ -177,8 +177,8 @@ function ContactPage() {
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="Your Email *"
-                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3.5 pl-11 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] focus:bg-white transition-all"
+                      placeholder={`${t("yourEmail")} *`}
+                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-4 py-3.5 pl-11 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] focus:bg-white transition-all"
                     />
                     <Mail className="w-4 h-4 text-[#8C877D] absolute left-4 top-1/2 -translate-y-1/2" />
                   </div>
@@ -193,8 +193,8 @@ function ContactPage() {
                       required
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      placeholder="Your Phone Number *"
-                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3.5 pl-11 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] focus:bg-white transition-all"
+                      placeholder={`${t("yourPhone")} *`}
+                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-4 py-3.5 pl-11 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] focus:bg-white transition-all"
                     />
                     <Phone className="w-4 h-4 text-[#8C877D] absolute left-4 top-1/2 -translate-y-1/2" />
                   </div>
@@ -204,7 +204,7 @@ function ContactPage() {
                     <select
                       value={formData.tourType}
                       onChange={(e) => setFormData({ ...formData, tourType: e.target.value })}
-                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3.5 pl-11 pr-10 text-xs sm:text-sm text-[#2D2A26] focus:outline-none focus:border-[#C68A36] focus:bg-white transition-all appearance-none cursor-pointer"
+                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-4 py-3.5 pl-11 pr-10 text-xs sm:text-sm text-[#2D2A26] focus:outline-none focus:border-[#C68A36] focus:bg-white transition-all appearance-none cursor-pointer"
                     >
                       <option value="" disabled>
                         Select Tour Type
@@ -229,7 +229,7 @@ function ContactPage() {
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder="Your Message *"
-                    className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl p-4 pl-11 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] focus:bg-white transition-all resize-none"
+                    className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none p-4 pl-11 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] focus:bg-white transition-all resize-none"
                   />
                   <MessageSquare className="w-4 h-4 text-[#8C877D] absolute left-4 top-4" />
                 </div>
@@ -237,10 +237,10 @@ function ContactPage() {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs sm:text-sm py-4 px-6 rounded-xl flex items-center justify-center gap-2.5 transition-all shadow-md active:scale-98 uppercase tracking-wider cursor-pointer"
+                  className="w-full bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs sm:text-sm py-4 px-6 rounded-none flex items-center justify-center gap-2.5 transition-all shadow-md active:scale-98 uppercase tracking-wider cursor-pointer"
                 >
                   <Send className="w-4 h-4" />
-                  <span>Send Message</span>
+                  <span>{t("bookNow")}</span>
                 </button>
               </form>
             )}
@@ -258,12 +258,12 @@ function ContactPage() {
                 <div>
                   <h4 className="font-serif text-base font-bold text-[#1F2421]">Call Us</h4>
                   <a
-                    href="tel:+919876543210"
+                    href="tel:+971501234567"
                     className="text-xs font-bold text-[#C68A36] hover:underline block"
                   >
-                    +91 98765 43210
+                    +971 50 123 4567
                   </a>
-                  <p className="text-[11px] text-[#8C877D] mt-0.5">Mon - Sun: 8:00 AM - 8:00 PM</p>
+                  <p className="text-[11px] text-[#8C877D] mt-0.5">Mon - Sun: 8:00 AM - 10:00 PM</p>
                 </div>
               </div>
 
@@ -275,10 +275,10 @@ function ContactPage() {
                 <div>
                   <h4 className="font-serif text-base font-bold text-[#1F2421]">Email Us</h4>
                   <a
-                    href="mailto:info@desertsafari.com"
+                    href="mailto:info@desertjourneydxb.com"
                     className="text-xs font-bold text-[#C68A36] hover:underline block"
                   >
-                    info@desertsafari.com
+                    info@desertjourneydxb.com
                   </a>
                   <p className="text-[11px] text-[#8C877D] mt-0.5">
                     We&apos;ll respond within 24 hours
@@ -293,8 +293,8 @@ function ContactPage() {
                 </div>
                 <div>
                   <h4 className="font-serif text-base font-bold text-[#1F2421]">Visit Us</h4>
-                  <p className="text-xs font-bold text-[#1F2421]">Jaisalmer, Rajasthan</p>
-                  <p className="text-[11px] text-[#8C877D] mt-0.5">India - 345001</p>
+                  <p className="text-xs font-bold text-[#1F2421]">Dubai Marina, UAE</p>
+                  <p className="text-[11px] text-[#8C877D] mt-0.5">Downtown Dubai</p>
                 </div>
               </div>
             </div>
@@ -303,8 +303,8 @@ function ContactPage() {
             <div className="relative rounded-3xl overflow-hidden border border-[#EDE7D9] shadow-md h-[340px] sm:h-[380px] bg-stone-200">
               {/* Google Map Embed */}
               <iframe
-                title="Desert Safari Jaisalmer Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d113645.7176465492!2d70.83547844111328!3d26.91574868472535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3947bc4878a87b01%3A0x6a19f074d28e75e!2sJaisalmer%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1716000000000!5m2!1sen!2sin"
+                title="Desert Safari Dubai Location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115622.7844111303!2d55.195498!3d25.138804!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f43496ad9c645%3A0xbde66e5084295162!2sDubai%20Desert%20Safari!5e0!3m2!1sen!2sae!4v1716000000000!5m2!1sen!2sae"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -321,13 +321,13 @@ function ContactPage() {
                   <h5 className="font-serif text-base font-bold text-[#1F2421]">Our Location</h5>
                 </div>
                 <p className="text-xs font-semibold text-[#C68A36] mb-1.5">
-                  Jaisalmer, Rajasthan, India
+                  Downtown Dubai, UAE
                 </p>
                 <p className="text-[11px] text-[#635E54] leading-relaxed mb-3">
-                  Experience the beauty of the Thar Desert with our authentic desert safari tours.
+                  Experience the pinnacle of luxury desert tours and bespoke city excursions in the UAE.
                 </p>
                 <a
-                  href="https://maps.google.com/?q=Jaisalmer+Rajasthan"
+                  href="https://maps.google.com/?q=Dubai+UAE"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-[#C68A36] hover:bg-[#B3792A] text-white text-xs font-bold px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-all shadow-xs"
@@ -350,7 +350,7 @@ function ContactPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 text-white">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-[#F3C472]">
-                    THAR DESERT OASIS
+                    DUBAI DESERT OASIS
                   </span>
                   <p className="font-serif text-lg font-bold text-white leading-tight mt-0.5">
                     Magical Evening Campfire & Stargazing
@@ -363,7 +363,7 @@ function ContactPage() {
                 <div>
                   <div className="flex items-center justify-between pb-3 mb-3 border-b border-stone-100">
                     <TextReveal
-                      text="Frequently Asked Questions"
+                      text={t("frequentlyAskedQuestions")}
                       as="h4"
                       className="font-serif text-lg font-bold text-[#1F2421]"
                     />
@@ -371,7 +371,7 @@ function ContactPage() {
                       to="/blog"
                       className="text-xs font-bold text-[#C68A36] hover:text-[#9F671E] flex items-center gap-1"
                     >
-                      View All →
+                      {t("viewMore")} →
                     </Link>
                   </div>
 
@@ -477,3 +477,4 @@ function ContactPage() {
     </div>
   );
 }
+

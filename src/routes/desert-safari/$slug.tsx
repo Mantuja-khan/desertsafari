@@ -26,6 +26,8 @@ import { DESERT_SAFARIS, type DesertSafariTour } from "../../data/desertSafaris"
 import { SiteHeader } from "../../components/SiteHeader";
 import { SiteFooter } from "../../components/SiteFooter";
 import { TextReveal } from "../../components/TextReveal";
+import { TourSectionTabs } from "../../components/TourSectionTabs";
+import { useLanguage } from "../../lib/i18n";
 
 export const Route = createFileRoute("/desert-safari/$slug")({
   loader: ({ params }) => {
@@ -83,11 +85,14 @@ function getFeatureIcon(iconName: string) {
 
 function DesertSafariDetailPage() {
   const { slug } = Route.useParams();
-  const tour: DesertSafariTour = DESERT_SAFARIS.find((t) => t.slug === slug) || DESERT_SAFARIS[0];
+  const { t, getLocalizedTourData } = useLanguage();
+  const baseTour: DesertSafariTour = (DESERT_SAFARIS.find((t) => t.slug === slug) ||
+    DESERT_SAFARIS[0])!;
+  const tour = getLocalizedTourData(baseTour.slug, baseTour);
 
   const [adults, setAdults] = useState(1);
   const [infants, setInfants] = useState(0);
-  const [selectedPkg, setSelectedPkg] = useState(tour.type);
+  const [selectedPkg, setSelectedPkg] = useState<string>(tour.type);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
 
@@ -109,14 +114,14 @@ function DesertSafariDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white">
+    <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white page-fade-in">
       {/* Website Navigation Header */}
       <SiteHeader activeNav="Desert Safari" />
 
       {/* =========================================================
-          HERO BANNER MATCHING IMAGE 3 WITH TEXT REVEAL
+          HERO BANNER WITH TEXT REVEAL
       ========================================================= */}
-      <section className="relative min-h-[460px] sm:min-h-[520px] flex items-center overflow-hidden text-white py-12">
+      <section className="relative min-h-[480px] sm:min-h-[540px] flex items-center overflow-hidden text-white pt-28 pb-12 sm:pt-36 sm:pb-16">
         {/* Background Skyline / Desert Image */}
         <img
           src={tour.image}
@@ -132,7 +137,7 @@ function DesertSafariDetailPage() {
           {/* Left Hero Content (8 cols) */}
           <div className="lg:col-span-8 flex flex-col items-start">
             {/* Tag Badge */}
-            <div className="inline-flex items-center gap-1.5 bg-[#C68A36] text-white text-[11px] font-bold uppercase tracking-[0.2em] px-3.5 py-1.5 rounded-md mb-4 shadow-md">
+            <div className="inline-flex items-center gap-1.5 bg-[#C68A36] text-white text-[11px] font-bold uppercase tracking-[0.2em] px-3.5 py-1.5 rounded-none mb-4 shadow-md">
               <MapPin className="w-3.5 h-3.5" />
               <span>{tour.tag}</span>
             </div>
@@ -153,19 +158,19 @@ function DesertSafariDetailPage() {
 
             {/* Badges Strip */}
             <div className="flex flex-wrap items-center gap-3 text-xs font-semibold">
-              <div className="flex items-center gap-1.5 bg-black/50 text-[#F3C472] px-3.5 py-1.5 rounded-md border border-[#F3C472]/30 backdrop-blur-xs">
+              <div className="flex items-center gap-1.5 bg-black/50 text-[#F3C472] px-3.5 py-1.5 rounded-none border border-[#F3C472]/30 backdrop-blur-xs">
                 <Crown className="w-3.5 h-3.5" />
-                <span>BestSeller</span>
+                <span>{t("bestseller", "BestSeller")}</span>
               </div>
-              <div className="flex items-center gap-1.5 bg-black/50 text-white/90 px-3.5 py-1.5 rounded-md border border-white/20">
+              <div className="flex items-center gap-1.5 bg-black/50 text-white/90 px-3.5 py-1.5 rounded-none border border-white/20">
                 <Star className="w-3.5 h-3.5 text-emerald-400" />
-                <span>2025 Traveller's Choice</span>
+                <span>{t("travellerChoice", "2025 Traveller's Choice")}</span>
               </div>
-              <div className="flex items-center gap-1.5 bg-black/50 text-white/90 px-3.5 py-1.5 rounded-md border border-white/20">
+              <div className="flex items-center gap-1.5 bg-black/50 text-white/90 px-3.5 py-1.5 rounded-none border border-white/20">
                 <MapPin className="w-3.5 h-3.5 text-[#F3C472]" />
                 <span>{tour.city}</span>
               </div>
-              <div className="flex items-center gap-1.5 bg-black/50 text-white/90 px-3.5 py-1.5 rounded-md border border-white/20">
+              <div className="flex items-center gap-1.5 bg-black/50 text-white/90 px-3.5 py-1.5 rounded-none border border-white/20">
                 <Users className="w-3.5 h-3.5 text-[#F3C472]" />
                 <span>{tour.type}</span>
               </div>
@@ -190,7 +195,7 @@ function DesertSafariDetailPage() {
                 className="w-full h-32 object-cover rounded-xs"
               />
               <p className="font-script text-center text-stone-800 text-lg mt-2 font-bold">
-                Desert Adventure
+                {t("feelTheDesert", "Desert Adventure")}
               </p>
             </div>
             {/* Bottom Right Polaroid */}
@@ -211,15 +216,15 @@ function DesertSafariDetailPage() {
       <main className="flex-1 max-w-[1360px] mx-auto px-4 sm:px-8 py-12 sm:py-16 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
           {/* LEFT COLUMN: TOUR DETAILS & ITINERARY (8 COLS) */}
-          <div className="lg:col-span-8 flex flex-col gap-12">
+          <div className="lg:col-span-8 flex flex-col gap-10">
+            {/* Interactive 7 Tags Section */}
+            <TourSectionTabs tour={tour} />
+
             {/* 1. Tour Overview */}
-            <section className="bg-white rounded-3xl p-8 border border-[#EDE7D9] shadow-xs">
+            <section className="bg-white rounded-none p-8 border border-[#EDE7D9] shadow-xs">
               <div className="flex items-center gap-2 mb-2">
                 <span className="font-serif text-2xl sm:text-3xl font-bold text-[#0D3B33]">
-                  Tour
-                </span>
-                <span className="font-serif text-2xl sm:text-3xl font-bold text-[#C68A36] italic">
-                  Overview
+                  {t("tourOverview", "Tour Overview")}
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-[#5A554C] leading-relaxed mb-8">
@@ -228,12 +233,12 @@ function DesertSafariDetailPage() {
 
               {/* 4 Feature Highlights */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-[#F2EDE2]">
-                {tour.overviewFeatures.map((feat, i) => (
+                {tour.overviewFeatures.map((feat: any, i: number) => (
                   <div
                     key={i}
-                    className="flex flex-col items-center text-center p-4 rounded-2xl bg-[#FAF7F2] border border-[#EFE9DC]"
+                    className="flex flex-col items-center text-center p-4 rounded-none bg-[#FAF7F2] border border-[#EFE9DC]"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-white border border-[#E5DFD3] flex items-center justify-center mb-3 shadow-xs">
+                    <div className="w-12 h-12 rounded-none bg-white border border-[#E5DFD3] flex items-center justify-center mb-3 shadow-xs">
                       {getFeatureIcon(feat.icon)}
                     </div>
                     <h4 className="font-bold text-xs sm:text-sm text-[#0D3B33] mb-1">
@@ -249,18 +254,15 @@ function DesertSafariDetailPage() {
             <section>
               <div className="flex items-center gap-2 mb-6">
                 <span className="font-serif text-2xl sm:text-3xl font-bold text-[#0D3B33]">
-                  Top
-                </span>
-                <span className="font-serif text-2xl sm:text-3xl font-bold text-[#C68A36] italic">
-                  Attractions & Activities
+                  {t("topAttractions", "Top Attractions & Activities")}
                 </span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {tour.attractions.map((attr, i) => (
+                {tour.attractions.map((attr: any, i: number) => (
                   <div
                     key={i}
-                    className="group bg-white rounded-2xl overflow-hidden border border-[#EDE7D9] shadow-xs hover:shadow-md transition-all flex flex-col"
+                    className="group bg-white rounded-none overflow-hidden border border-[#EDE7D9] shadow-xs hover:shadow-md transition-all flex flex-col"
                   >
                     <div className="relative aspect-[4/3] overflow-hidden">
                       <img
@@ -283,23 +285,18 @@ function DesertSafariDetailPage() {
             </section>
 
             {/* 3. Top Itinerary Stepper Timeline */}
-            <section className="bg-white rounded-3xl p-8 border border-[#EDE7D9] shadow-xs">
+            <section className="bg-white rounded-none p-8 border border-[#EDE7D9] shadow-xs">
               <div className="flex items-center gap-2 mb-6">
                 <span className="font-serif text-2xl sm:text-3xl font-bold text-[#0D3B33]">
-                  Top
-                </span>
-                <span className="font-serif text-2xl sm:text-3xl font-bold text-[#C68A36] italic">
-                  Itinerary
+                  {t("topItinerary", "Top Itinerary")}
                 </span>
               </div>
 
-              {/* Horizontal Stepper for Desktop / Vertical for Mobile */}
               <div className="relative">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 relative z-10">
-                  {tour.itinerary.map((step, i) => (
+                  {tour.itinerary.map((step: any, i: number) => (
                     <div key={i} className="flex flex-col items-center text-center group">
-                      {/* Step Circle */}
-                      <div className="w-12 h-12 rounded-full bg-[#C68A36] text-white flex items-center justify-center font-bold text-sm shadow-md mb-3 group-hover:scale-110 transition-transform">
+                      <div className="w-12 h-12 rounded-none bg-[#C68A36] text-white flex items-center justify-center font-bold text-sm shadow-md mb-3 group-hover:scale-110 transition-transform">
                         <span className="text-xs">{i + 1}</span>
                       </div>
                       <h4 className="font-bold text-xs text-[#0D3B33] leading-tight mb-1">
@@ -318,7 +315,7 @@ function DesertSafariDetailPage() {
             </section>
 
             {/* 4. Video Experience Banner */}
-            <section className="relative rounded-3xl overflow-hidden border border-[#EDE7D9] shadow-md min-h-[220px] sm:min-h-[260px] flex items-center justify-center text-center text-white">
+            <section className="relative rounded-none overflow-hidden border border-[#EDE7D9] shadow-md min-h-[220px] sm:min-h-[260px] flex items-center justify-center text-center text-white">
               <img
                 src={tour.image}
                 alt="Watch Video"
@@ -335,10 +332,10 @@ function DesertSafariDetailPage() {
                   <Play className="w-7 h-7 fill-white pl-1" />
                 </button>
                 <h3 className="font-serif text-xl sm:text-2xl font-bold mb-1">
-                  Watch Our Desert Safari Video
+                  {t("watchExperience", "Watch Our Desert Safari Video")}
                 </h3>
                 <p className="text-xs text-white/80">
-                  Experience the thrills of high dune bashing and Bedouin hospitality
+                  {t("chooseExpSubtitle", "Experience the thrills of high dune bashing and Bedouin hospitality")}
                 </p>
               </div>
             </section>
@@ -346,20 +343,20 @@ function DesertSafariDetailPage() {
             {/* 5. Inclusions & Exclusions */}
             <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Inclusions */}
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EDE7D9] shadow-xs">
+              <div className="bg-white rounded-none p-6 sm:p-8 border border-[#EDE7D9] shadow-xs">
                 <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#F2EDE2]">
-                  <div className="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs">
+                  <div className="w-7 h-7 rounded-none bg-emerald-500 text-white flex items-center justify-center font-bold text-xs">
                     ✓
                   </div>
-                  <h3 className="font-serif text-lg font-bold text-[#0D3B33]">Inclusions</h3>
+                  <h3 className="font-serif text-lg font-bold text-[#0D3B33]">{t("inclusions", "Inclusions")}</h3>
                 </div>
                 <ul className="space-y-2.5">
-                  {tour.inclusions.map((inc, i) => (
+                  {tour.inclusions.map((inc: string, i: number) => (
                     <li
                       key={i}
                       className="flex items-start gap-3 text-xs sm:text-sm text-[#4A463F]"
                     >
-                      <div className="w-4 h-4 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-bold">
+                      <div className="w-4 h-4 rounded-none bg-emerald-500 text-white flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-bold">
                         ✓
                       </div>
                       <span>{inc}</span>
@@ -369,20 +366,20 @@ function DesertSafariDetailPage() {
               </div>
 
               {/* Exclusions */}
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EDE7D9] shadow-xs">
+              <div className="bg-white rounded-none p-6 sm:p-8 border border-[#EDE7D9] shadow-xs">
                 <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#F2EDE2]">
-                  <div className="w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold text-xs">
+                  <div className="w-7 h-7 rounded-none bg-rose-500 text-white flex items-center justify-center font-bold text-xs">
                     ✕
                   </div>
-                  <h3 className="font-serif text-lg font-bold text-[#0D3B33]">Exclusions</h3>
+                  <h3 className="font-serif text-lg font-bold text-[#0D3B33]">{t("exclusions", "Exclusions")}</h3>
                 </div>
                 <ul className="space-y-2.5">
-                  {tour.exclusions.map((exc, i) => (
+                  {tour.exclusions.map((exc: string, i: number) => (
                     <li
                       key={i}
                       className="flex items-start gap-3 text-xs sm:text-sm text-[#4A463F]"
                     >
-                      <div className="w-4 h-4 rounded-full bg-rose-500 text-white flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-bold">
+                      <div className="w-4 h-4 rounded-none bg-rose-500 text-white flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-bold">
                         ✕
                       </div>
                       <span>{exc}</span>
@@ -396,13 +393,13 @@ function DesertSafariDetailPage() {
           {/* RIGHT COLUMN: BOOKING FORM & SIDEBAR (4 COLS) */}
           <aside className="lg:col-span-4 flex flex-col gap-8">
             {/* Price Badge Card */}
-            <div className="bg-white rounded-3xl p-6 border border-[#EDE7D9] shadow-sm flex items-center justify-between">
+            <div className="bg-white rounded-none p-6 border border-[#EDE7D9] shadow-sm flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-[#C68A36] text-white flex items-center justify-center font-bold text-xl shadow-md">
+                <div className="w-12 h-12 rounded-none bg-[#C68A36] text-white flex items-center justify-center font-bold text-xl shadow-md">
                   ♦
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-[#8A857B]">FROM</span>
+                  <span className="text-[10px] uppercase font-bold text-[#8A857B]">{t("from", "FROM")}</span>
                   <div className="font-serif text-3xl font-bold text-[#C68A36] leading-none">
                     {tour.price}
                   </div>
@@ -415,7 +412,7 @@ function DesertSafariDetailPage() {
                     {tour.originalPrice}
                   </span>
                   {tour.saveAmount && (
-                    <span className="text-[10px] font-bold bg-rose-500 text-white px-2 py-0.5 rounded">
+                    <span className="text-[10px] font-bold bg-rose-500 text-white px-2 py-0.5 rounded-none">
                       {tour.saveAmount}
                     </span>
                   )}
@@ -424,21 +421,21 @@ function DesertSafariDetailPage() {
             </div>
 
             {/* Interactive Booking Form Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EDE7D9] shadow-sm">
+            <div className="bg-white rounded-none p-6 sm:p-8 border border-[#EDE7D9] shadow-sm">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-[#C68A36]">📅</span>
-                <h3 className="font-serif text-xl font-bold text-[#0D3B33]">Book Your Safari</h3>
+                <h3 className="font-serif text-xl font-bold text-[#0D3B33]">{t("bookYourSafari", "Book Your Safari")}</h3>
               </div>
               <p className="text-xs text-[#7A7469] mb-6">
                 Fill in the details and we'll get back to you shortly.
               </p>
 
               {bookingSubmitted ? (
-                <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl p-6 text-center animate-fade-in-up">
-                  <div className="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center mx-auto mb-3 font-bold text-xl">
+                <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-none p-6 text-center animate-fade-in-up">
+                  <div className="w-12 h-12 rounded-none bg-emerald-500 text-white flex items-center justify-center mx-auto mb-3 font-bold text-xl">
                     ✓
                   </div>
-                  <h4 className="font-serif text-lg font-bold mb-1">Booking Request Sent!</h4>
+                  <h4 className="font-serif text-lg font-bold mb-1">{t("bookingRequestSent", "Booking Request Sent!")}</h4>
                   <p className="text-xs text-emerald-700">
                     Thank you, {name || "traveler"}. Our safari concierge will contact you on{" "}
                     {phone || "WhatsApp"} within 15 minutes to confirm your reservation.
@@ -451,10 +448,10 @@ function DesertSafariDetailPage() {
                     <input
                       type="text"
                       required
-                      placeholder="Your Name *"
+                      placeholder={t("yourName", "Your Name *")}
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3 text-xs sm:text-sm text-[#2D2A26] placeholder-[#9E988D] focus:outline-none focus:border-[#C68A36] transition-all"
+                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-4 py-3 text-xs sm:text-sm text-[#2D2A26] placeholder-[#9E988D] focus:outline-none focus:border-[#C68A36] transition-all"
                     />
                   </div>
 
@@ -463,10 +460,10 @@ function DesertSafariDetailPage() {
                     <input
                       type="email"
                       required
-                      placeholder="Your Email *"
+                      placeholder={t("yourEmail", "Your Email *")}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3 text-xs sm:text-sm text-[#2D2A26] placeholder-[#9E988D] focus:outline-none focus:border-[#C68A36] transition-all"
+                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-4 py-3 text-xs sm:text-sm text-[#2D2A26] placeholder-[#9E988D] focus:outline-none focus:border-[#C68A36] transition-all"
                     />
                   </div>
 
@@ -475,10 +472,10 @@ function DesertSafariDetailPage() {
                     <input
                       type="tel"
                       required
-                      placeholder="Your Phone / WhatsApp Number *"
+                      placeholder={t("yourPhone", "Your Phone / WhatsApp Number *")}
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3 text-xs sm:text-sm text-[#2D2A26] placeholder-[#9E988D] focus:outline-none focus:border-[#C68A36] transition-all"
+                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-4 py-3 text-xs sm:text-sm text-[#2D2A26] placeholder-[#9E988D] focus:outline-none focus:border-[#C68A36] transition-all"
                     />
                   </div>
 
@@ -487,7 +484,7 @@ function DesertSafariDetailPage() {
                     <select
                       value={selectedPkg}
                       onChange={(e) => setSelectedPkg(e.target.value)}
-                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3 text-xs sm:text-sm text-[#2D2A26] focus:outline-none focus:border-[#C68A36] transition-all appearance-none cursor-pointer"
+                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-4 py-3 text-xs sm:text-sm text-[#2D2A26] focus:outline-none focus:border-[#C68A36] transition-all appearance-none cursor-pointer"
                     >
                       <option value="Sharing Tour">Standard Safari ({tour.price})</option>
                       <option value="VIP Tour">VIP Sofa Safari (AED 149)</option>
@@ -499,23 +496,23 @@ function DesertSafariDetailPage() {
                   {/* Counters: Adults & Infants */}
                   <div className="grid grid-cols-2 gap-3">
                     {/* Adults Counter */}
-                    <div className="bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl p-2.5 flex items-center justify-between">
+                    <div className="bg-[#FAF7F2] border border-[#E5DFD3] rounded-none p-2.5 flex items-center justify-between">
                       <div className="flex flex-col">
-                        <span className="text-[11px] text-[#7A7469] font-medium">Adults *</span>
+                        <span className="text-[11px] text-[#7A7469] font-medium">{t("adults", "Adults *")}</span>
                         <span className="font-bold text-sm text-[#2D2A26]">{adults}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <button
                           type="button"
                           onClick={() => setAdults(Math.max(1, adults - 1))}
-                          className="w-7 h-7 rounded-lg bg-white border border-[#DDD5C7] flex items-center justify-center font-bold text-xs text-[#524D44] hover:bg-gray-100"
+                          className="w-7 h-7 rounded-none bg-white border border-[#DDD5C7] flex items-center justify-center font-bold text-xs text-[#524D44] hover:bg-gray-100 cursor-pointer"
                         >
                           -
                         </button>
                         <button
                           type="button"
                           onClick={() => setAdults(adults + 1)}
-                          className="w-7 h-7 rounded-lg bg-white border border-[#DDD5C7] flex items-center justify-center font-bold text-xs text-[#524D44] hover:bg-gray-100"
+                          className="w-7 h-7 rounded-none bg-white border border-[#DDD5C7] flex items-center justify-center font-bold text-xs text-[#524D44] hover:bg-gray-100 cursor-pointer"
                         >
                           +
                         </button>
@@ -523,10 +520,10 @@ function DesertSafariDetailPage() {
                     </div>
 
                     {/* Infants Counter */}
-                    <div className="bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl p-2.5 flex items-center justify-between">
+                    <div className="bg-[#FAF7F2] border border-[#E5DFD3] rounded-none p-2.5 flex items-center justify-between">
                       <div className="flex flex-col">
                         <span className="text-[10px] text-[#7A7469] font-medium">
-                          Infants (0-3y)
+                          {t("infants", "Infants (0-3y)")}
                         </span>
                         <span className="font-bold text-sm text-[#2D2A26]">{infants}</span>
                       </div>
@@ -534,14 +531,14 @@ function DesertSafariDetailPage() {
                         <button
                           type="button"
                           onClick={() => setInfants(Math.max(0, infants - 1))}
-                          className="w-7 h-7 rounded-lg bg-white border border-[#DDD5C7] flex items-center justify-center font-bold text-xs text-[#524D44] hover:bg-gray-100"
+                          className="w-7 h-7 rounded-none bg-white border border-[#DDD5C7] flex items-center justify-center font-bold text-xs text-[#524D44] hover:bg-gray-100 cursor-pointer"
                         >
                           -
                         </button>
                         <button
                           type="button"
                           onClick={() => setInfants(infants + 1)}
-                          className="w-7 h-7 rounded-lg bg-white border border-[#DDD5C7] flex items-center justify-center font-bold text-xs text-[#524D44] hover:bg-gray-100"
+                          className="w-7 h-7 rounded-none bg-white border border-[#DDD5C7] flex items-center justify-center font-bold text-xs text-[#524D44] hover:bg-gray-100 cursor-pointer"
                         >
                           +
                         </button>
@@ -553,11 +550,11 @@ function DesertSafariDetailPage() {
                   <div className="relative">
                     <input
                       type="text"
-                      placeholder="Street Address / Hotel Name *"
+                      placeholder={t("streetAddress", "Street Address / Hotel Name *")}
                       required
                       value={hotel}
                       onChange={(e) => setHotel(e.target.value)}
-                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3 text-xs sm:text-sm text-[#2D2A26] placeholder-[#9E988D] focus:outline-none focus:border-[#C68A36] transition-all"
+                      className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-4 py-3 text-xs sm:text-sm text-[#2D2A26] placeholder-[#9E988D] focus:outline-none focus:border-[#C68A36] transition-all"
                     />
                   </div>
 
@@ -567,7 +564,7 @@ function DesertSafariDetailPage() {
                       <select
                         value={day}
                         onChange={(e) => setDay(e.target.value)}
-                        className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-2.5 py-3 text-xs text-[#2D2A26] focus:outline-none focus:border-[#C68A36] appearance-none"
+                        className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-2.5 py-3 text-xs text-[#2D2A26] focus:outline-none focus:border-[#C68A36] appearance-none"
                       >
                         {Array.from({ length: 31 }, (_, i) => {
                           const val = String(i + 1).padStart(2, "0");
@@ -585,7 +582,7 @@ function DesertSafariDetailPage() {
                       <select
                         value={month}
                         onChange={(e) => setMonth(e.target.value)}
-                        className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-2.5 py-3 text-xs text-[#2D2A26] focus:outline-none focus:border-[#C68A36] appearance-none"
+                        className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-2.5 py-3 text-xs text-[#2D2A26] focus:outline-none focus:border-[#C68A36] appearance-none"
                       >
                         {[
                           "01",
@@ -613,7 +610,7 @@ function DesertSafariDetailPage() {
                       <select
                         value={year}
                         onChange={(e) => setYear(e.target.value)}
-                        className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-2.5 py-3 text-xs text-[#2D2A26] focus:outline-none focus:border-[#C68A36] appearance-none"
+                        className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-none px-2.5 py-3 text-xs text-[#2D2A26] focus:outline-none focus:border-[#C68A36] appearance-none"
                       >
                         <option value="2026">2026</option>
                         <option value="2027">2027</option>
@@ -625,25 +622,25 @@ function DesertSafariDetailPage() {
                   {/* Submit CTA */}
                   <button
                     type="submit"
-                    className="bg-[#C68A36] hover:bg-[#B3792B] text-white font-bold text-sm uppercase tracking-wider py-4 rounded-xl flex items-center justify-center gap-2 shadow-md transition-all mt-2 active:scale-98 cursor-pointer"
+                    className="bg-[#C68A36] hover:bg-[#B3792B] text-white font-bold text-sm uppercase tracking-wider py-4 rounded-none flex items-center justify-center gap-2 shadow-md transition-all mt-2 active:scale-98 cursor-pointer"
                   >
                     <span>🚀</span>
-                    <span>Book Now</span>
+                    <span>{t("bookTourNow", "Book Now")}</span>
                   </button>
 
                   <div className="flex items-center justify-center gap-1 text-[11px] text-[#7A7469] text-center mt-1">
                     <span>🔒</span>
-                    <span>Your information is 100% secure with us.</span>
+                    <span>{t("yourInfoSecure", "Your information is 100% secure with us.")}</span>
                   </div>
                 </form>
               )}
             </div>
 
             {/* Need Customized Tour Card */}
-            <div className="bg-[#FAF7F2] rounded-3xl p-6 border border-[#E5DFD3] flex items-center justify-between gap-4">
+            <div className="bg-[#FAF7F2] rounded-none p-6 border border-[#E5DFD3] flex items-center justify-between gap-4">
               <div>
                 <h4 className="font-bold text-xs sm:text-sm text-[#0D3B33] mb-1">
-                  Need a Customized Safari?
+                  {t("needCustomizedTour", "Need a Customized Safari?")}
                 </h4>
                 <p className="text-[11px] text-[#7A7469] mb-3">
                   Contact us for private groups, corporate events or buggy rentals.
@@ -654,28 +651,28 @@ function DesertSafariDetailPage() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-xs font-bold text-[#C68A36] hover:underline"
                 >
-                  <span>Enquire Now</span>
+                  <span>{t("enquireNow", "Enquire Now")}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </a>
               </div>
               <img
                 src="/pkg_vip.jpg"
                 alt="Custom Safari"
-                className="w-20 h-16 object-cover rounded-xl shadow-xs"
+                className="w-20 h-16 object-cover rounded-none shadow-xs"
               />
             </div>
 
             {/* Frequently Asked Questions */}
-            <div className="bg-white rounded-3xl p-6 border border-[#EDE7D9] shadow-sm">
+            <div className="bg-white rounded-none p-6 border border-[#EDE7D9] shadow-sm">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-[#C68A36]">💬</span>
                 <h3 className="font-serif text-lg font-bold text-[#0D3B33]">
-                  Frequently Asked Questions
+                  {t("frequentlyAskedQuestions", "Frequently Asked Questions")}
                 </h3>
               </div>
 
               <div className="space-y-3">
-                {tour.faqs.map((faq, i) => (
+                {tour.faqs.map((faq: any, i: number) => (
                   <div key={i} className="border-b border-[#F2EDE2] pb-3 last:border-b-0">
                     <button
                       type="button"
@@ -709,40 +706,43 @@ function DesertSafariDetailPage() {
         <div className="max-w-[1360px] mx-auto px-4 sm:px-8">
           <div className="text-center max-w-xl mx-auto mb-10">
             <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#0D3B33] mb-2">
-              Explore More <span className="text-[#C68A36] italic">Desert Safari Tours</span>
+              {t("exploreMoreTours", "Explore More Desert Safari Tours")}
             </h3>
             <p className="text-xs sm:text-sm text-[#7A7469]">
-              Discover our other top-rated Arabian adventure experiences.
+              {t("chooseExpSubtitle", "Discover our other top-rated Arabian adventure experiences.")}
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {otherTours.map((t) => (
-              <Link
-                key={t.id}
-                to="/desert-safari/$slug"
-                params={{ slug: t.slug }}
-                className="group relative rounded-2xl overflow-hidden aspect-[16/11] shadow-sm hover:shadow-lg transition-all"
-              >
-                <img
-                  src={t.image}
-                  alt={t.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
-                  <div>
-                    <h4 className="font-serif font-bold text-sm group-hover:text-[#F3C472] transition-colors">
-                      {t.title}
-                    </h4>
-                    <span className="text-xs text-[#F3C472] font-semibold">{t.price}</span>
+            {otherTours.map((t) => {
+              const localizedOther = getLocalizedTourData(t.slug, t);
+              return (
+                <Link
+                  key={t.id}
+                  to="/desert-safari/$slug"
+                  params={{ slug: t.slug }}
+                  className="group relative rounded-none overflow-hidden aspect-[16/11] shadow-sm hover:shadow-lg transition-all"
+                >
+                  <img
+                    src={t.image}
+                    alt={localizedOther.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
+                    <div>
+                      <h4 className="font-serif font-bold text-sm group-hover:text-[#F3C472] transition-colors">
+                        {localizedOther.title}
+                      </h4>
+                      <span className="text-xs text-[#F3C472] font-semibold">{t.price}</span>
+                    </div>
+                    <div className="w-8 h-8 rounded-none bg-white/20 backdrop-blur-xs flex items-center justify-center text-white group-hover:bg-[#C68A36] transition-colors">
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white group-hover:bg-[#C68A36] transition-colors">
-                    <ArrowRight className="w-4 h-4" />
-                  </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

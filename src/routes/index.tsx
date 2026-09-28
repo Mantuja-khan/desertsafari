@@ -6,6 +6,9 @@ import { CITY_TOURS } from "../data/cityTours";
 import { DESERT_SAFARIS } from "../data/desertSafaris";
 import { BlogCard } from "../components/BlogCard";
 import { TextReveal } from "../components/TextReveal";
+import { LanguageSelector } from "../components/LanguageSelector";
+import { SiteFooter } from "../components/SiteFooter";
+import { useLanguage, getLocalizedPackage } from "../lib/i18n";
 import {
   ArrowLeft,
   ArrowRight,
@@ -318,29 +321,6 @@ const cityToursSubmenu = [
   "Khor Fakkan Tour",
 ];
 
-// Decorative Dark Dotted Matrix Square Component
-function DottedSquare({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      className={`w-28 h-28 text-[#0D3B33] opacity-65 pointer-events-none ${className}`}
-      viewBox="0 0 100 100"
-      fill="currentColor"
-    >
-      <pattern
-        id="dot-matrix-pattern"
-        x="0"
-        y="0"
-        width="20"
-        height="20"
-        patternUnits="userSpaceOnUse"
-      >
-        <circle cx="5" cy="5" r="3" />
-      </pattern>
-      <rect width="100" height="100" fill="url(#dot-matrix-pattern)" />
-    </svg>
-  );
-}
-
 // User-Uploaded Hero Desert Video Background (Camel Riding, Safari Riding & Bike Riding)
 function HeroVideoBackground() {
   return (
@@ -383,8 +363,9 @@ function ScrollReveal({
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
+      (entries) => {
+        const entry = entries[0];
+        if (entry && entry.isIntersecting) {
           setIsVisible(true);
           observer.unobserve(entry.target);
         }
@@ -417,21 +398,59 @@ function ScrollReveal({
 }
 
 function Index() {
+  const { t, currentLanguage, getLocalizedTourData } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileCityToursOpen, setMobileCityToursOpen] = useState(false);
   const [mobileSafariOpen, setMobileSafariOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Home");
   const [reviewIndex, setReviewIndex] = useState(0);
 
+  const heroFeatures = [
+    {
+      title: t("thrillingSafari", "Thrilling Desert Safari"),
+      subtitle: t("thrillingSafariSub", "4x4 Dune Bashing & Sandboarding"),
+      icon: Car,
+      offset: "translate-y-0",
+    },
+    {
+      title: t("authenticCamel", "Authentic Camel Rides"),
+      subtitle: t("authenticCamelSub", "Sunset Caravan Trails"),
+      icon: Compass,
+      offset: "translate-y-0 sm:translate-y-2",
+    },
+    {
+      title: t("bedouinCamp", "Traditional Bedouin Camp"),
+      subtitle: t("bedouinCampSub", "BBQ Dinner & Live Shows"),
+      icon: FlameKindling,
+      offset: "translate-y-0 sm:translate-y-4",
+    },
+    {
+      title: t("exploreCityTours", "Explore Dubai City Tours"),
+      subtitle: t("exploreCityToursSub", "Iconic Landmarks & Heritage"),
+      icon: Building,
+      offset: "translate-y-0 sm:translate-y-6",
+    },
+  ];
+
   const navItems = [
-    { name: "Home", href: "/", isRoute: true },
-    { name: "About Us", href: "/about", isRoute: true },
-    { name: "Desert Safari", href: "/desert-safari", isRoute: true, hasSafariDropdown: true },
-    { name: "City Tours", href: "/city-tours", isRoute: true, hasCityDropdown: true },
-    { name: "Packages", href: "/#packages", isRoute: false },
-    { name: "Blogs", href: "/blog", isRoute: true },
-    { name: "Gallery", href: "/#gallery", isRoute: false },
-    { name: "Contact", href: "/contact", isRoute: true },
+    { name: t("home", "Home"), href: "/", isRoute: true },
+    { name: t("aboutUs", "About Us"), href: "/about", isRoute: true },
+    {
+      name: t("desertSafari", "Desert Safari"),
+      href: "/desert-safari",
+      isRoute: true,
+      hasSafariDropdown: true,
+    },
+    {
+      name: t("cityTours", "City Tours"),
+      href: "/city-tours",
+      isRoute: true,
+      hasCityDropdown: true,
+    },
+    { name: t("packages", "Packages"), href: "/#packages", isRoute: false },
+    { name: t("blogs", "Blogs"), href: "/blog", isRoute: true },
+    { name: t("gallery", "Gallery"), href: "/#gallery", isRoute: false },
+    { name: t("contact", "Contact"), href: "/contact", isRoute: true },
   ];
 
   return (
@@ -459,15 +478,12 @@ function Index() {
         {/* Background Video showing Desert Activities (Camel Riding, Safari Dune Bashing, Quad Bike) */}
         <HeroVideoBackground />
 
-        {/* Decorative Dotted Matrix Square */}
-        <DottedSquare className="absolute top-32 right-12 z-1 hidden lg:block opacity-40" />
-
         {/* Dark Vignette Overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#0D3B33]/85 via-[#0D3B33]/45 to-black/35 z-1" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/55 z-1" />
 
         {/* Header Navigation */}
-        <header className="relative z-10 w-full max-w-[1340px] mx-auto px-6 h-24 flex items-center justify-between border-b border-white/20 animate-fade-in-up delay-100">
+        <header className="relative z-50 w-full max-w-[1340px] mx-auto px-6 h-24 flex items-center justify-between border-b border-white/20 animate-fade-in-up delay-100">
           <Logo />
 
           {/* Desktop Nav Links */}
@@ -512,64 +528,70 @@ function Index() {
                     </a>
                   )}
 
-                  {/* Desert Safari Simple White Background Dropdown (NO Border Styling) */}
+                  {/* Desert Safari Simple White Background Dropdown */}
                   {item.hasSafariDropdown && (
-                    <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[310px]">
-                      <div className="bg-white rounded-2xl shadow-2xl py-3 px-1 overflow-hidden border-0">
+                    <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] min-w-[310px]">
+                      <div className="bg-white rounded-none shadow-2xl py-3 px-1 overflow-hidden border border-gray-200">
                         <div className="px-4 py-2 border-b border-gray-100 mb-1 flex items-center justify-between">
                           <Link
                             to="/desert-safari"
                             className="text-[11px] font-bold text-[#C68A36] uppercase tracking-wider hover:underline"
                           >
-                            All Desert Safari Packages →
+                            {t("allDesertSafari", "All Desert Safari Packages →")}
                           </Link>
                         </div>
-                        {DESERT_SAFARIS.map((safari) => (
-                          <Link
-                            key={safari.id}
-                            to="/desert-safari/$slug"
-                            params={{ slug: safari.slug }}
-                            className="block px-4 py-2.5 text-xs text-gray-800 hover:text-[#C68A36] hover:bg-amber-50/60 rounded-lg transition-colors font-sans"
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="font-medium">{safari.title}</span>
-                              <span className="text-[11px] font-bold text-[#C68A36]">
-                                {safari.price}
-                              </span>
-                            </div>
-                          </Link>
-                        ))}
+                        {DESERT_SAFARIS.map((safari) => {
+                          const locSafari = getLocalizedTourData(safari.slug, safari);
+                          return (
+                            <Link
+                              key={safari.id}
+                              to="/desert-safari/$slug"
+                              params={{ slug: safari.slug }}
+                              className="block px-4 py-2.5 text-xs text-gray-800 hover:text-[#C68A36] hover:bg-amber-50/60 rounded-none transition-colors font-sans"
+                            >
+                              <div className="flex items-center justify-between">
+                                <span className="font-medium">{locSafari.title}</span>
+                                <span className="text-[11px] font-bold text-[#C68A36]">
+                                  {safari.price}
+                                </span>
+                              </div>
+                            </Link>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
 
-                  {/* City Tours Simple White Background Dropdown (NO Border Styling) */}
+                  {/* City Tours Simple White Background Dropdown */}
                   {item.hasCityDropdown && (
-                    <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[310px]">
-                      <div className="bg-white rounded-2xl shadow-2xl py-3 px-1 overflow-hidden border-0">
+                    <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] min-w-[310px]">
+                      <div className="bg-white rounded-none shadow-2xl py-3 px-1 overflow-hidden border border-gray-200">
                         <div className="px-4 py-2 border-b border-gray-100 mb-1 flex items-center justify-between">
                           <Link
                             to="/city-tours"
                             className="text-[11px] font-bold text-[#C68A36] uppercase tracking-wider hover:underline"
                           >
-                            All City Tours Packages →
+                            {t("allCityTours", "All City Tours Packages →")}
                           </Link>
                         </div>
-                        {CITY_TOURS.map((tour) => (
-                          <Link
-                            key={tour.id}
-                            to="/city-tours/$slug"
-                            params={{ slug: tour.slug }}
-                            className="block px-4 py-2.5 text-xs text-gray-800 hover:text-[#C68A36] hover:bg-amber-50/60 rounded-lg transition-colors font-sans"
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="font-medium">{tour.title}</span>
-                              <span className="text-[11px] font-bold text-[#C68A36]">
-                                {tour.price}
-                              </span>
-                            </div>
-                          </Link>
-                        ))}
+                        {CITY_TOURS.map((tour) => {
+                          const locTour = getLocalizedTourData(tour.slug, tour);
+                          return (
+                            <Link
+                              key={tour.id}
+                              to="/city-tours/$slug"
+                              params={{ slug: tour.slug }}
+                              className="block px-4 py-2.5 text-xs text-gray-800 hover:text-[#C68A36] hover:bg-amber-50/60 rounded-none transition-colors font-sans"
+                            >
+                              <div className="flex items-center justify-between">
+                                <span className="font-medium">{locTour.title}</span>
+                                <span className="text-[11px] font-bold text-[#C68A36]">
+                                  {tour.price}
+                                </span>
+                              </div>
+                            </Link>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
@@ -578,32 +600,29 @@ function Index() {
             })}
           </nav>
 
-          {/* Right Header Action Controls */}
-          <div className="hidden lg:flex items-center gap-4">
-            <Link
-              to="/blog"
-              className="p-2 text-white/80 hover:text-[#E4B564] transition-colors"
-              aria-label="Search"
-            >
-              <Search className="w-4 h-4" />
-            </Link>
+          {/* Right Header Action Controls: Language Selector + Book Now */}
+          <div className="hidden lg:flex items-center gap-3">
+            <LanguageSelector />
             <a
               href="#packages"
-              className="bg-[#E4B564] text-[#0D3B33] font-sans font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xs flex items-center gap-2 hover:bg-[#E8C88B] transition-all shadow-md"
+              className="bg-[#E4B564] text-[#0D3B33] font-sans font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-none flex items-center gap-2 hover:bg-[#E8C88B] transition-all shadow-md active:scale-95"
             >
               <Calendar className="w-4 h-4" />
-              Book Now
+              {t("bookNow", "Book Now")}
             </a>
           </div>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-white hover:text-[#E4B564]"
-            aria-label="Toggle Navigation"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Mobile Menu Toggle & Language Selector */}
+          <div className="lg:hidden flex items-center gap-2">
+            <LanguageSelector />
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 text-white hover:text-[#E4B564]"
+              aria-label="Toggle Navigation"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </header>
 
         {/* Mobile Dropdown Nav */}
@@ -671,20 +690,23 @@ function Index() {
                       onClick={() => setMobileMenuOpen(false)}
                       className="text-xs text-[#E4B564] font-bold mb-1"
                     >
-                      • View All Desert Safari Packages →
+                      {t("allDesertSafari", "• View All Desert Safari Packages →")}
                     </Link>
-                    {DESERT_SAFARIS.map((safari) => (
-                      <Link
-                        key={safari.id}
-                        to="/desert-safari/$slug"
-                        params={{ slug: safari.slug }}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="text-xs text-white/80 hover:text-[#E4B564] flex items-center justify-between py-1"
-                      >
-                        <span>• {safari.title}</span>
-                        <span className="text-[10px] text-[#E4B564]">{safari.price}</span>
-                      </Link>
-                    ))}
+                    {DESERT_SAFARIS.map((safari) => {
+                      const locSafari = getLocalizedTourData(safari.slug, safari);
+                      return (
+                        <Link
+                          key={safari.id}
+                          to="/desert-safari/$slug"
+                          params={{ slug: safari.slug }}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="text-xs text-white/80 hover:text-[#E4B564] flex items-center justify-between py-1"
+                        >
+                          <span>• {locSafari.title}</span>
+                          <span className="text-[10px] text-[#E4B564]">{safari.price}</span>
+                        </Link>
+                      );
+                    })}
                   </div>
                 )}
 
@@ -696,20 +718,23 @@ function Index() {
                       onClick={() => setMobileMenuOpen(false)}
                       className="text-xs text-[#E4B564] font-bold mb-1"
                     >
-                      • View All City Tours →
+                      {t("allCityTours", "• View All City Tours →")}
                     </Link>
-                    {CITY_TOURS.map((t) => (
-                      <Link
-                        key={t.id}
-                        to="/city-tours/$slug"
-                        params={{ slug: t.slug }}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="text-xs text-white/80 hover:text-[#E4B564] flex items-center justify-between py-1"
-                      >
-                        <span>• {t.title}</span>
-                        <span className="text-[10px] text-[#E4B564]">{t.price}</span>
-                      </Link>
-                    ))}
+                    {CITY_TOURS.map((t) => {
+                      const locTour = getLocalizedTourData(t.slug, t);
+                      return (
+                        <Link
+                          key={t.id}
+                          to="/city-tours/$slug"
+                          params={{ slug: t.slug }}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="text-xs text-white/80 hover:text-[#E4B564] flex items-center justify-between py-1"
+                        >
+                          <span>• {locTour.title}</span>
+                          <span className="text-[10px] text-[#E4B564]">{t.price}</span>
+                        </Link>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -720,16 +745,16 @@ function Index() {
               className="bg-[#E4B564] text-[#0D3B33] font-bold uppercase text-center py-3 rounded mt-2 flex items-center justify-center gap-2 shadow-md"
             >
               <Calendar className="w-4 h-4" />
-              Book Now
+              {t("bookNow", "Book Now")}
             </a>
           </div>
         )}
 
         {/* Top Floating Side Annotations */}
         <div className="relative z-10 hidden xl:flex justify-between w-full max-w-[1340px] mx-auto px-6 pt-4 text-[10px] tracking-[0.25em] text-white/60 uppercase animate-fade-in-up delay-200">
-          <span>EXPLORE • DISCOVER • EXPERIENCE</span>
+          <span>{t("exploreDiscoverExperience", "EXPLORE • DISCOVER • EXPERIENCE")}</span>
           <span className="flex items-center gap-2">
-            DUBAI BEYOND ORDINARY
+            {t("dubaiBeyondOrdinary", "DUBAI BEYOND ORDINARY")}
             <span className="w-8 h-[1px] bg-white/40 inline-block" />
           </span>
         </div>
@@ -738,7 +763,7 @@ function Index() {
         <div className="relative z-10 w-full max-w-[1280px] mx-auto px-6 py-12 flex-1 flex flex-col justify-center items-center text-center">
           {/* Subtitle */}
           <span className="text-xs uppercase tracking-[0.35em] text-[#E4B564] font-semibold mb-4 animate-fade-in-up delay-200">
-            A D V E N T U R E &nbsp; A W A I T S
+            {t("adventureAwaits", "A D V E N T U R E   A W A I T S")}
           </span>
 
           {/* Animated Headline: Word-by-Word Reveal */}
@@ -779,16 +804,16 @@ function Index() {
 
           {/* Subtext */}
           <p className="font-sans text-sm md:text-base text-white/95 max-w-3xl font-medium leading-relaxed mt-3 mb-8 animate-fade-in-up delay-700 drop-shadow-md">
-            Indulge in the untamed beauty of the desert with our exclusive safaris where opulence
-            meets adventure. Glide over the dunes in a private 4×4, sip champagne under a fiery
-            sunset, and unwind in a royal-style camp with gourmet dining. The desert isn’t just
-            wild; it’s wonderfully lavish
+            {t(
+              "heroSubtitle",
+              "Indulge in the untamed beauty of the desert with our exclusive safaris where opulence meets adventure. Glide over the dunes in a private 4×4, sip champagne under a fiery sunset, and unwind in a royal-style camp with gourmet dining.",
+            )}
           </p>
 
           {/* Call to Actions */}
           <div className="flex flex-wrap items-center justify-center gap-5 animate-fade-in-up delay-800">
             <a href="#packages" className="btn-gold text-xs px-8 py-4">
-              BOOK YOUR SAFARI NOW &nbsp; →
+              {t("bookSafariNow", "BOOK YOUR SAFARI NOW")} &nbsp; →
             </a>
             <button
               onClick={() => alert("Playing Virtual Experience Trailer...")}
@@ -797,7 +822,7 @@ function Index() {
               <span className="w-11 h-11 rounded-full border border-white/40 flex items-center justify-center group-hover:border-[#E4B564] group-hover:scale-105 transition-all">
                 <Play className="w-4 h-4 fill-current ml-0.5" />
               </span>
-              WATCH THE EXPERIENCE
+              {t("watchExperience", "WATCH THE EXPERIENCE")}
             </button>
           </div>
         </div>
@@ -815,7 +840,7 @@ function Index() {
         {/* Bottom Left Scroll Indicator */}
         <div className="absolute left-8 bottom-6 hidden xl:flex items-center gap-2 text-[9px] tracking-[0.25em] text-white/70 uppercase z-10 animate-fade-in-up delay-700">
           <ArrowRight className="w-3 h-3 rotate-90" />
-          SCROLL TO EXPLORE
+          {t("scrollToExplore", "SCROLL TO EXPLORE")}
         </div>
 
         {/* Hero Bottom Bar Service Highlights (Desert Dune Wave Curve Style) */}
@@ -837,74 +862,45 @@ function Index() {
             </svg>
           </div>
 
-          <div className="w-full max-w-[1340px] mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-center relative z-10">
-            {/* Feature 1 (Left - Top Curve) */}
-            <div className="flex items-center gap-4 bg-[#0D3B33]/85 backdrop-blur-md border border-[#E4B564]/30 p-4 rounded-xl shadow-xl hover:border-[#E4B564] hover:scale-105 transition-all duration-300 group cursor-pointer lg:-translate-y-5">
-              <div className="w-11 h-11 rounded-full bg-[#E4B564]/20 border border-[#E4B564]/50 flex items-center justify-center text-[#E4B564] group-hover:bg-[#E4B564] group-hover:text-[#0D3B33] transition-colors shrink-0">
-                <Car className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <h4 className="font-serif text-base font-semibold text-white leading-tight">
-                  Thrilling Desert Safari
-                </h4>
-                <p className="text-[10px] text-white/70 tracking-wider">
-                  4x4 Dune Bashing & Sandboarding
-                </p>
-              </div>
-            </div>
+          {/* 4 Tags Grid: Small screens show 4 icons without green background, and tooltip on hover */}
+          <div className="w-full max-w-[1340px] mx-auto px-4 sm:px-6 grid grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6 items-center relative z-10">
+            {heroFeatures.map((feature, idx) => {
+              const IconComp = feature.icon;
+              return (
+                <div
+                  key={idx}
+                  className={`relative flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 sm:gap-4 bg-transparent sm:bg-[#0D3B33]/85 backdrop-blur-sm sm:backdrop-blur-md border border-white/25 sm:border-[#E4B564]/30 p-2 sm:p-4 rounded-xl shadow-lg hover:border-[#E4B564] hover:scale-105 transition-all duration-300 group cursor-pointer ${feature.offset}`}
+                >
+                  {/* Floating tooltip on small screens showing the name on hover */}
+                  <div className="absolute -top-11 left-1/2 -translate-x-1/2 px-2.5 py-1.5 bg-[#0D3B33] text-[#E4B564] border border-[#E4B564]/60 text-[11px] font-sans font-semibold rounded-md whitespace-nowrap shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none z-30 block sm:hidden">
+                    {feature.title}
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#0D3B33]" />
+                  </div>
 
-            {/* Feature 2 (Center Left - Down Trough) */}
-            <div className="flex items-center gap-4 bg-[#0D3B33]/85 backdrop-blur-md border border-[#E4B564]/30 p-4 rounded-xl shadow-xl hover:border-[#E4B564] hover:scale-105 transition-all duration-300 group cursor-pointer lg:translate-y-5">
-              <div className="w-11 h-11 rounded-full bg-[#E4B564]/20 border border-[#E4B564]/50 flex items-center justify-center text-[#E4B564] group-hover:bg-[#E4B564] group-hover:text-[#0D3B33] transition-colors shrink-0">
-                <Compass className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <h4 className="font-serif text-base font-semibold text-white leading-tight">
-                  Authentic Camel Rides
-                </h4>
-                <p className="text-[10px] text-white/70 tracking-wider">Sunset Caravan Trails</p>
-              </div>
-            </div>
-
-            {/* Feature 3 (Center Right - Down Trough) */}
-            <div className="flex items-center gap-4 bg-[#0D3B33]/85 backdrop-blur-md border border-[#E4B564]/30 p-4 rounded-xl shadow-xl hover:border-[#E4B564] hover:scale-105 transition-all duration-300 group cursor-pointer lg:translate-y-5">
-              <div className="w-11 h-11 rounded-full bg-[#E4B564]/20 border border-[#E4B564]/50 flex items-center justify-center text-[#E4B564] group-hover:bg-[#E4B564] group-hover:text-[#0D3B33] transition-colors shrink-0">
-                <FlameKindling className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <h4 className="font-serif text-base font-semibold text-white leading-tight">
-                  Traditional Bedouin Camp
-                </h4>
-                <p className="text-[10px] text-white/70 tracking-wider">BBQ Dinner & Live Shows</p>
-              </div>
-            </div>
-
-            {/* Feature 4 (Right - Top Curve) */}
-            <div className="flex items-center gap-4 bg-[#0D3B33]/85 backdrop-blur-md border border-[#E4B564]/30 p-4 rounded-xl shadow-xl hover:border-[#E4B564] hover:scale-105 transition-all duration-300 group cursor-pointer lg:-translate-y-5">
-              <div className="w-11 h-11 rounded-full bg-[#E4B564]/20 border border-[#E4B564]/50 flex items-center justify-center text-[#E4B564] group-hover:bg-[#E4B564] group-hover:text-[#0D3B33] transition-colors shrink-0">
-                <Building className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <h4 className="font-serif text-base font-semibold text-white leading-tight">
-                  Explore Dubai City Tours
-                </h4>
-                <p className="text-[10px] text-white/70 tracking-wider">
-                  Iconic Landmarks & Heritage
-                </p>
-              </div>
-            </div>
+                  {/* Icon circle: NO green background on small screen (crystal translucent), gold on hover */}
+                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/10 sm:bg-[#E4B564]/20 border border-white/30 sm:border-[#E4B564]/50 flex items-center justify-center text-[#E4B564] group-hover:bg-[#E4B564] group-hover:text-[#0D3B33] transition-colors shrink-0">
+                    <IconComp className="w-5 h-5" />
+                  </div>
+                  <div className="hidden sm:block text-left">
+                    <h4 className="font-serif text-base font-semibold text-white leading-tight">
+                      {feature.title}
+                    </h4>
+                    <p className="text-[10px] text-white/70 tracking-wider">{feature.subtitle}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* ==========================================
-          SECTION 2: SHORT ABOUT SECTION
+          SECTION 2: SHORT ABOUT SECTION (TIGHTENED GAP)
       ========================================== */}
-      <section id="aboutus" className="py-24 bg-[#F8F5EF] relative overflow-hidden">
-        {/* Background Dotted Matrix Squares */}
-        <DottedSquare className="absolute top-12 left-8 z-0 opacity-50" />
-        <DottedSquare className="absolute bottom-12 right-12 z-0 opacity-40" />
-
+      <section
+        id="aboutus"
+        className="pt-14 pb-4 sm:pt-16 sm:pb-6 bg-[#F8F5EF] relative overflow-hidden"
+      >
         <div className="section-shell grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
           {/* Left Column: Visuals & Tilted Polaroids (Scrolls from Left) */}
           <ScrollReveal
@@ -913,8 +909,8 @@ function Index() {
           >
             {/* Top Tag Annotations */}
             <div className="w-full flex justify-between text-[10px] tracking-[0.25em] text-[#6B7672] uppercase mb-4">
-              <span>MORE THAN A TRIP</span>
-              <span>A STORY TO TELL</span>
+              <span>{t("moreThanTrip", "MORE THAN A TRIP")}</span>
+              <span>{t("aStoryToTell", "A STORY TO TELL")}</span>
             </div>
 
             {/* Main Land Cruiser Visual with Dark Overlay Block */}
@@ -928,7 +924,7 @@ function Index() {
 
               {/* Overlay Handwritten Script */}
               <div className="absolute bottom-6 left-6 text-white font-script text-4xl text-[#E4B564] drop-shadow-md">
-                Feel the Desert
+                {t("feelTheDesert", "Feel the Desert")}
               </div>
 
               {/* Slider Arrows */}
@@ -953,7 +949,7 @@ function Index() {
                   className="w-full h-36 object-cover rounded-xs"
                 />
                 <p className="font-script text-lg text-center text-[#1D2523] mt-2 font-semibold">
-                  Authentic Experiences
+                  {t("authenticExperiences", "Authentic Experiences")}
                 </p>
               </div>
 
@@ -965,14 +961,14 @@ function Index() {
                   className="w-full h-36 object-cover rounded-xs"
                 />
                 <p className="font-script text-lg text-center text-[#1D2523] mt-2 font-semibold">
-                  Arabian Hospitality
+                  {t("arabianHospitality", "Arabian Hospitality")}
                 </p>
               </div>
             </div>
 
             {/* Bottom Subtitle Tag */}
             <div className="w-full flex justify-between text-[10px] tracking-[0.25em] text-[#6B7672] uppercase mt-4">
-              <span>DUBAI BEYOND ORDINARY</span>
+              <span>{t("dubaiBeyondOrdinary", "DUBAI BEYOND ORDINARY")}</span>
             </div>
           </ScrollReveal>
 
@@ -981,25 +977,9 @@ function Index() {
             direction="right"
             className="lg:col-span-6 flex flex-col items-start pl-0 lg:pl-6"
           >
-            {/* Arch Stamp Badge Top Right */}
-            <div className="self-end mb-4">
-              <div className="stamp-badge">
-                <Palmtree className="w-6 h-6 text-[#D4A353]" />
-                <span className="text-[8px] tracking-[0.2em] uppercase text-[#0D3B33] font-bold">
-                  EXPLORE
-                </span>
-                <span className="text-[7px] tracking-[0.15em] uppercase text-[#6B7672]">
-                  EXPERIENCE
-                </span>
-                <span className="text-[7px] tracking-[0.15em] uppercase text-[#6B7672]">
-                  BELONG
-                </span>
-              </div>
-            </div>
-
             {/* Subtitle */}
             <div className="section-subtitle mb-3">
-              <span>ABOUT DESERTJOURNEYDXB</span>
+              <span>{t("aboutTag", "ABOUT DESERTJOURNEYDXB")}</span>
               <span className="w-12 h-[1px] bg-[#D4A353]" />
             </div>
 
@@ -1008,37 +988,40 @@ function Index() {
               as="h2"
               className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0D3B33] leading-[1.1] mb-6"
             >
-              Your Gateway to an <br />
-              Extraordinary <em className="gold-italic">Dubai Adventure</em>
+              {t("aboutHeading1", "Your Gateway to an")} <br />
+              {t("aboutHeading2", "Extraordinary")}{" "}
+              <em className="gold-italic">{t("aboutHeading3", "Dubai Adventure")}</em>
             </TextReveal>
 
             {/* Body Text */}
             <p className="font-sans text-sm text-[#4A5550] leading-relaxed mb-4">
-              At DesertJourneyDXB, we believe travel is more than just a destination — it’s an
-              experience that stays with you forever. From thrilling desert safaris and breathtaking
-              city tours to authentic Arabian hospitality, we create unforgettable moments that let
-              you discover the real beauty of Dubai.
+              {t(
+                "aboutBody1",
+                "At DesertJourneyDXB, we believe travel is more than just a destination — it’s an experience that stays with you forever. From thrilling desert safaris and breathtaking city tours to authentic Arabian hospitality, we create unforgettable moments that let you discover the real beauty of Dubai.",
+              )}
             </p>
             <p className="font-sans text-sm text-[#4A5550] leading-relaxed mb-8">
-              Join us for a journey where adventure, culture and luxury come together in the most
-              extraordinary way.
+              {t(
+                "aboutBody2",
+                "Join us for a journey where adventure, culture and luxury come together in the most extraordinary way.",
+              )}
             </p>
 
             {/* Discover Story Button */}
             <a href="#packages" className="btn-gold text-xs px-8 py-4">
-              DISCOVER OUR STORY &nbsp; →
+              {t("discoverStory", "DISCOVER OUR STORY")} &nbsp; →
             </a>
           </ScrollReveal>
         </div>
       </section>
 
       {/* ==========================================
-          SECTION 3: CHOOSE YOUR DESERT EXPERIENCE
+          SECTION 3: CHOOSE YOUR DESERT EXPERIENCE (TIGHTENED GAP)
       ========================================== */}
-      <section id="packages" className="py-24 bg-[#FAF7F2] relative overflow-hidden">
-        {/* Background Dotted Matrix Square */}
-        <DottedSquare className="absolute top-10 right-10 z-0 opacity-40" />
-
+      <section
+        id="packages"
+        className="pt-4 pb-20 sm:pt-6 sm:pb-24 bg-[#FAF7F2] relative overflow-hidden"
+      >
         <div className="section-shell relative z-10">
           {/* Top Header Row (Scrolls from Left) */}
           <ScrollReveal
@@ -1047,20 +1030,24 @@ function Index() {
           >
             <div>
               <span className="font-script text-2xl text-[#D4A353] block mb-1">
-                Adventure Awaits
+                {t("adventureAwaits", "Adventure Awaits")}
               </span>
               <div className="section-subtitle mb-2">
-                <span>POPULAR PACKAGES</span>
+                <span>{t("popularPackages", "POPULAR PACKAGES")}</span>
                 <span className="w-8 h-[1px] bg-[#D4A353]" />
               </div>
               <TextReveal
                 as="h2"
                 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0D3B33]"
               >
-                Choose Your <em className="gold-italic">Desert Experience</em>
+                {t("chooseDesertExp", "Choose Your")}{" "}
+                <em className="gold-italic">{t("desertExperience", "Desert Experience")}</em>
               </TextReveal>
               <p className="text-sm text-[#6B7672] mt-2">
-                Thrilling adventures, authentic culture and unforgettable memories.
+                {t(
+                  "chooseExpSubtitle",
+                  "Thrilling adventures, authentic culture and unforgettable memories.",
+                )}
               </p>
             </div>
 
@@ -1078,7 +1065,7 @@ function Index() {
                 href="#attractions"
                 className="text-xs font-bold uppercase tracking-wider text-[#0D3B33] hover:text-[#D4A353] flex items-center gap-1 transition-colors"
               >
-                View All Packages →
+                {t("viewAllPackages", "View All Packages →")}
               </a>
             </div>
           </ScrollReveal>
@@ -1087,11 +1074,13 @@ function Index() {
           <ScrollReveal direction="right">
             {/* 3 Detailed Package Cards Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {packagesData.map((pkg) => (
-                <div
-                  key={pkg.id}
-                  className="bg-white rounded-md overflow-hidden shadow-lg border border-[#E5E0D6] flex flex-col hover:shadow-2xl transition-all duration-300 group"
-                >
+              {packagesData.map((rawPkg) => {
+                const pkg = getLocalizedPackage(rawPkg, currentLanguage.code);
+                return (
+                  <div
+                    key={pkg.id}
+                    className="bg-white rounded-md overflow-hidden shadow-lg border border-[#E5E0D6] flex flex-col hover:shadow-2xl transition-all duration-300 group"
+                  >
                   {/* Package Image & Badges Header */}
                   <div className="relative h-60 overflow-hidden">
                     <img
@@ -1158,7 +1147,7 @@ function Index() {
                     <div>
                       <div className="bg-[#F8F5EF] p-3 rounded-xs border border-[#E5E0D6] text-center mb-6">
                         <span className="text-[10px] font-bold text-[#6B7672] uppercase tracking-wider block mb-1">
-                          ENTERTAINMENT SHOWS:
+                          {t("entertainmentShows", "ENTERTAINMENT SHOWS:")}
                         </span>
                         <span className="text-xs font-semibold text-[#0D3B33]">{pkg.shows}</span>
                       </div>
@@ -1168,7 +1157,7 @@ function Index() {
                         href="#map"
                         className={`w-full py-4 px-6 rounded-xs text-xs font-bold uppercase tracking-wider flex items-center justify-between transition-all ${pkg.buttonColor}`}
                       >
-                        <span>VIEW MORE &nbsp; →</span>
+                        <span>{t("viewMore", "VIEW MORE")} &nbsp; →</span>
                         {pkg.buttonIcon === "camel" && (
                           <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                             <path d="M19 13c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2s2-.9 2-2v-2c0-1.1-.9-2-2-2zM4 11c0-1.1.9-2 2-2h3.58l.71-2.13C10.59 6.28 11.23 6 11.92 6H15c.55 0 1 .45 1 1s-.45 1-1 1h-2.58l-1 3H16c1.1 0 2 .9 2 2v1c0 .55.45 1 1 1h1c.55 0 1 .45 1 1s-.45 1-1 1h-1.5c-1.38 0-2.5-1.12-2.5-2.5V13h-4v4c0 .55-.45 1-1 1s-1-.45-1-1v-4H8v4c0 .55-.45 1-1 1s-1-.45-1-1v-5.08C4.82 12.63 4 11.9 4 11z" />
@@ -1180,7 +1169,8 @@ function Index() {
                     </div>
                   </div>
                 </div>
-              ))}
+              );
+            })}
             </div>
 
             {/* Pagination Indicators */}
@@ -1218,9 +1208,6 @@ function Index() {
         {/* Soft Warm Wash Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/65 z-1" />
 
-        {/* Background Dotted Matrix Square */}
-        <DottedSquare className="absolute top-12 left-10 z-1 opacity-30 text-white" />
-
         <div className="relative z-10 section-shell h-full flex flex-col justify-between">
           {/* Top Row Titles & Badges (Scrolls from Left) */}
           <ScrollReveal
@@ -1247,12 +1234,15 @@ function Index() {
               </div>
             </div>
 
-            {/* Main Title */}
-            <h2 className="font-serif text-5xl sm:text-6xl lg:text-7xl text-white font-normal mb-2">
-              What Our <em className="gold-italic font-normal">Guests Say</em>
-            </h2>
+            {/* Main Title with Word-by-Word Reveal */}
+            <TextReveal
+              as="h2"
+              className="font-serif text-5xl sm:text-6xl lg:text-7xl text-white font-normal mb-2"
+            >
+              {t("whatOurGuestsSay", "What Our Guests Say")}
+            </TextReveal>
             <p className="text-xs uppercase tracking-[0.3em] text-[#E4B564] font-semibold mb-6">
-              REAL EXPERIENCES. REAL ADVENTURES. REAL MEMORIES.
+              {t("guestsSayTag", "REAL EXPERIENCES. REAL ADVENTURES. REAL MEMORIES.")}
             </p>
 
             {/* Google Rating Score Banner */}
@@ -1275,14 +1265,14 @@ function Index() {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                 />
               </svg>
-              <span className="font-bold text-white text-sm">Excellent</span>
+              <span className="font-bold text-white text-sm">{t("excellent", "Excellent")}</span>
               <div className="flex text-[#FFD700] text-sm">
                 {"★★★★★".split("").map((star, i) => (
                   <span key={i}>{star}</span>
                 ))}
               </div>
               <span className="text-xs text-white/80">
-                Based on <strong>628 reviews</strong>
+                {t("googleRating", "Based on 628 reviews")}
               </span>
             </div>
           </ScrollReveal>
@@ -1384,25 +1374,25 @@ function Index() {
             <div>
               <span className="font-serif text-2xl font-bold text-white block">1000+</span>
               <span className="text-[9px] tracking-widest text-[#E4B564] uppercase font-semibold">
-                HAPPY TRAVELERS
+                {t("happyTravelers", "HAPPY TRAVELERS")}
               </span>
             </div>
             <div>
               <span className="font-serif text-2xl font-bold text-white block">4.9/5</span>
               <span className="text-[9px] tracking-widest text-[#E4B564] uppercase font-semibold">
-                GOOGLE RATING
+                {t("googleRatingBadge", "GOOGLE RATING")}
               </span>
             </div>
             <div>
               <span className="font-serif text-2xl font-bold text-white block">TRUSTED</span>
               <span className="text-[9px] tracking-widest text-[#E4B564] uppercase font-semibold">
-                TRAVEL PARTNER
+                {t("trustedPartner", "TRUSTED TRAVEL PARTNER")}
               </span>
             </div>
             <div>
               <span className="font-serif text-2xl font-bold text-white block">MEMORABLE</span>
               <span className="text-[9px] tracking-widest text-[#E4B564] uppercase font-semibold">
-                EXPERIENCES
+                {t("memorableExp", "MEMORABLE EXPERIENCES")}
               </span>
             </div>
           </div>
@@ -1417,9 +1407,6 @@ function Index() {
           SECTION 5: EXCLUSIVE ATTRACTION OFFER
       ========================================== */}
       <section id="attractions" className="py-24 bg-[#F8F5EF] relative overflow-hidden">
-        {/* Background Dotted Matrix Square */}
-        <DottedSquare className="absolute top-12 left-12 z-0 opacity-40" />
-
         <div className="section-shell relative z-10">
           {/* Header Row (Scrolls from Left) */}
           <ScrollReveal
@@ -1431,18 +1418,20 @@ function Index() {
                 <span>DUBAI • ABU DHABI • HATTA AND BEYOND</span>
               </div>
               <div className="section-subtitle mb-2">
-                <span>EXPLORE BEYOND THE DESERT</span>
+                <span>{t("exploreBeyondDesert", "EXPLORE BEYOND THE DESERT")}</span>
                 <span className="w-8 h-[1px] bg-[#D4A353]" />
               </div>
               <TextReveal
                 as="h2"
                 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0D3B33]"
               >
-                Exclusive <em className="gold-italic">Attraction Packages</em>
+                {t("exclusiveAttractions", "Exclusive Attraction Packages")}
               </TextReveal>
               <p className="text-sm text-[#6B7672] mt-2">
-                Discover iconic destinations, cultural experiences and breathtaking landscapes with
-                our handpicked tour packages.
+                {t(
+                  "attractionsSub",
+                  "Discover iconic destinations, cultural experiences and breathtaking landscapes with our handpicked tour packages.",
+                )}
               </p>
             </div>
 
@@ -1454,7 +1443,7 @@ function Index() {
                 to="/city-tours"
                 className="bg-white border border-[#D4A353]/50 text-[#0D3B33] font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-full hover:bg-[#D4A353] hover:text-white transition-all shadow-xs"
               >
-                View All Tours →
+                {t("viewAllTours", "View All Tours →")}
               </Link>
             </div>
           </ScrollReveal>
@@ -1501,7 +1490,9 @@ function Index() {
 
                       {/* Price Tag */}
                       <div className="flex items-baseline gap-2 mb-6">
-                        <span className="text-xs uppercase text-white/70">starting from</span>
+                        <span className="text-xs uppercase text-white/70">
+                          {t("startingFrom", "starting from")}
+                        </span>
                         <span className="font-serif text-4xl font-bold text-[#E4B564]">
                           {tour.price}
                         </span>
@@ -1524,7 +1515,7 @@ function Index() {
                         params={{ slug: tourSlug }}
                         className="btn-gold w-full text-center justify-center py-4 text-xs font-bold uppercase tracking-wider mb-4 block"
                       >
-                        BOOK NOW &nbsp; →
+                        {t("bookNow", "BOOK NOW")} &nbsp; →
                       </Link>
 
                       {/* Footer Tag */}
@@ -1552,9 +1543,6 @@ function Index() {
         id="blogs"
         className="py-24 bg-white border-t border-[#EDE7D9] relative overflow-hidden"
       >
-        {/* Background Dotted Matrix Square */}
-        <DottedSquare className="absolute top-10 right-10 z-0 opacity-30" />
-
         <div className="section-shell relative z-10">
           {/* Header row with Title & "View More Blogs" Button */}
           <ScrollReveal
@@ -1563,17 +1551,19 @@ function Index() {
           >
             <div>
               <span className="text-xs uppercase tracking-[0.3em] text-[#C68A36] font-bold block mb-2">
-                OUR BLOG & GUIDES
+                {t("ourBlogGuides", "OUR BLOG & GUIDES")}
               </span>
               <TextReveal
                 as="h2"
                 className="font-serif text-4xl sm:text-5xl text-[#0D3B33] leading-tight"
               >
-                Desert Safari <em className="gold-italic">Blog & Travel Tips</em>
+                {t("blogHeading", "Desert Safari Blog & Travel Tips")}
               </TextReveal>
               <p className="text-sm text-[#5A5449] mt-2 max-w-xl">
-                Travel tips, guides, experiences and everything you need to know about exploring the
-                magical deserts.
+                {t(
+                  "blogSub",
+                  "Travel tips, guides, experiences and everything you need to know about exploring the magical deserts.",
+                )}
               </p>
             </div>
 
@@ -1581,7 +1571,7 @@ function Index() {
               to="/blog"
               className="bg-[#C68A36] hover:bg-[#B3792A] text-white font-sans font-bold text-xs uppercase tracking-wider px-7 py-3.5 rounded-xl flex items-center gap-2 transition-all shadow-md hover:shadow-lg active:scale-95 shrink-0 self-start md:self-auto"
             >
-              <span>View More Blogs</span>
+              <span>{t("viewMoreBlogs", "View More Blogs")}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </ScrollReveal>
@@ -1606,16 +1596,13 @@ function Index() {
         id="map"
         className="py-20 bg-[#FAF7F2] border-t border-[#E5E0D6] relative overflow-hidden"
       >
-        {/* Background Dotted Matrix Square */}
-        <DottedSquare className="absolute top-6 left-6 z-0 opacity-40" />
-
         <ScrollReveal direction="left" className="section-shell relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <span className="text-xs uppercase tracking-[0.3em] text-[#D4A353] font-bold block mb-2">
-              OUR DUBAI LOCATION
+              {t("ourDubaiLocation", "OUR DUBAI LOCATION")}
             </span>
             <TextReveal as="h2" className="font-serif text-4xl sm:text-5xl text-[#0D3B33] mb-4">
-              Visit Our <em className="gold-italic">Dubai Office</em>
+              {t("visitOurOffice", "Visit Our Dubai Office")}
             </TextReveal>
             <p className="text-sm text-[#4A5550] leading-relaxed">
               Micron Technical Services, Karama Zabeel Street, Montana Building, 304 - Dubai -
@@ -1642,198 +1629,9 @@ function Index() {
       </section>
 
       {/* ==========================================
-          NEW FOOTER REDESIGN MATCHING MOCKUP IMAGE 1 & 2
+          FOOTER COMPONENT
       ========================================== */}
-      <footer id="contact" className="relative text-white overflow-hidden footer-mockup-bg">
-        {/* Background Image (User Uploaded Image 2) */}
-        <img
-          src="/footer_bg.png"
-          alt="Dubai desert sunset camel caravan background"
-          className="absolute inset-0 w-full h-full object-cover object-center z-0 opacity-40 mix-blend-luminosity"
-        />
-
-        {/* Gradient Overlay Matching Image 1 Dark Styling */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#051E1A] via-[#072B25]/90 to-[#0A332C]/80 z-1" />
-
-        <ScrollReveal
-          direction="up"
-          className="relative z-10 w-full max-w-[1340px] mx-auto px-6 pt-16 pb-8"
-        >
-          {/* Main 4 Columns Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-[#E4B564]/20">
-            {/* Column 1: Brand & Social (3 cols) */}
-            <div className="lg:col-span-3 flex flex-col items-start pr-4 border-r-0 lg:border-r border-[#E4B564]/20">
-              <FooterLogo />
-
-              <p className="text-xs text-white/70 leading-relaxed mt-6 mb-6">
-                Experience the magic of Dubai with unforgettable desert safaris, city tours and
-                authentic Arabian hospitality.
-              </p>
-
-              {/* Social Icons Row */}
-              <div className="flex items-center gap-3">
-                <a href="#top" className="social-icon-btn" aria-label="Facebook">
-                  <Facebook className="w-4 h-4" />
-                </a>
-                <a href="#top" className="social-icon-btn" aria-label="Instagram">
-                  <Instagram className="w-4 h-4" />
-                </a>
-                <a href="#top" className="social-icon-btn" aria-label="YouTube">
-                  <Youtube className="w-4 h-4" />
-                </a>
-                <a href="#top" className="social-icon-btn" aria-label="TripAdvisor">
-                  <Globe className="w-4 h-4" />
-                </a>
-                <a href="#top" className="social-icon-btn font-bold text-xs" aria-label="Google">
-                  G
-                </a>
-              </div>
-            </div>
-
-            {/* Column 2: Useful Links (3 cols) */}
-            <div className="lg:col-span-3 pl-0 lg:pl-6 border-r-0 lg:border-r border-[#E4B564]/20">
-              <h4 className="font-serif text-xl font-bold text-white mb-6">Useful Links</h4>
-              <ul className="space-y-3 text-xs text-white/80 font-sans">
-                <li>
-                  <a
-                    href="#packages"
-                    className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
-                  >
-                    <span className="text-[#E4B564] font-bold">›</span> Desert Safari Packages
-                  </a>
-                </li>
-                <li>
-                  <Link
-                    to="/city-tours"
-                    className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
-                  >
-                    <span className="text-[#E4B564] font-bold">›</span> City Tour Packages
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/blog"
-                    className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
-                  >
-                    <span className="text-[#E4B564] font-bold">›</span> Desert Safari Blog & Guides
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/about"
-                    className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
-                  >
-                    <span className="text-[#E4B564] font-bold">›</span> About Us
-                  </Link>
-                </li>
-                <li>
-                  <a
-                    href="#map"
-                    className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
-                  >
-                    <span className="text-[#E4B564] font-bold">›</span> Terms & Conditions
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#map"
-                    className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
-                  >
-                    <span className="text-[#E4B564] font-bold">›</span> Privacy Policy
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Column 3: Get In Touch (3 cols) */}
-            <div className="lg:col-span-3 pl-0 lg:pl-6 border-r-0 lg:border-r border-[#E4B564]/20">
-              <h4 className="font-serif text-xl font-bold text-white mb-6">Get In Touch</h4>
-              <ul className="space-y-4 text-xs text-white/80 font-sans">
-                <li className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full border border-[#E4B564]/40 flex items-center justify-center text-[#E4B564] shrink-0 mt-0.5">
-                    <MapPin className="w-4 h-4" />
-                  </div>
-                  <span className="leading-snug">324, Nextcare Building, Al Karama, Dubai</span>
-                </li>
-
-                <li className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full border border-[#E4B564]/40 flex items-center justify-center text-[#E4B564] shrink-0">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                  <a
-                    href="mailto:desertjourneydxb@gmail.com"
-                    className="hover:text-[#E4B564] transition-colors"
-                  >
-                    desertjourneydxb@gmail.com
-                  </a>
-                </li>
-
-                <li className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full border border-[#E4B564]/40 flex items-center justify-center text-[#E4B564] shrink-0">
-                    <Phone className="w-4 h-4" />
-                  </div>
-                  <a href="tel:+971582639173" className="hover:text-[#E4B564] transition-colors">
-                    +971 582639173
-                  </a>
-                </li>
-
-                <li className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full border border-[#E4B564]/40 flex items-center justify-center text-[#E4B564] shrink-0">
-                    <Send className="w-4 h-4 rotate-45" />
-                  </div>
-                  <a href="#contact" className="hover:text-[#E4B564] transition-colors font-medium">
-                    Contact Us
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Column 4: Visit DUBAI Banner (3 cols) */}
-            <div className="lg:col-span-3 pl-0 lg:pl-6 flex flex-col justify-between relative">
-              <div>
-                <span className="font-script text-4xl text-[#E4B564] block mb-[-10px] pl-1">
-                  Visit
-                </span>
-                <h2 className="font-serif text-6xl lg:text-7xl font-bold text-white tracking-widest leading-none mb-3">
-                  DUBAI
-                </h2>
-                <p className="text-[8px] tracking-[0.25em] text-[#E4B564] uppercase font-semibold border-y border-[#E4B564]/30 py-2 mb-3">
-                  DESERTS &nbsp;|&nbsp; CITY TOURS &nbsp;|&nbsp; CULTURE &nbsp;|&nbsp; MEMORIES
-                </p>
-                <span className="font-script text-2xl text-white/80 block italic">
-                  Adventure Awaits...
-                </span>
-              </div>
-
-              {/* Bottom Right Dune Emblem */}
-              <div className="self-end mt-6">
-                <svg className="w-20 h-10 text-[#E4B564]" viewBox="0 0 60 30" fill="none">
-                  <path d="M30 4L45 22H15L30 4Z" fill="#E4B564" opacity="0.8" />
-                  <path d="M30 10L52 28H8L30 10Z" fill="#D4A353" opacity="0.5" />
-                  <path d="M2 28H58" stroke="#E4B564" strokeWidth="2" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Copyright Bar */}
-          <div className="flex flex-col md:flex-row items-center justify-between pt-6 text-[10px] text-white/60 tracking-wider">
-            <div>© 2025 NextTrip Travel LLC | All Rights Reserved</div>
-
-            <div className="flex items-center gap-2 text-[#E4B564] my-3 md:my-0">
-              <Palmtree className="w-4 h-4" />
-              <span className="text-white/80 font-semibold tracking-[0.2em]">
-                EXPLORE &nbsp;|&nbsp; DISCOVER &nbsp;|&nbsp; EXPERIENCE
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="w-8 h-[1px] bg-white/30 inline-block" />
-              <span>DUBAI BEYOND ORDINARY</span>
-            </div>
-          </div>
-        </ScrollReveal>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }

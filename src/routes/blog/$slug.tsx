@@ -17,14 +17,16 @@ import { RelatedBlogsCarousel } from "../../components/RelatedBlogsCarousel";
 import { TextReveal } from "../../components/TextReveal";
 import { BLOG_POSTS } from "../../data/blogs";
 import { useBlogStats } from "../../hooks/useBlogStats";
+import { useLanguage } from "../../lib/i18n";
 
 export const Route = createFileRoute("/blog/$slug")({
   head: ({ params }) => {
-    const post = BLOG_POSTS.find((p) => p.slug === params.slug) || BLOG_POSTS[0];
+    const post =
+      BLOG_POSTS.find((p) => p.slug === params.slug) || (BLOG_POSTS[0] as (typeof BLOG_POSTS)[0]);
     return {
       meta: [
-        { title: `${post.title} | Desert Safari Blog` },
-        { name: "description", content: post.excerpt },
+        { title: `${post?.title || "Blog Post"} | Desert Safari Blog` },
+        { name: "description", content: post?.excerpt || "" },
       ],
     };
   },
@@ -33,25 +35,27 @@ export const Route = createFileRoute("/blog/$slug")({
 
 function BlogPostDetailPage() {
   const { slug } = useParams({ from: "/blog/$slug" });
+  const { t, getLocalizedBlog } = useLanguage();
 
-  // Find matching blog post, default to the top 10 tips post if not found
-  const post = BLOG_POSTS.find((p) => p.slug === slug) || BLOG_POSTS[0];
+  // Find matching blog post, default to the first post if not found
+  const basePost = (BLOG_POSTS.find((p) => p.slug === slug) || BLOG_POSTS[0])!;
+  const post = getLocalizedBlog(basePost);
 
   // Actual dynamic backend-synced likes and views
   const { views, likes, hasLiked, toggleLike } = useBlogStats(post.slug, post.likes, post.views);
 
   // Related posts (all other posts)
-  const relatedPosts = BLOG_POSTS.filter((p) => p.id !== post.id);
+  const relatedPosts = BLOG_POSTS.filter((p) => p.id !== basePost.id);
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white">
+    <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white page-fade-in">
       {/* Blog Navigation Header (matching actual website navbar) */}
       <SiteHeader activeNav="Blogs" />
 
       {/* =========================================================
           HERO BANNER WITH BREADCRUMB, TITLE, META & DESERT SUNSET BG
       ========================================================= */}
-      <section className="relative min-h-[320px] sm:min-h-[380px] flex flex-col justify-end text-white overflow-hidden pb-10 pt-8">
+      <section className="relative min-h-[360px] sm:min-h-[420px] flex flex-col justify-end text-white overflow-hidden pb-10 pt-28 sm:pt-36 sm:pb-14">
         {/* Desert Sunset / Jeep Caravan Background Image */}
         <img
           src="/hero_bg.jpg"
@@ -66,11 +70,11 @@ function BlogPostDetailPage() {
           {/* Breadcrumbs Navigation */}
           <nav className="flex items-center gap-2 text-xs sm:text-sm text-white/80 mb-4 font-medium flex-wrap">
             <Link to="/" className="hover:text-[#F3C472] transition-colors">
-              Home
+              {t("navHome")}
             </Link>
             <ChevronRight className="w-3.5 h-3.5 text-white/50" />
             <Link to="/blog" className="hover:text-[#F3C472] transition-colors">
-              Blog
+              {t("navBlogs")}
             </Link>
             <ChevronRight className="w-3.5 h-3.5 text-white/50" />
             <span className="text-[#F3C472] truncate max-w-[280px] sm:max-w-md">{post.title}</span>
@@ -190,7 +194,7 @@ function BlogPostDetailPage() {
               {/* Social Share Icons */}
               <div className="flex items-center gap-3">
                 <span className="text-xs sm:text-sm font-bold text-[#3E3A33] font-sans">
-                  Share This Post:
+                  {t("shareThisPost")}:
                 </span>
                 <div className="flex items-center gap-2">
                   <a
@@ -263,9 +267,11 @@ function BlogPostDetailPage() {
                 RELATED POSTS SECTION WITH DRAGGABLE AUTO-SCROLL CAROUSEL
             ========================================================= */}
             <div className="w-full overflow-hidden">
-              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#1F2421] mb-4">
-                Related Posts
-              </h3>
+              <TextReveal
+                text={t("relatedPosts")}
+                as="h3"
+                className="font-serif text-2xl sm:text-3xl font-bold text-[#1F2421] mb-4"
+              />
 
               {/* Draggable and Auto-scrolling from Right to Left on Small Screens */}
               <RelatedBlogsCarousel posts={relatedPosts} />
@@ -291,3 +297,4 @@ function BlogPostDetailPage() {
     </div>
   );
 }
+

@@ -14,6 +14,7 @@ import {
   Ticket,
 } from "lucide-react";
 import { BLOG_CATEGORIES, BLOG_TAGS, BLOG_POSTS } from "../data/blogs";
+import { useLanguage } from "../lib/i18n";
 
 const ICON_MAP: Record<string, typeof FileText> = {
   "file-text": FileText,
@@ -45,6 +46,7 @@ export function BlogSidebar({
   showTags?: boolean;
   onSearch?: (query: string) => void;
 }) {
+  const { t, getLocalizedBlog } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [emailInput, setEmailInput] = useState("");
   const [subscribed, setSubscribed] = useState(false);
@@ -78,7 +80,7 @@ export function BlogSidebar({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search blog posts..."
+                placeholder={t("searchBlog", "Search blog posts...")}
                 className="w-full bg-[#FAF7F2] border border-[#E5DFD3] rounded-xl px-4 py-3 pl-10 text-xs sm:text-sm text-[#2D2A26] placeholder-[#8C877D] focus:outline-none focus:border-[#C68A36] transition-colors"
               />
               <Search className="w-4 h-4 text-[#8C877D] absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -87,7 +89,7 @@ export function BlogSidebar({
               type="submit"
               className="bg-[#C68A36] hover:bg-[#B3792A] text-white text-xs sm:text-sm font-semibold px-5 py-3 rounded-xl transition-all shadow-sm shrink-0"
             >
-              Search
+              {t("search", "Search")}
             </button>
           </form>
         </div>
@@ -97,39 +99,44 @@ export function BlogSidebar({
       {showRecentPosts && (
         <div className="bg-white rounded-2xl p-6 border border-[#EDE7D9] shadow-sm">
           <div className="flex items-center justify-between pb-4 mb-4 border-b border-stone-100">
-            <h4 className="font-serif text-xl font-bold text-[#1F2421]">Recent Posts</h4>
+            <h4 className="font-serif text-xl font-bold text-[#1F2421]">
+              {t("recentPosts", "Recent Posts")}
+            </h4>
             <Link
               to="/blog"
               className="text-xs font-semibold text-[#C68A36] hover:text-[#9F671E] flex items-center gap-1"
             >
-              View All →
+              {t("viewMore", "View All")} →
             </Link>
           </div>
 
           <div className="space-y-4">
-            {recentPosts.map((post) => (
-              <Link
-                key={post.id}
-                to="/blog/$slug"
-                params={{ slug: post.slug }}
-                className="group flex items-center gap-4 hover:bg-[#FAF7F2] p-2 rounded-xl transition-colors"
-              >
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="w-20 h-16 rounded-lg object-cover shrink-0 group-hover:scale-105 transition-transform"
-                />
-                <div className="flex-1 min-w-0">
-                  <h5 className="font-serif text-sm font-bold text-[#1F2421] group-hover:text-[#C68A36] transition-colors line-clamp-2 leading-snug">
-                    {post.title}
-                  </h5>
-                  <div className="flex items-center gap-1.5 text-[11px] text-[#8A857B] mt-1.5 font-sans">
-                    <Calendar className="w-3 h-3 text-[#C68A36]" />
-                    <span>{post.date}</span>
+            {recentPosts.map((post) => {
+              const localized = getLocalizedBlog(post);
+              return (
+                <Link
+                  key={post.id}
+                  to="/blog/$slug"
+                  params={{ slug: post.slug }}
+                  className="group flex items-center gap-4 hover:bg-[#FAF7F2] p-2 rounded-xl transition-colors"
+                >
+                  <img
+                    src={localized.image}
+                    alt={localized.title}
+                    className="w-20 h-16 rounded-lg object-cover shrink-0 group-hover:scale-105 transition-transform"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h5 className="font-serif text-sm font-bold text-[#1F2421] group-hover:text-[#C68A36] transition-colors line-clamp-2 leading-snug">
+                      {localized.title}
+                    </h5>
+                    <div className="flex items-center gap-1.5 text-[11px] text-[#8A857B] mt-1.5 font-sans">
+                      <Calendar className="w-3 h-3 text-[#C68A36]" />
+                      <span>{localized.date}</span>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </div>
       )}
@@ -138,7 +145,7 @@ export function BlogSidebar({
       {showCategories && (
         <div className="bg-white rounded-2xl p-6 border border-[#EDE7D9] shadow-sm">
           <h4 className="font-serif text-xl font-bold text-[#1F2421] pb-4 mb-4 border-b border-stone-100">
-            Blog Categories
+            {t("blogCategories", "Blog Categories")}
           </h4>
 
           <ul className="space-y-2">
@@ -194,21 +201,21 @@ export function BlogSidebar({
 
           <div className="relative z-10">
             <h4 className="font-serif text-2xl font-bold text-white mb-2 leading-tight">
-              Plan Your Desert Safari Today!
+              {t("bookYourSafari", "Plan Your Desert Safari Today!")}
             </h4>
             <p className="text-xs text-white/80 leading-relaxed">
-              Explore our exciting packages and create unforgettable memories.
+              {t("chooseExpSubtitle", "Explore our exciting packages and create unforgettable memories.")}
             </p>
           </div>
 
           <div className="relative z-10 mt-6">
-            <Link
-              to="/#packages"
+            <a
+              href="/#packages"
               className="w-full bg-[#C68A36] hover:bg-[#B3792A] text-white text-xs sm:text-sm font-bold uppercase tracking-wider py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md active:scale-95"
             >
               <Ticket className="w-4 h-4" />
-              View Packages
-            </Link>
+              {t("packages", "View Packages")}
+            </a>
           </div>
         </div>
       )}
@@ -226,15 +233,15 @@ export function BlogSidebar({
 
           <div className="relative z-10">
             <h4 className="font-serif text-xl sm:text-2xl font-bold text-white mb-2">
-              Subscribe to Our Newsletter
+              {t("subscribeNewsletter", "Subscribe to Our Newsletter")}
             </h4>
             <p className="text-xs text-white/80 leading-relaxed mb-4">
-              Get the latest travel tips, offers and desert safari updates directly in your inbox.
+              {t("welcomeVip", "Get the latest travel tips, offers and desert safari updates directly in your inbox.")}
             </p>
 
             {subscribed ? (
               <div className="bg-emerald-600/90 text-white text-xs p-3 rounded-xl text-center font-medium">
-                🎉 Thank you for subscribing!
+                🎉 {t("welcomeVip", "Thank you for subscribing!")}
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="space-y-3">
@@ -244,7 +251,7 @@ export function BlogSidebar({
                     required
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
-                    placeholder="Your email address"
+                    placeholder={t("enterEmail", "Your email address")}
                     className="w-full bg-white/90 focus:bg-white text-stone-900 placeholder-stone-500 rounded-xl px-4 py-3 pl-10 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#C68A36] transition-all"
                   />
                   <Mail className="w-4 h-4 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -253,7 +260,7 @@ export function BlogSidebar({
                   type="submit"
                   className="w-full bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs sm:text-sm py-3 px-4 rounded-xl transition-all shadow-md active:scale-95 uppercase tracking-wider"
                 >
-                  Subscribe
+                  {t("subscribe", "Subscribe")}
                 </button>
               </form>
             )}

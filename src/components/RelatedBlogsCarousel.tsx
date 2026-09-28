@@ -3,36 +3,39 @@ import { Link } from "@tanstack/react-router";
 import { Calendar, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 import type { BlogPost } from "../data/blogs";
 import { useBlogStats } from "../hooks/useBlogStats";
+import { useLanguage } from "../lib/i18n";
 
 function MiniRelatedCard({ post }: { post: BlogPost }) {
+  const { getLocalizedBlog } = useLanguage();
+  const localized = getLocalizedBlog(post);
   const { views } = useBlogStats(post.slug, post.likes, post.views);
 
   return (
     <div className="w-[280px] sm:w-[320px] shrink-0 bg-white rounded-2xl overflow-hidden border border-[#EDE7D9] shadow-xs hover:shadow-lg transition-all flex flex-col select-none group">
-      <Link to="/blog/$slug" params={{ slug: post.slug }} className="block">
+      <Link to="/blog/$slug" params={{ slug: localized.slug }} className="block">
         <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
           <img
-            src={post.image}
-            alt={post.title}
+            src={localized.image}
+            alt={localized.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none"
             loading="lazy"
           />
           <div className="absolute top-3 left-3">
             <span className="bg-[#C68A36] text-white text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded shadow-sm">
-              {post.categoryBadge}
+              {localized.categoryBadge}
             </span>
           </div>
         </div>
 
         <div className="p-4 flex flex-col justify-between">
           <h4 className="font-serif text-base font-bold text-[#1F2421] group-hover:text-[#C68A36] transition-colors line-clamp-2 leading-snug mb-3">
-            {post.title}
+            {localized.title}
           </h4>
 
           <div className="flex items-center justify-between text-[11px] text-[#8A857B] font-sans pt-2 border-t border-stone-100">
             <div className="flex items-center gap-1.5">
               <Calendar className="w-3 h-3 text-[#C68A36]" />
-              <span>{post.date}</span>
+              <span>{localized.date}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Eye className="w-3 h-3 text-[#C68A36]" />

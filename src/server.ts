@@ -77,7 +77,7 @@ export default {
 
       // POST /api/blogs/:slug/view
       const viewMatch = url.pathname.match(/^\/api\/blogs\/([^/]+)\/view$/);
-      if (viewMatch && request.method === "POST") {
+      if (viewMatch && viewMatch[1] && request.method === "POST") {
         const slug = viewMatch[1];
         const result = incrementBlogView(slug);
         return new Response(JSON.stringify(result), { headers });
@@ -85,7 +85,7 @@ export default {
 
       // POST /api/blogs/:slug/like
       const likeMatch = url.pathname.match(/^\/api\/blogs\/([^/]+)\/like$/);
-      if (likeMatch && request.method === "POST") {
+      if (likeMatch && likeMatch[1] && request.method === "POST") {
         const slug = likeMatch[1];
         let action: "like" | "unlike" = "like";
         try {
@@ -100,7 +100,7 @@ export default {
 
       // GET /api/blogs/:slug
       const singleMatch = url.pathname.match(/^\/api\/blogs\/([^/]+)$/);
-      if (singleMatch && request.method === "GET") {
+      if (singleMatch && singleMatch[1] && request.method === "GET") {
         const slug = singleMatch[1];
         const post = getBlogBySlug(slug);
         if (!post) {

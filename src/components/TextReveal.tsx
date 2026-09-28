@@ -6,7 +6,7 @@ export function TextReveal({
   className = "",
   as: Component = "h2",
   delay = 0,
-  stagger = 0.08,
+  stagger = 0.06,
 }: {
   text?: string;
   children?: ReactNode;
@@ -15,18 +15,19 @@ export function TextReveal({
   delay?: number;
   stagger?: number;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
+      (entries) => {
+        const entry = entries[0];
+        if (entry && entry.isIntersecting) {
           setIsVisible(true);
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.15 },
+      { threshold: 0.1 },
     );
 
     if (ref.current) {
@@ -36,15 +37,17 @@ export function TextReveal({
     return () => observer.disconnect();
   }, []);
 
-  if (text) {
-    const words = text.split(" ");
+  const contentText = text || (typeof children === "string" ? children : undefined);
+
+  if (contentText) {
+    const words = contentText.split(" ");
 
     return (
       <Component ref={ref} className={className}>
         {words.map((word, index) => (
           <span
             key={index}
-            className={`inline-block mr-[0.25em] last:mr-0 transition-all ${
+            className={`inline-block mr-[0.25em] last:mr-0 ${
               isVisible ? "reveal-word" : "opacity-0"
             }`}
             style={{
