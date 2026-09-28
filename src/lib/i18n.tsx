@@ -1,9 +1,9 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import type { BlogPost } from "../data/blogs";
+import type { BlogPost, BlogCategory } from "../data/blogs";
 import type { DesertSafariTour } from "../data/desertSafaris";
 import type { CityTour } from "../data/cityTours";
 
-export type LanguageCode = "en" | "de" | "it" | "pt" | "ru" | "es" | "ar" | "zh" | "nl" | "fr";
+export type LanguageCode = "en" | "de" | "it" | "pt" | "ru" | "es" | "ar" | "zh" | "nl" | "fr" | "hi";
 
 export interface LanguageOption {
   code: LanguageCode;
@@ -15,13 +15,13 @@ export interface LanguageOption {
 
 export const LANGUAGES: LanguageOption[] = [
   { code: "en", name: "English", nativeName: "English", flag: "gb", flagEmoji: "🇬🇧" },
+  { code: "ar", name: "Arabic", nativeName: "العربية", flag: "sa", flagEmoji: "🇸🇦" },
   { code: "de", name: "German", nativeName: "Deutsch", flag: "de", flagEmoji: "🇩🇪" },
+  { code: "fr", name: "French", nativeName: "Français", flag: "fr", flagEmoji: "🇫🇷" },
+  { code: "es", name: "Spanish", nativeName: "Español", flag: "es", flagEmoji: "🇪🇸" },
   { code: "it", name: "Italian", nativeName: "Italiano", flag: "it", flagEmoji: "🇮🇹" },
   { code: "pt", name: "Portuguese", nativeName: "Português", flag: "pt", flagEmoji: "🇵🇹" },
   { code: "ru", name: "Russian", nativeName: "Русский", flag: "ru", flagEmoji: "🇷🇺" },
-  { code: "es", name: "Spanish", nativeName: "Español", flag: "es", flagEmoji: "🇪🇸" },
-  { code: "ar", name: "Arabic", nativeName: "العربية", flag: "sa", flagEmoji: "🇸🇦" },
-  { code: "fr", name: "French", nativeName: "Français", flag: "fr", flagEmoji: "🇫🇷" },
   { code: "nl", name: "Dutch", nativeName: "Nederlands", flag: "nl", flagEmoji: "🇳🇱" },
   { code: "zh", name: "Chinese", nativeName: "简体中文", flag: "cn", flagEmoji: "🇨🇳" },
 ];
@@ -1509,6 +1509,120 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     rightsReserved: "版权所有",
     switchingLanguage: "正在切换语言...",
   },
+  hi: {
+    // Navigation
+    home: "होम",
+    aboutUs: "हमारे बारे में",
+    desertSafari: "डेजर्ट सफारी",
+    cityTours: "सिटी टूर्स",
+    packages: "पैकेजेस",
+    blogs: "ब्लॉग्स",
+    gallery: "गैलरी",
+    contact: "संपर्क करें",
+    bookNow: "अभी बुक करें",
+    readMore: "और पढ़ें",
+    allDesertSafari: "सभी डेजर्ट सफारी पैकेजेस →",
+    allCityTours: "सभी सिटी टूर पैकेजेस →",
+    search: "खोजें",
+    from: "से",
+    bestseller: "बेस्टसेलर",
+    popular: "लोकप्रिय",
+    travellerChoice: "2025 यात्रियों की पसंद",
+    viewMore: "विवरण देखें",
+    viewAllToursBtn: "सभी टूर्स देखें →",
+
+    // Hero Section
+    adventureAwaits: "रो मांच   इंत ज़ा र   क र   र हा   है",
+    heroHeadline1: "जहाँ विलासिता मिलती है",
+    heroHeadline2: "सुनहरे टीलों से",
+    heroSubtitle:
+      "रेगिस्तान की बेमिसाल सुंदरता का आनंद लें हमारी विशेष सफारी के साथ जहाँ भव्यता और रोमांच का संगम होता है। निजी 4×4 में टीलों पर सरपट दौड़ें, सूर्यास्त के समय आराम करें और स्वादिष्ट भोजन के साथ शाही कैंप का अनुभव लें।",
+    bookSafariNow: "अपनी सफारी अभी बुक करें",
+    watchExperience: "अनुभव वीडियो देखें",
+    exploreDiscoverExperience: "एक्सप्लोर करें • खोजें • अनुभव करें",
+
+    // Key stats
+    statGuests: "50,000+ खुश यात्री",
+    statRating: "4.9/5 स्टार रेटिंग",
+    statVehicles: "100% लक्ज़री 4x4 बेड़ा",
+
+    // Packages Section
+    featuredPackages: "रेगिस्तानी साहसिक यात्राएं",
+    packagesSub: "पारंपरिक प्रामाणिकता के साथ दुबई के सबसे रोमांचक सफारी अनुभवों में से चुनें।",
+    perPerson: "प्रति व्यक्ति",
+    duration: "अवधि",
+    packageIncludes: "पैकेज में शामिल विशेषताएं:",
+    liveShows: "लाइव मनोरंजक शो:",
+    exclusiveExperience: "विशेष वीआईपी अनुभव",
+
+    // Top City Attractions
+    exploreBeyondDesert: "रेगिस्तान से परे एक्सप्लोर करें",
+    exclusiveAttractions: "विशेष आकर्षण एवं सिटी टूर पैकेजेस",
+    attractionsSub: "हमारे चुनिंदा टूर पैकेजों के साथ दुबई और अबू धाबी के प्रतिष्ठित स्थलों व संस्कृति का अनुभव करें।",
+    startingFrom: "शुरुआती कीमत",
+
+    // Tour Detail Pages
+    tourOverview: "टूर अवलोकन",
+    topAttractions: "प्रमुख आकर्षण",
+    topItinerary: "विस्तृत यात्रा कार्यक्रम (Itinerary)",
+    packageOptions: "पैकेज विकल्प",
+    knowBeforeYouGo: "जाने से पहले जरूरी बातें",
+    agePolicy: "आयु नीति",
+    cancellationPolicy: "रद्दीकरण नीति",
+    faqs: "अक्सर पूछे जाने वाले प्रश्न (FAQs)",
+    guestReviews: "यात्रियों की समीक्षाएं",
+    instantBooking: "त्वरित वीआईपी बुकिंग",
+    adults: "वयस्क",
+    infants: "शिशु",
+    selectDate: "तारीख चुनें",
+    fullName: "पूरा नाम",
+    emailAddress: "ईमेल पता",
+    phoneNumber: "व्हाट्सएप / फोन नंबर",
+    pickupLocation: "होटल / पिकअप स्थान",
+    confirmBooking: "बुकिंग की पुष्टि करें",
+    bookingSuccess: "धन्यवाद! आपकी बुकिंग सफलतापूर्वक प्राप्त हो गई है। हमारी टीम जल्द ही आपसे संपर्क करेगी।",
+
+    // Blog & Articles
+    navBlogs: "ब्लॉग्स एवं यात्रा गाइड",
+    latestTravelInsights: "नवीनतम यात्रा अनुभव व कहानियां",
+    blogDescription: "दुबई रेगिस्तान और शहर घूमने के लिए बेहतरीन यात्रा सुझाव, गाइड और अनुभव।",
+    searchPosts: "ब्लॉग पोस्ट खोजें...",
+    toggleCategories: "कैटेगरी देखें",
+    allCategories: "सभी श्रेणियां",
+    allArticles: "सभी लेख",
+    available: "उपलब्ध",
+    categories: "श्रेणियां",
+    filterByCategory: "फ़िल्टर",
+    close: "बंद करें",
+    showingResultsFor: "के लिए परिणाम दिखाए जा रहे हैं",
+    matching: "मिलान",
+    resetFilter: "फ़िल्टर रीसेट करें",
+    noPostsFound: "कोई ब्लॉग पोस्ट नहीं मिला",
+    noPostsFoundDesc: "कृपया अपना खोज शब्द बदलें या कोई अन्य श्रेणी चुनें।",
+    latestArticles: "नवीनतम लेख",
+    recentPosts: "हालिया पोस्ट",
+    blogCategories: "ब्लॉग श्रेणियां",
+    subscribeNewsletter: "विशेष यात्रा अपडेट सब्सक्राइब करें",
+    subscribe: "सब्सक्राइब",
+    searchBlog: "ब्लॉग खोजें...",
+    shareThisPost: "यह लेख शेयर करें:",
+    relatedPosts: "संबंधित लेख",
+    dtcmLicensed: "DTCM दुबई पर्यटन द्वारा प्रमाणित",
+    dtcmDesc: "दुबई का आधिकारिक पंजीकृत टूर ऑपरेटर",
+    verifiedReviews: "628+ सत्यापित 5-स्टार समीक्षाएं",
+    bestPriceGuarantee: "सर्वोत्तम मूल्य की गारंटी",
+    bestPriceDesc: "100% पारदर्शी दरें, कोई छिपा हुआ शुल्क नहीं",
+    freeCancellationDesc: "पूर्ण धनवापसी और निःशुल्क पुनर्निर्धारण गारंटी",
+    topExperiences: "शीर्ष लक्जरी अनुभव",
+    quickLinks: "त्वरित लिंक",
+    joinVipClub: "वीआईपी क्लब में शामिल हों",
+    joinBtn: "ज्वाइन करें",
+    welcomeVip: "स्वागत है! विशेष छूट के लिए अपना ईमेल चेक करें।",
+    enterEmail: "अपना ईमेल पता दर्ज करें",
+    dubaiOfficeConcierge: "दुबई मुख्यालय और 24/7 वीआईपी कंसीयज",
+    rightsReserved: "सर्वाधिकार सुरक्षित",
+    switchingLanguage: "भाषा अपडेट हो रही है...",
+  },
 };
 
 // Dynamic Tour Localization Data Provider
@@ -1519,7 +1633,7 @@ export function getLocalizedTourData(
 ) {
   const dict = TRANSLATIONS[langCode] || TRANSLATIONS.en;
 
-  const titleMap: Record<string, Record<LanguageCode, string>> = {
+  const titleMap: Record<string, Partial<Record<LanguageCode, string>>> = {
     "evening-desert-safari": {
       en: "Evening Desert Safari",
       de: "Abend-Wüstensafari",
@@ -1690,7 +1804,7 @@ export function getLocalizedTourData(
     },
   };
 
-  const descriptionsMap: Record<string, Record<LanguageCode, string>> = {
+  const descriptionsMap: Record<string, Partial<Record<LanguageCode, string>>> = {
     "vip-desert-safari": {
       en: "Experience the ultimate VIP treatment in the desert with luxury camp access, table service, premium buffet, thrilling 4x4 dune bashing and 5 live shows.",
       de: "Erleben Sie die ultimative VIP-Behandlung in der Wüste mit luxuriösem Camp, Tischservice, Premium-Buffet, Dünenbashing und 5 Live-Shows.",
@@ -1741,7 +1855,7 @@ export function getLocalizedTourData(
     },
   };
 
-  const typeTranslation: Record<string, Record<LanguageCode, string>> = {
+  const typeTranslation: Record<string, Partial<Record<LanguageCode, string>>> = {
     "Private Tour": {
       en: "Private Tour",
       de: "Privattour",
@@ -1805,16 +1919,18 @@ export function getLocalizedPackage(
 ) {
   const pkgMap: Record<
     string,
-    Record<
-      LanguageCode,
-      {
-        title: string;
-        tag: string;
-        badge: string;
-        duration: string;
-        shows: string;
-        inclusions: string[];
-      }
+    Partial<
+      Record<
+        LanguageCode,
+        {
+          title: string;
+          tag: string;
+          badge: string;
+          duration: string;
+          shows: string;
+          inclusions: string[];
+        }
+      >
     >
   > = {
     vip: {
@@ -2432,145 +2548,578 @@ export function getLocalizedPackage(
   };
 }
 
-// Dynamic Blog Localization Data Provider
-export function getLocalizedBlog(post: BlogPost, langCode: LanguageCode): BlogPost {
-  const blogTitles: Record<string, Record<LanguageCode, { title: string; excerpt: string }>> = {
-    "what-to-wear-desert-safari-dubai": {
-      en: {
-        title: "What to Wear for a Desert Safari in Dubai (Full Packing Guide)",
-        excerpt: "Master your desert safari outfit: breathable cotton fabrics, essential sun protection, and evening layers for cool dunes.",
-      },
-      de: {
-        title: "Was man für eine Wüstensafari in Dubai anziehen sollte (Packliste)",
-        excerpt: "Perfekte Kleidung für die Wüste: atmungsaktive Baumwolle, Sonnenschutz und wärmere Schichten für kühle Abende.",
-      },
-      it: {
-        title: "Cosa indossare per un safari nel deserto a Dubai (Guida Completa)",
-        excerpt: "I migliori consigli di abbigliamento: tessuti traspiranti, protezione solare e giacca leggera per la sera.",
-      },
-      pt: {
-        title: "O que vestir em um Safari no Deserto em Dubai (Guia de Roupas)",
-        excerpt: "Dicas de roupas para o deserto: tecidos leves de algodão, protetor solar e agasalho para noites frescas nas dunas.",
-      },
-      ru: {
-        title: "Что надеть на сафари в пустыне в Дубае (Полный гид по одежде)",
-        excerpt: "Секреты идеального гардероба: легкие дышащие ткани, защита от солнца и теплая одежда для прохладных вечеров в пустыне.",
-      },
-      es: {
-        title: "Qué llevar puesto para un Safari en el Desierto en Dubai (Guía)",
-        excerpt: "Consejos de vestimenta: prendas de algodón transpirables, protección solar y chaqueta ligera para el atardecer.",
-      },
-      ar: {
-        title: "ماذا ترتدي في رحلة السفاري الصحراوية في دبي (دليل شامل)",
-        excerpt: "نصائح لاختيار الملابس المثالية: أقمشة قطنية خفيفة، حماية من الشمس، وسترة مريحة للأمسيات الصحراوية اللطيفة.",
-      },
-      fr: {
-        title: "Comment s'habiller pour un safari dans le désert à Dubaï (Guide)",
-        excerpt: "Le guide vestimentaire idéal: tissus en coton respirants, protection solaire et vêtements chauds pour le soir.",
-      },
-      nl: {
-        title: "Wat te dragen tijdens een woestijnsafari in Dubai (Inpakgids)",
-        excerpt: "Tips voor de perfecte kleding: ademend katoen, zonnebescherming en warme laagjes voor de avond.",
-      },
-      zh: {
-        title: "迪拜沙漠冲沙穿搭与必备装备指南（行前全攻略）",
-        excerpt: "为您量身打造的沙漠冲沙穿搭秘籍：透气棉麻材质、全套防晒装备以及应对沙漠温差的保暖建议。",
-      },
-    },
-    "morning-vs-evening-desert-safari": {
-      en: {
-        title: "Morning vs Evening Desert Safari: Which One is Right for You?",
-        excerpt: "Compare sunrise tranquility and thrilling buggy rides with sunset golden hours, BBQ buffets, and live shows.",
-      },
-      de: {
-        title: "Morgen- vs. Abend-Wüstensafari: Was passt am besten zu Ihnen?",
-        excerpt: "Vergleich zwischen morgendlicher Ruhe mit Quad-Touren und abendlichen Shows mit orientalischem BBQ-Buffet.",
-      },
-      it: {
-        title: "Safari Mattutino o Serale: Quale scegliere a Dubai?",
-        excerpt: "Confronta la quiete dell'alba e i quad mattutini con il magico tramonto, la cena BBQ e gli spettacoli serali.",
-      },
-      pt: {
-        title: "Safari Matinal vs Noturno: Qual a melhor opção para você?",
-        excerpt: "Compare a tranquilidade do nascer do sol com o espetáculo do pôr do sol, banquete árabe e danças ao vivo.",
-      },
-      ru: {
-        title: "Утреннее или Вечернее Сафари: Что выбрать именно вам?",
-        excerpt: "Сравнение утренней свежести и катания на багги с золотым закатом, королевским ужином и шоу-программой.",
-      },
-      es: {
-        title: "Safari Matutino vs Vespertino: ¿Cuál es el mejor para ti?",
-        excerpt: "Descubre las diferencias entre la paz del amanecer y el mágico atardecer con cena barbacoa y espectáculos en vivo.",
-      },
-      ar: {
-        title: "السفاري الصباحي مقابل السفاري المسائي: أيهما أفضل لرحلتك؟",
-        excerpt: "مقارنة شاملة بين هدوء شروق الشمس والأنشطة السريعة، وسحر غروب الشمس مع العشاء المشوي والعروض الحية.",
-      },
-      fr: {
-        title: "Safari Matinal vs Safari en Soirée: Lequel choisir ?",
-        excerpt: "Comparez la sérénité du lever de soleil avec la magie du coucher de soleil, barbecue gastronomique et spectacles.",
-      },
-      nl: {
-        title: "Ochtend vs Avond Woestijnsafari: Welke past bij jou?",
-        excerpt: "Vergelijk de rustige zonsopgang en buggyritten met het magische avondprogramma inclusief BBQ en dansshows.",
-      },
-      zh: {
-        title: "早晨冲沙 vs 傍晚冲沙深度对比：哪个更适合您的迪拜行程？",
-        excerpt: "全面对比日出清晨的宁静清爽与傍晚落日的金色盛宴、星空BBQ晚宴及多场阿拉伯风情歌舞表演。",
-      },
-    },
-    "best-time-desert-safari-dubai": {
-      en: {
-        title: "Best Time for a Desert Safari in Dubai (Month-by-Month Guide)",
-        excerpt: "Find the best season for desert safari adventures, optimal weather windows, and insider tips for winter dunes.",
-      },
-      de: {
-        title: "Beste Reisezeit für eine Wüstensafari in Dubai (Monat für Monat)",
-        excerpt: "Finden Sie die perfekte Jahreszeit für Wüstensafaris, optimale Wetterbedingungen und Insidertipps.",
-      },
-      it: {
-        title: "Il Miglior Periodo per un Safari nel Deserto a Dubai (Mese per Mese)",
-        excerpt: "Scopri la stagione ideale per le avventure nel deserto, il clima perfetto e i consigli degli esperti.",
-      },
-      pt: {
-        title: "Melhor Época para Fazer Safari no Deserto em Dubai (Mês a Mês)",
-        excerpt: "Descubra a melhor temporada para aventuras no deserto, clima ideal e dicas de especialistas.",
-      },
-      ru: {
-        title: "Лучшее время для сафари в пустыне Дубая (Гид по сезонам)",
-        excerpt: "Узнайте идеальный сезон для сафари по барханам, комфортные погодные условия и полезные лайфхаки.",
-      },
-      es: {
-        title: "Mejor Época para un Safari en el Desierto en Dubai (Mes a Mes)",
-        excerpt: "Encuentra la temporada perfecta para aventuras en el desierto, clima favorable y consejos de expertos.",
-      },
-      ar: {
-        title: "أفضل الأوقات لرحلات السفاري الصحراوية في دبي (دليل شهري شامل)",
-        excerpt: "تعرف على الموسم المثالي لخوض مغامرة السفاري، والطقس الأنسب مع نصائح حصرية للمسافرين.",
-      },
-      fr: {
-        title: "Meilleure Période pour un Safari Désert à Dubaï (Guide Mensuel)",
-        excerpt: "Découvrez la saison idéale pour partir en safari dans le désert et profitez des conseils d'experts.",
-      },
-      nl: {
-        title: "Beste Reistijd voor een Woestijnsafari in Dubai (Maandoverzicht)",
-        excerpt: "Vind het ideale seizoen voor woestijnavonturen, perfect weer en praktische insider tips.",
-      },
-      zh: {
-        title: "迪拜沙漠冲沙最佳出行季节与月份指南（全景解析）",
-        excerpt: "掌握迪拜沙漠出游黄金季节，深入了解气候特点及避坑实用指南，尽享舒心旅程。",
-      },
-    },
-  };
-
-  const localizedData = blogTitles[post.slug]?.[langCode];
-
-  return {
-    ...post,
-    title: localizedData?.title || post.title,
-    excerpt: localizedData?.excerpt || post.excerpt,
-  };
+export interface AttractionPackageData {
+  id: string;
+  slug: string;
+  title: string;
+  tag: string;
+  price: string;
+  image: string;
+  inclusions: string[];
+  footerTag: string;
 }
+
+export function getLocalizedAttractionPackages(langCode: LanguageCode): AttractionPackageData[] {
+  const packages: Record<"dubai" | "abudhabi" | "hatta", Partial<Record<LanguageCode, { title: string; tag: string; inclusions: string[]; footerTag: string }>>> = {
+    dubai: {
+      hi: {
+        title: "दुबई शहर भ्रमण टूर",
+        tag: "आधुनिक महानगर / कालजयी अनुभव",
+        inclusions: [
+          "होटल पिकअप और ड्रॉप-ऑफ",
+          "ब्लू मस्जिद (अल फारूक)",
+          "बुर्ज अल अरब और जुमेराह बीच फोटो स्टॉप",
+          "द पाम जुमेराह और अटलांटिस फोटो पॉइंट",
+          "दुबई मरीना का भव्य क्षितिज दृश्य",
+          "अमीरात मॉल (गाड़ी से नजारा)",
+          "दुबई मॉल और डाउनटाउन (गाड़ी से नजारा)",
+          "बुर्ज खलीफा के प्रतिष्ठित दृश्य",
+        ],
+        footerTag: "प्रतिष्ठित लैंडमार्क  |  अद्भुत दृश्य  |  अविस्मरणीय पल",
+      },
+      en: {
+        title: "Dubai Tour",
+        tag: "MODERN CITY / TIMELESS EXPERIENCES",
+        inclusions: [
+          "Pickup & Drop",
+          "Blue Mosque",
+          "Snaps at Jumeirah Beach Burj Al Arab",
+          "Photo Stop : The Palm Jumeirah",
+          "Dubai Marina Skyline View",
+          "Mall of The Emirates (Drive-through)",
+          "The Dubai Mall (Drive through)",
+          "Burj Khalifa (Drive-through)",
+        ],
+        footerTag: "ICONIC LANDMARKS  |  STUNNING VIEWS  |  UNFORGETTABLE MOMENTS",
+      },
+      ar: {
+        title: "جولة مدينة دبي",
+        tag: "مدينة عصرية / تجارب خالدة",
+        inclusions: [
+          "خدمة التوصيل من وإلى الفندق",
+          "المسجد الأزرق (الفاروق)",
+          "محطة تصوير برج العرب وشاطئ جميرا",
+          "محطة تصوير نخلة جميرا وأتلانتس",
+          "إطلالة أفق دبي مارينا الخلابة",
+          "مول الإمارات (مروراً بالسيارة)",
+          "دبي مول ووسط المدينة (مروراً)",
+          "إطلالات برج خليفة الأيقونية",
+        ],
+        footerTag: "معالم أيقونية  |  إطلالات ساحرة  |  لحظات لا تُنسى",
+      },
+      de: {
+        title: "Dubai Stadtrundfahrt",
+        tag: "MODERNE STADT / ZEITLOSE ERLEBNISSE",
+        inclusions: [
+          "Abholung & Rücktransfer",
+          "Blaue Moschee (Al Farooq)",
+          "Fotostopp am Burj Al Arab & Jumeirah Strand",
+          "Fotostopp: Palm Jumeirah & Atlantis",
+          "Dubai Marina Skyline-Blick",
+          "Mall of the Emirates (Durchfahrt)",
+          "Dubai Mall & Downtown (Durchfahrt)",
+          "Burj Khalifa ikonische Ausblicke",
+        ],
+        footerTag: "IKONISCHE SEHENSWÜRDIGKEITEN  |  ATEMBERAUBENDE AUSSICHTEN  |  UNVERGESSLICHE MOMENTE",
+      },
+      fr: {
+        title: "Visite de Dubaï",
+        tag: "VILLE MODERNE / EXPÉRIENCES INTEMPORELLES",
+        inclusions: [
+          "Prise en charge et retour à l'hôtel",
+          "Mosquée Bleue (Al Farooq)",
+          "Arrêt photo Burj Al Arab et plage de Jumeirah",
+          "Arrêt photo Palm Jumeirah et Atlantis",
+          "Vue sur la skyline de Dubai Marina",
+          "Mall of the Emirates (passage)",
+          "Dubai Mall & Downtown (passage)",
+          "Vues emblématiques du Burj Khalifa",
+        ],
+        footerTag: "MONUMENTS EMBLÉMATIQUES  |  VUES ÉPOUSTOUFLANTES  |  MOMENTS INOUBLIABLES",
+      },
+      es: {
+        title: "Tour por Dubái",
+        tag: "CIUDAD MODERNA / EXPERIENCIAS ETERNAS",
+        inclusions: [
+          "Recogida y regreso al hotel",
+          "Mezquita Azul (Al Farooq)",
+          "Parada fotográfica en Burj Al Arab y playa Jumeirah",
+          "Parada fotográfica en Palm Jumeirah y Atlantis",
+          "Vistas al horizonte de Dubai Marina",
+          "Mall of the Emirates (panorámico)",
+          "The Dubai Mall y Downtown (panorámico)",
+          "Vistas icónicas del Burj Khalifa",
+        ],
+        footerTag: "LUGARES ICÓNICOS  |  VISTAS IMPRESIONANTES  |  MOMENTOS INOLVIDABLES",
+      },
+      it: {
+        title: "Tour di Dubai",
+        tag: "CITTÀ MODERNA / ESPERIENZE SENZA TEMPO",
+        inclusions: [
+          "Ritiro e rientro in hotel",
+          "Moschea Blu (Al Farooq)",
+          "Sosta fotografica a Burj Al Arab e spiaggia di Jumeirah",
+          "Sosta fotografica a Palm Jumeirah e Atlantis",
+          "Panorama dello skyline di Dubai Marina",
+          "Mall of the Emirates (passaggio)",
+          "Dubai Mall e Downtown (passaggio)",
+          "Viste iconiche del Burj Khalifa",
+        ],
+        footerTag: "LUOGHI ICONICI  |  VISTE MOZZAFIATO  |  MOMENTI INDIMENTICABILI",
+      },
+      pt: {
+        title: "Tour por Dubai",
+        tag: "CIDADE MODERNA / EXPERIÊNCIAS ETERNAS",
+        inclusions: [
+          "Traslado de ida e volta ao hotel",
+          "Mesquita Azul (Al Farooq)",
+          "Parada fotográfica no Burj Al Arab e praia de Jumeirah",
+          "Parada fotográfica na Palm Jumeirah e Atlantis",
+          "Vista do skyline de Dubai Marina",
+          "Mall of the Emirates (passagem panorâmica)",
+          "Dubai Mall e Downtown (passagem panorâmica)",
+          "Vistas icônicas do Burj Khalifa",
+        ],
+        footerTag: "MARCOS ICÔNICOS  |  VISTAS DESLUMBRANTES  |  MOMENTOS INESQUECÍVEIS",
+      },
+      ru: {
+        title: "Тур по Дубаю",
+        tag: "СОВРЕМЕННЫЙ ГОРОД / ВЕЧНЫЕ ВПЕЧАТЛЕНИЯ",
+        inclusions: [
+          "Трансфер из/в отель",
+          "Голубая мечеть (Аль-Фарук)",
+          "Фотостоп у Бурдж Аль Араб и пляжа Джумейра",
+          "Фотостоп на Пальме Джумейра и у отеля Атлантис",
+          "Панорамный вид на Дубай Марину",
+          "Торговый центр Mall of the Emirates (проезд)",
+          "Дубай Молл и Даунтаун (проезд)",
+          "Культовые виды на Бурдж Халифа",
+        ],
+        footerTag: "КУЛЬТОВЫЕ ДОСТОПРИМЕЧАТЕЛЬНОСТИ  |  ПОТРЯСАЮЩИЕ ВИДЫ  |  НЕЗАБЫВАЕМЫЕ МОМЕНТЫ",
+      },
+      nl: {
+        title: "Dubai Stadstour",
+        tag: "MODERNE STAD / TIJDLOZE ERVARINGEN",
+        inclusions: [
+          "Ophalen en terugbrengen",
+          "Blauwe Moskee (Al Farooq)",
+          "Fotostop bij Burj Al Arab & Jumeirah Strand",
+          "Fotostop Palm Jumeirah & Atlantis",
+          "Uitzicht op Dubai Marina Skyline",
+          "Mall of the Emirates (doorrit)",
+          "The Dubai Mall & Downtown (doorrit)",
+          "Iconisch uitzicht op Burj Khalifa",
+        ],
+        footerTag: "ICONISCHE BEZIENSWAARDIGHEDEN  |  PRACHTIGE UITZICHTEN  |  ONVERGETELIJKE MOMENTEN",
+      },
+      zh: {
+        title: "迪拜城市观光之旅",
+        tag: "现代都会 / 永恒魅力体验",
+        inclusions: [
+          "指定酒店往返舒适接送",
+          "蓝色清真寺（阿尔法鲁克）",
+          "帆船酒店与朱美拉海滩拍照打卡",
+          "棕榈岛与亚特兰蒂斯拍照打卡",
+          "迪拜游艇港璀璨天际线全景",
+          "阿联酋购物中心（车览）",
+          "迪拜购物中心与市中心（车览）",
+          "哈利法塔壮观全景拍照",
+        ],
+        footerTag: "标志性地标  |  壮丽全景  |  难忘珍贵回忆",
+      },
+    },
+    abudhabi: {
+      hi: {
+        title: "अबू धाबी शहर भ्रमण टूर",
+        tag: "संस्कृति / विरासत / भव्यता",
+        inclusions: [
+          "होटल पिकअप और ड्रॉप-ऑफ",
+          "शेख जायद ग्रैंड मस्जिद (प्रवेश व भ्रमण)",
+          "आर्ट गैलरी संग्रहालय",
+          "अल बतीन राष्ट्रपति महल (नजारा)",
+          "एमिरेट्स पैलेस होटल (गाड़ी से नजारा)",
+          "सादियात द्वीप एवं लौवर (गाड़ी से नजारा)",
+          "BAPS हिंदू मंदिर",
+          "यास द्वीप एवं फेरारी वर्ल्ड (गाड़ी से नजारा)",
+        ],
+        footerTag: "समृद्ध संस्कृति  |  प्रतिष्ठित वास्तुकला  |  असाधारण अनुभव",
+      },
+      en: {
+        title: "Abu Dhabi Tour",
+        tag: "CULTURE / HERITAGE / GRANDEUR",
+        inclusions: [
+          "Pickup & Drop",
+          "Sheikh Zayed Grand Mosque (stop)",
+          "Art Gallery Museum",
+          "Al Bateen Presidential Palace",
+          "Emirates Palace Hotel (drive thru)",
+          "Saadiyat Island (drive Thru)",
+          "BAPS Temple",
+          "Yas Island (drive Thru)",
+        ],
+        footerTag: "RICH CULTURE  |  ICONIC ARCHITECTURE  |  EXTRAORDINARY EXPERIENCES",
+      },
+      ar: {
+        title: "جولة مدينة أبوظبي",
+        tag: "ثقافة / تراث / فخامة ملكية",
+        inclusions: [
+          "خدمة التوصيل من وإلى الفندق",
+          "جامع الشيخ زايد الكبير (دخول وجولة)",
+          "متحف ومعرض الفنون التراثية",
+          "قصور البطين الرئاسية (إطلالة)",
+          "فندق قصر الإمارات الفاخر (مروراً)",
+          "جزيرة السعديات واللوفر (مروراً)",
+          "معبد بابس الهندوسي الشهير",
+          "جزيرة ياس وعالم فيراري (مروراً)",
+        ],
+        footerTag: "ثقافة عريقة  |  عمارة استثنائية  |  تجارب فريدة",
+      },
+      de: {
+        title: "Abu Dhabi Stadtrundfahrt",
+        tag: "KULTUR / ERBE / PRACHT",
+        inclusions: [
+          "Abholung & Rücktransfer",
+          "Scheich-Zayid-Moschee (Stopp & Eintritt)",
+          "Kunstgalerie & Museum",
+          "Al Bateen Präsidentenpalast (Blick)",
+          "Emirates Palace Hotel (Durchfahrt)",
+          "Saadiyat Island & Louvre (Durchfahrt)",
+          "BAPS Hindu-Tempel",
+          "Yas Island & Ferrari World (Durchfahrt)",
+        ],
+        footerTag: "REICHE KULTUR  |  IKONISCHE ARCHITEKTUR  |  AUSSERGEWÖHNLICHE ERLEBNISSE",
+      },
+      fr: {
+        title: "Visite d'Abou Dabi",
+        tag: "CULTURE / PATRIMOINE / GRANDEUR",
+        inclusions: [
+          "Prise en charge et retour à l'hôtel",
+          "Grande Mosquée Cheikh Zayed (Visite & Entrée)",
+          "Musée et Galerie d'Art",
+          "Palais Présidentiel Al Bateen (Vue)",
+          "Hôtel Emirates Palace (Passage)",
+          "Île de Saadiyat & Louvre (Passage)",
+          "Temple hindou BAPS",
+          "Île de Yas & Ferrari World (Passage)",
+        ],
+        footerTag: "RICHESSE CULTURELLE  |  ARCHITECTURE EMBLÉMATIQUE  |  EXPÉRIENCES EXTRAORDINAIRES",
+      },
+      es: {
+        title: "Tour por Abu Dabi",
+        tag: "CULTURA / PATRIMONIO / GRANDEZA",
+        inclusions: [
+          "Recogida y regreso al hotel",
+          "Gran Mezquita Sheikh Zayed (Parada y Entrada)",
+          "Museo y Galería de Arte",
+          "Palacio Presidencial Al Bateen (Vistas)",
+          "Hotel Emirates Palace (Panorámico)",
+          "Isla Saadiyat y Louvre (Panorámico)",
+          "Templo Hindú BAPS",
+          "Isla Yas y Ferrari World (Panorámico)",
+        ],
+        footerTag: "RICA CULTURA  |  ARQUITECTURA ICÓNICA  |  EXPERIENCIAS EXTRAORDINARIAS",
+      },
+      it: {
+        title: "Tour di Abu Dhabi",
+        tag: "CULTURA / PATRIMONIO / MAESTOSITÀ",
+        inclusions: [
+          "Ritiro e rientro in hotel",
+          "Grande Moschea dello Sceicco Zayed (Sosta & Ingresso)",
+          "Galleria d'Arte e Museo",
+          "Palazzo Presidenziale Al Bateen (Vista)",
+          "Hotel Emirates Palace (Passaggio)",
+          "Isola Saadiyat e Louvre (Passaggio)",
+          "Tempio BAPS",
+          "Isola Yas e Ferrari World (Passaggio)",
+        ],
+        footerTag: "RICCA CULTURA  |  ARCHITETTURA ICONICA  |  ESPERIENZE STRAORDINARIE",
+      },
+      pt: {
+        title: "Tour por Abu Dhabi",
+        tag: "CULTURA / PATRIMÔNIO / GRANDEZA",
+        inclusions: [
+          "Traslado de ida e volta ao hotel",
+          "Grande Mesquita Sheikh Zayed (Parada e Entrada)",
+          "Museu e Galeria de Arte",
+          "Palácio Presidencial Al Bateen (Vista)",
+          "Hotel Emirates Palace (Passagem panorâmica)",
+          "Ilha Saadiyat e Louvre (Passagem)",
+          "Templo BAPS",
+          "Ilha Yas e Ferrari World (Passagem)",
+        ],
+        footerTag: "RICA CULTURA  |  ARQUITETURA ICÔNICA  |  EXPERIÊNCIAS EXTRAORDINÁRIAS",
+      },
+      ru: {
+        title: "Тур по Абу-Даби",
+        tag: "КУЛЬТУРА / НАСЛЕДИЕ / ВЕЛИЧИЕ",
+        inclusions: [
+          "Трансфер из/в отель",
+          "Большая мечеть шейха Зайда (посещение)",
+          "Художественная галерея и музей",
+          "Президентский дворец Аль Батин (вид)",
+          "Отель Emirates Palace (проезд)",
+          "Остров Саадият и Лувр (проезд)",
+          "Индуистский храм BAPS",
+          "Остров Яс и Ferrari World (проезд)",
+        ],
+        footerTag: "БОГАТАЯ КУЛЬТУРА  |  КУЛЬТОВАЯ АРХИТЕКТУРА  |  НЕВЕРОЯТНЫЕ ВПЕЧАТЛЕНИЯ",
+      },
+      nl: {
+        title: "Abu Dhabi Stadstour",
+        tag: "CULTUUR / ERFGOED / GROOTSHEID",
+        inclusions: [
+          "Ophalen en terugbrengen",
+          "Sjeik Zayed-moskee (Stop & Toegang)",
+          "Kunstgalerie & Museum",
+          "Al Bateen Presidentieel Paleis (Uitzicht)",
+          "Emirates Palace Hotel (Doorrit)",
+          "Saadiyat Island & Louvre (Doorrit)",
+          "BAPS Hindu Mandir Tempel",
+          "Yas Island & Ferrari World (Doorrit)",
+        ],
+        footerTag: "RIJKE CULTUUR  |  ICONISCHE ARCHITECTUUR  |  BUITENGEWONE ERVARINGEN",
+      },
+      zh: {
+        title: "阿布扎比皇室之旅",
+        tag: "深厚文化 / 历史遗产 / 皇室宏伟",
+        inclusions: [
+          "指定酒店往返舒适接送",
+          "谢赫扎耶德大清真寺（入内参观）",
+          "伊斯兰艺术博物馆",
+          "阿勒巴廷总统府（外观打卡）",
+          "阿联酋八星皇宫酒店（车览）",
+          "萨迪亚特岛与阿布扎比卢浮宫（车览）",
+          "BAPS 印度神庙",
+          "亚斯岛与法拉利主题公园（车览）",
+        ],
+        footerTag: "深厚历史文化  |  传世壮丽建筑  |  非凡皇室体验",
+      },
+    },
+    hatta: {
+      hi: {
+        title: "रोमांचक हट्टा माउंटेन टूर",
+        tag: "पहाड़ / रोमांच / प्राकृतिक सौंदर्य",
+        inclusions: [
+          "होटल पिक और ड्रॉप (4x4 SUV)",
+          "हट्टा पर्वतीय प्राकृतिक ड्राइव",
+          "अल हजर बीहड़ पहाड़ों पर फोटो पॉइंट",
+          "हट्टा हेरिटेज विलेज (प्रवेश)",
+          "हट्टा हिल पार्क मनोरम दृश्य",
+          "हट्टा बांध एवं पन्ना झील",
+          "वादी हब एडवेंचर सेंटर",
+          "हट्टा कयाकिंग अनुभव (वैकल्पिक)",
+          "रोमांचक पहाड़ी पगडंडी का अनुभव",
+        ],
+        footerTag: "लुभावने पहाड़  |  आउटडोर एडवेंचर  |  प्रकृति का बेहतरीन रूप",
+      },
+      en: {
+        title: "Thrilling Hatta Tour",
+        tag: "MOUNTAINS / ADVENTURE / NATURAL BEAUTY",
+        inclusions: [
+          "Pick & Drop",
+          "Hatta Mountains Tour",
+          "Picture Points at Al Hajar Mountains",
+          "Heritage Village",
+          "Hill Park",
+          "Hatta Dam – Hatta Reservoir",
+          "Wadi Hub Center",
+          "Hatta Kayaking",
+          "Experience In Dam",
+        ],
+        footerTag: "BREATHTAKING MOUNTAINS  |  OUTDOOR ADVENTURE  |  NATURE AT ITS BEST",
+      },
+      ar: {
+        title: "جولة جبال حتا المثيرة",
+        tag: "جبال / مغامرة / جمال طبيعي ساحر",
+        inclusions: [
+          "خدمة التوصيل بسيارات الدفع الرباعي 4x4",
+          "جولة جبال حتا ذات المناظر الخلابة",
+          "محطات تصوير في جبال الحجر الشاهقة",
+          "قرية حتا التراثية التاريخية",
+          "حديقة التل وإطلالات حتا البانورامية",
+          "سد حتا وبحيرته الفيروزية الساحرة",
+          "مركز وادي هب للمغامرات",
+          "تجربة التجديف بالكاياك في بحيرة حتا",
+          "تجربة المسارات الجبلية المشوقة",
+        ],
+        footerTag: "جبال خلابة  |  مغامرات في الهواء الطلق  |  الطبيعة في أبهى صورها",
+      },
+      de: {
+        title: "Aufregende Hatta-Tour",
+        tag: "BERGE / ABENTEUER / NATÜRLICHE SCHÖNHEIT",
+        inclusions: [
+          "Abholung & Rücktransfer im 4x4",
+          "Malerische Hatta-Gebirgsrundfahrt",
+          "Fotopunkte im Al-Hajar-Gebirge",
+          "Hatta Heritage Village (Eintritt)",
+          "Hatta Hill Park Aussichtspunkt",
+          "Hatta-Staudamm & türkisfarbener Stausee",
+          "Wadi Hub Abenteuerzentrum",
+          "Hatta-Kajakfahren (optional)",
+          "Aufregende Bergpfad-Erlebnisse",
+        ],
+        footerTag: "ATEMBERAUBENDE BERGE  |  OUTDOOR-ABENTEUER  |  NATUR PUR",
+      },
+      fr: {
+        title: "Excursion à Hatta",
+        tag: "MONTAGNES / AVENTURE / BEAUTÉ NATURELLE",
+        inclusions: [
+          "Prise en charge & retour en 4x4",
+          "Route panoramique des montagnes de Hatta",
+          "Points photo dans les montagnes d'Al Hajar",
+          "Village du patrimoine de Hatta (Entrée)",
+          "Point de vue panoramique de Hatta Hill Park",
+          "Barrage de Hatta et réservoir turquoise",
+          "Centre d'aventure Wadi Hub",
+          "Expérience de kayak à Hatta (Optionnelle)",
+          "Aventure sur les pistes de montagne",
+        ],
+        footerTag: "MONTAGNES ÉPOUSTOUFLANTES  |  AVENTURE EN PLEIN AIR  |  NATURE SAUVAGE",
+      },
+      es: {
+        title: "Emocionante Tour por Hatta",
+        tag: "MONTAÑAS / AVENTURA / BELLEZA NATURAL",
+        inclusions: [
+          "Recogida y regreso en 4x4",
+          "Recorrido panorámico por las montañas de Hatta",
+          "Puntos fotográficos en las montañas Al Hajar",
+          "Pueblo Patrimonial de Hatta (Entrada)",
+          "Mirador panorámico de Hatta Hill Park",
+          "Presa de Hatta y embalse esmeralda",
+          "Centro de aventuras Wadi Hub",
+          "Experiencia de kayak en Hatta (Opcional)",
+          "Emocionante recorrido por senderos de montaña",
+        ],
+        footerTag: "MONTAÑAS IMPRESIONANTES  |  AVENTURA AL AIRE LIBRE  |  NATURALEZA PURA",
+      },
+      it: {
+        title: "Emozionante Tour di Hatta",
+        tag: "MONTAGNE / AVVENTURA / BELLEZZA NATURALE",
+        inclusions: [
+          "Ritiro e rientro in 4x4",
+          "Percorso panoramico sui monti di Hatta",
+          "Punti fotografici sulle montagne di Al Hajar",
+          "Villaggio del patrimonio di Hatta",
+          "Punto panoramico di Hatta Hill Park",
+          "Diga di Hatta e bacino smeraldo",
+          "Centro avventura Wadi Hub",
+          "Esperienza in kayak a Hatta (Opzionale)",
+          "Esperienza sui sentieri montani",
+        ],
+        footerTag: "MONTAGNE MOZZAFIATO  |  AVVENTURA ALL'APERTO  |  LA NATURA AL SUO MEGLIO",
+      },
+      pt: {
+        title: "Emocionante Tour por Hatta",
+        tag: "MONTANHAS / AVENTURA / BELEZA NATURAL",
+        inclusions: [
+          "Traslado de ida e volta em 4x4",
+          "Passeio cênico pelas montanhas de Hatta",
+          "Pontos de fotos nas montanhas Al Hajar",
+          "Vila de Patrimônio de Hatta",
+          "Mirante panorâmico do Hatta Hill Park",
+          "Represa de Hatta e reservatório esmeralda",
+          "Centro de aventura Wadi Hub",
+          "Experiência de caiaque em Hatta (Opcional)",
+          "Trilhas e aventuras na montanha",
+        ],
+        footerTag: "MONTANHAS DESLUMBRANTES  |  AVENTURA AO AR LIVRE  |  NATUREZA EM SEU MELHOR",
+      },
+      ru: {
+        title: "Тур в горы Хатта",
+        tag: "ГОРЫ / ПРИКЛЮЧЕНИЯ / КРАСОТА ПРИРОДЫ",
+        inclusions: [
+          "Трансфер туда и обратно на джипе 4x4",
+          "Живописная поездка по горам Хатта",
+          "Фотостопы в горах Аль-Хаджар",
+          "Историческая деревня Hatta Heritage Village",
+          "Смотровая площадка в парке Hatta Hill",
+          "Плотина Хатта и бирюзовое горное озеро",
+          "Центр приключений Wadi Hub",
+          "Каякинг на плотине Хатта (по желанию)",
+          "Захватывающие горные маршруты",
+        ],
+        footerTag: "ЗАХВАТЫВАЮЩИЕ ГОРЫ  |  АКТИВНЫЙ ОТДЫХ  |  ВЕЛИКОЛЕПИЕ ПРИРОДЫ",
+      },
+      nl: {
+        title: "Spannende Hatta Tour",
+        tag: "BERGEN / AVONTUUR / NATUURLIJKE SCHOONHEID",
+        inclusions: [
+          "Ophalen en terugbrengen in 4x4 SUV",
+          "Prachtige Hatta Mountains Tour",
+          "Fotopunten bij Al Hajar-gebergte",
+          "Hatta Heritage Village (Toegang)",
+          "Hatta Hill Park Panoramisch Uitzichtpunt",
+          "Hatta Dam & smaragdgroene stuwmeer",
+          "Wadi Hub Avonturencentrum",
+          "Hatta Kajakken (optioneel)",
+          "Spannende bergroute-ervaring",
+        ],
+        footerTag: "ADEMBENEMENDE BERGEN  |  OUTDOOR AVONTUUR  |  NATUUR OP ZIJN MOOIST",
+      },
+      zh: {
+        title: "哈塔高山秘境探险之旅",
+        tag: "险峻高山 / 户外探险 / 壮美自然",
+        inclusions: [
+          "4x4 豪华四驱越野车往返接送",
+          "哈塔壮美险峻高山全景风光游",
+          "哈杰尔雄伟山脉绝佳观景台打卡",
+          "哈塔历史文化民俗文化村（入内）",
+          "哈塔山顶公园俯瞰全城胜景",
+          "哈塔高山水坝与翡翠绿湖泊",
+          "瓦迪枢纽（Wadi Hub）户外探险中心",
+          "哈塔翡翠湖碧波皮划艇体验（自选）",
+          "惊险刺激高山越野体验",
+        ],
+        footerTag: "壮美险峻群山  |  极限户外探险  |  大自然纯净奇迹",
+      },
+    },
+  };
+
+  const dubaiLoc = (packages.dubai[langCode] || packages.dubai.en)!;
+  const abudhabiLoc = (packages.abudhabi[langCode] || packages.abudhabi.en)!;
+  const hattaLoc = (packages.hatta[langCode] || packages.hatta.en)!;
+
+  return [
+    {
+      id: "dubai",
+      slug: "sharing-dubai-city-tour",
+      title: dubaiLoc.title,
+      tag: dubaiLoc.tag,
+      price: "99",
+      image: "/dubai-tour-bg.jpg",
+      inclusions: dubaiLoc.inclusions,
+      footerTag: dubaiLoc.footerTag,
+    },
+    {
+      id: "abudhabi",
+      slug: "sharing-abu-dhabi-city-tour",
+      title: abudhabiLoc.title,
+      tag: abudhabiLoc.tag,
+      price: "149",
+      image: "/abudhabi-tour-bg.jpg",
+      inclusions: abudhabiLoc.inclusions,
+      footerTag: abudhabiLoc.footerTag,
+    },
+    {
+      id: "hatta",
+      slug: "thrilling-hatta-tour",
+      title: hattaLoc.title,
+      tag: hattaLoc.tag,
+      price: "799",
+      image: "/hatta-tour-bg.jpg",
+      inclusions: hattaLoc.inclusions,
+      footerTag: hattaLoc.footerTag,
+    },
+  ];
+}
+
+import {
+  getLocalizedBlog,
+  getLocalizedCategory,
+  getLocalizedCategories,
+  BLOG_UI_TRANSLATIONS,
+} from "../data/localizedBlogs";
+export { getLocalizedBlog, getLocalizedCategory, getLocalizedCategories, BLOG_UI_TRANSLATIONS };
 
 interface LanguageContextType {
   currentLanguage: LanguageOption;
@@ -2578,10 +3127,13 @@ interface LanguageContextType {
   t: (key: string, fallback?: string) => string;
   isChangingLanguage: boolean;
   getLocalizedBlog: (post: BlogPost) => BlogPost;
+  getLocalizedCategory: (cat: BlogCategory) => BlogCategory;
+  getLocalizedCategories: (categories: BlogCategory[]) => BlogCategory[];
   getLocalizedTourData: (
     tourIdOrSlug: string,
     baseTour: DesertSafariTour | CityTour | any,
   ) => any;
+  getLocalizedAttractionPackages: () => AttractionPackageData[];
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -2621,9 +3173,17 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const currentLanguage = LANGUAGES.find((l) => l.code === langCode) || LANGUAGES[0]!;
 
   const t = (key: string, fallback?: string): string => {
+    const blogDict = BLOG_UI_TRANSLATIONS[langCode];
+    if (blogDict && blogDict[key]) {
+      return blogDict[key];
+    }
     const dict = TRANSLATIONS[langCode];
     if (dict && dict[key]) {
       return dict[key];
+    }
+    const defaultBlogDict = BLOG_UI_TRANSLATIONS.en;
+    if (defaultBlogDict && defaultBlogDict[key]) {
+      return defaultBlogDict[key];
     }
     const defaultDict = TRANSLATIONS.en;
     if (defaultDict && defaultDict[key]) {
@@ -2633,10 +3193,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   };
 
   const localizedBlogHelper = (post: BlogPost) => getLocalizedBlog(post, langCode);
+  const localizedCategoryHelper = (cat: BlogCategory) => getLocalizedCategory(cat, langCode);
+  const localizedCategoriesHelper = (categories: BlogCategory[]) =>
+    getLocalizedCategories(categories, langCode);
   const localizedTourHelper = (
     tourIdOrSlug: string,
     baseTour: DesertSafariTour | CityTour | any,
   ) => getLocalizedTourData(tourIdOrSlug, langCode, baseTour);
+  const localizedAttractionsHelper = () => getLocalizedAttractionPackages(langCode);
 
   return (
     <LanguageContext.Provider
@@ -2646,40 +3210,133 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         t,
         isChangingLanguage,
         getLocalizedBlog: localizedBlogHelper,
+        getLocalizedCategory: localizedCategoryHelper,
+        getLocalizedCategories: localizedCategoriesHelper,
         getLocalizedTourData: localizedTourHelper,
+        getLocalizedAttractionPackages: localizedAttractionsHelper,
       }}
     >
       {children}
 
-      {/* Luxury Language Change Loading Modal / Overlay */}
+      {/* Luxury Language Change Loading Modal / Overlay with 4 Jumping Dotted Balls */}
       {isChangingLanguage && (
-        <div className="fixed inset-0 z-[9999] bg-[#072520]/95 backdrop-blur-xl flex flex-col items-center justify-center text-white animate-fade-in-up">
-          <div className="relative flex flex-col items-center p-8 text-center max-w-sm">
-            {/* Animated Glowing Ring & Flag */}
-            <div className="relative w-24 h-24 mb-6 flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full border-4 border-[#E4B564]/30 border-t-[#E4B564] animate-spin" />
-              <div className="absolute inset-2 rounded-full bg-[#0D3B33] flex items-center justify-center text-3xl shadow-xl">
-                {targetLangCode
-                  ? LANGUAGES.find((l) => l.code === targetLangCode)?.flagEmoji
-                  : currentLanguage.flagEmoji}
-              </div>
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            backgroundColor: "rgba(7, 37, 32, 0.96)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#ffffff",
+            animation: "pageFadeIn 0.3s ease-out forwards",
+          }}
+        >
+          <style>{`
+            @keyframes jumpDot {
+              0%, 100% {
+                transform: translateY(0px) scale(0.9);
+                opacity: 0.5;
+              }
+              50% {
+                transform: translateY(-22px) scale(1.25);
+                opacity: 1;
+                filter: drop-shadow(0 6px 12px rgba(243, 196, 114, 0.8));
+              }
+            }
+          `}</style>
+
+          <div
+            style={{
+              position: "relative",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "32px",
+              textAlign: "center",
+              maxWidth: "380px",
+            }}
+          >
+            {/* Flag Badge */}
+            <div
+              style={{
+                width: "72px",
+                height: "72px",
+                borderRadius: "50%",
+                backgroundColor: "#0D3B33",
+                border: "2px solid rgba(228, 181, 100, 0.4)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "32px",
+                marginBottom: "20px",
+                boxShadow: "0 10px 25px rgba(0, 0, 0, 0.4)",
+              }}
+            >
+              {targetLangCode
+                ? LANGUAGES.find((l) => l.code === targetLangCode)?.flagEmoji
+                : currentLanguage.flagEmoji}
+            </div>
+
+            {/* 4 Dotted Balls Jumping Loading Animation */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "12px",
+                height: "42px",
+                margin: "10px 0 20px 0",
+              }}
+            >
+              {[0, 1, 2, 3].map((index) => (
+                <div
+                  key={index}
+                  style={{
+                    width: "14px",
+                    height: "14px",
+                    borderRadius: "50%",
+                    background: "linear-gradient(135deg, #F3C472, #C68A36)",
+                    boxShadow: "0 0 12px rgba(243, 196, 114, 0.75)",
+                    animation: "jumpDot 0.75s ease-in-out infinite alternate",
+                    animationDelay: `${index * 0.15}s`,
+                  }}
+                />
+              ))}
             </div>
 
             {/* Language Transition Name */}
-            <span className="font-serif text-2xl font-bold text-[#E4B564] mb-2 tracking-wide">
+            <span
+              style={{
+                fontFamily: "serif",
+                fontSize: "24px",
+                fontWeight: "bold",
+                color: "#E4B564",
+                marginBottom: "8px",
+                letterSpacing: "0.05em",
+              }}
+            >
               {targetLangCode
                 ? LANGUAGES.find((l) => l.code === targetLangCode)?.nativeName
                 : currentLanguage.nativeName}
             </span>
 
-            <p className="text-xs text-white/80 font-sans tracking-widest uppercase">
+            <p
+              style={{
+                fontSize: "12px",
+                color: "rgba(255, 255, 255, 0.8)",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                fontFamily: "sans-serif",
+                margin: 0,
+              }}
+            >
               {t("switchingLanguage", "Updating language...")}
             </p>
-
-            {/* Golden Loading Progress Bar */}
-            <div className="w-48 h-1 bg-white/20 rounded-full overflow-hidden mt-6">
-              <div className="h-full bg-gradient-to-r from-[#D4A353] via-[#F3C472] to-[#D4A353] w-full animate-[progress_1.2s_ease-in-out_forwards]" />
-            </div>
           </div>
         </div>
       )}
@@ -2694,3 +3351,4 @@ export function useLanguage() {
   }
   return context;
 }
+

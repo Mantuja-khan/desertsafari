@@ -398,7 +398,7 @@ function ScrollReveal({
 }
 
 function Index() {
-  const { t, currentLanguage, getLocalizedTourData } = useLanguage();
+  const { t, currentLanguage, getLocalizedTourData, getLocalizedAttractionPackages } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileCityToursOpen, setMobileCityToursOpen] = useState(false);
   const [mobileSafariOpen, setMobileSafariOpen] = useState(false);
@@ -456,6 +456,7 @@ function Index() {
   return (
     <main
       id="top"
+      style={{ animation: "globalPageFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards" }}
       className="min-h-screen bg-[#F8F5EF] text-[#1D2523] selection:bg-[#E4B564] selection:text-[#0D3B33]"
     >
       {/* Pure Floating WhatsApp Icon Button */}
@@ -1452,13 +1453,14 @@ function Index() {
           <ScrollReveal direction="right">
             {/* 3 Tall Attraction Cards Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {toursData.map((tour, idx) => {
-                const tourSlug =
+              {getLocalizedAttractionPackages().map((tour, idx) => {
+                const tourSlug = tour.slug || (
                   idx === 0
                     ? "sharing-dubai-city-tour"
                     : idx === 1
                       ? "sharing-abu-dhabi-city-tour"
-                      : "thrilling-hatta-tour";
+                      : "thrilling-hatta-tour"
+                );
 
                 return (
                   <div

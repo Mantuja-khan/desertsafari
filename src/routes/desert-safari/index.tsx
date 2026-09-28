@@ -25,7 +25,10 @@ function DesertSafariListPage() {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white page-fade-in">
+    <div
+      style={{ animation: "globalPageFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards" }}
+      className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white page-fade-in"
+    >
       {/* Same Website Header */}
       <SiteHeader activeNav="Desert Safari" />
 

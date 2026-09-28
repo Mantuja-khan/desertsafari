@@ -46,10 +46,12 @@ export function BlogSidebar({
   showTags?: boolean;
   onSearch?: (query: string) => void;
 }) {
-  const { t, getLocalizedBlog } = useLanguage();
+  const { t, getLocalizedBlog, getLocalizedCategories } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [emailInput, setEmailInput] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+
+  const localizedCategories = getLocalizedCategories(BLOG_CATEGORIES);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,7 +151,7 @@ export function BlogSidebar({
           </h4>
 
           <ul className="space-y-2">
-            {BLOG_CATEGORIES.map((cat) => {
+            {localizedCategories.map((cat) => {
               const Icon = ICON_MAP[cat.icon] || FileText;
               const isSelected = activeCategory === cat.slug;
 

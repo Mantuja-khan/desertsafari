@@ -25,6 +25,7 @@ import { SiteHeader } from "../../components/SiteHeader";
 import { SiteFooter } from "../../components/SiteFooter";
 import { TextReveal } from "../../components/TextReveal";
 import { TourSectionTabs } from "../../components/TourSectionTabs";
+import { AutoDragTourImages } from "../../components/AutoDragTourImages";
 import { CITY_TOURS, type CityTour } from "../../data/cityTours";
 import { useLanguage } from "../../lib/i18n";
 
@@ -79,7 +80,10 @@ function CityTourDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white page-fade-in">
+    <div
+      style={{ animation: "globalPageFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards" }}
+      className="min-h-screen bg-[#FBF9F4] text-[#1D2523] flex flex-col font-sans selection:bg-[#C68A36] selection:text-white page-fade-in"
+    >
       {/* Website Navigation Header */}
       <SiteHeader activeNav="City Tours" />
 
@@ -143,33 +147,33 @@ function CityTourDetailPage() {
             </div>
           </div>
 
-          {/* Right Polaroid Photo Collage (4 cols) */}
-          <div className="hidden lg:flex lg:col-span-4 relative justify-center items-center">
+          {/* Right Tilted Polaroid Photo Collage (Responsive & visible on mobile and desktop) */}
+          <div className="lg:col-span-4 w-full flex relative justify-center items-center h-48 xs:h-56 sm:h-64 my-6 lg:my-0">
             {/* Top Right Polaroid */}
-            <div className="polaroid-card w-44 absolute -top-12 right-0 rotate-6 shadow-2xl z-10">
+            <div className="polaroid-card w-28 xs:w-36 sm:w-44 absolute -top-2 xs:-top-4 sm:-top-6 right-2 sm:right-0 rotate-6 shadow-2xl z-10 hover:rotate-0 hover:scale-105 transition-all duration-300">
               <img
                 src="/about_suv.jpg"
-                alt="Burj Al Arab"
-                className="w-full h-28 object-cover rounded-xs"
+                alt="Burj Al Arab & SUV"
+                className="w-full h-16 xs:h-20 sm:h-28 object-cover rounded-xs"
               />
             </div>
             {/* Center Left Polaroid */}
-            <div className="polaroid-card w-48 relative -left-4 -rotate-6 shadow-2xl z-20">
+            <div className="polaroid-card w-32 xs:w-40 sm:w-48 relative -left-2 sm:-left-4 -rotate-6 shadow-2xl z-20 hover:rotate-0 hover:scale-105 transition-all duration-300">
               <img
-                src="/dubai-tour-bg.jpg"
-                alt="Dubai Frame"
-                className="w-full h-32 object-cover rounded-xs"
+                src={tour.image}
+                alt={tour.title}
+                className="w-full h-20 xs:h-24 sm:h-32 object-cover rounded-xs"
               />
-              <p className="font-script text-center text-stone-800 text-lg mt-2 font-bold">
+              <p className="font-script text-center text-stone-800 text-xs sm:text-base mt-1 font-bold">
                 Explore Dubai
               </p>
             </div>
             {/* Bottom Right Polaroid */}
-            <div className="polaroid-card w-44 absolute -bottom-10 right-4 rotate-3 shadow-2xl z-30">
+            <div className="polaroid-card w-28 xs:w-36 sm:w-44 absolute -bottom-2 xs:-bottom-4 sm:-bottom-6 right-4 rotate-3 shadow-2xl z-30 hover:rotate-0 hover:scale-105 transition-all duration-300">
               <img
-                src="/guest_reviews_bg.jpg"
-                alt="Dubai Marina"
-                className="w-full h-28 object-cover rounded-xs"
+                src="/dubai-tour-bg.jpg"
+                alt="Dubai Skyline"
+                className="w-full h-16 xs:h-20 sm:h-28 object-cover rounded-xs"
               />
             </div>
           </div>
