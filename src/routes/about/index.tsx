@@ -219,7 +219,7 @@ function AboutPage() {
                   5+
                 </span>
                 <span className="text-[10px] text-[#8C877D] leading-tight block">
-                  Years Experience
+                  {t("yearsExperience", "Years Experience")}
                 </span>
               </div>
               <div className="hover:scale-105 transition-transform duration-200">
@@ -227,7 +227,7 @@ function AboutPage() {
                   100%
                 </span>
                 <span className="text-[10px] text-[#8C877D] leading-tight block">
-                  {t("excellent", "Satisfaction")}
+                  {t("satisfactionRate", "Satisfaction")}
                 </span>
               </div>
             </div>
@@ -242,13 +242,13 @@ function AboutPage() {
         <div className="max-w-[1360px] mx-auto px-4 sm:px-8">
           <div className="mb-10">
             <span className="text-xs uppercase tracking-[0.3em] text-[#C68A36] font-bold block mb-2">
-              OUR VALUES
+              {t("ourValues", "OUR VALUES")}
             </span>
             <TextReveal
               as="h2"
               className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1F2421]"
             >
-              What Makes Us Different
+              {t("whatMakesUsDifferent", "What Makes Us Different")}
             </TextReveal>
           </div>
 
@@ -262,10 +262,13 @@ function AboutPage() {
                 </div>
                 <div>
                   <h4 className="font-serif text-lg font-bold text-[#1F2421] mb-1">
-                    Sustainable Tourism
+                    {t("sustainableTourism", "Sustainable Tourism")}
                   </h4>
                   <p className="text-xs text-[#6B655B] leading-relaxed">
-                    We promote responsible travel and care for the desert environment.
+                    {t(
+                      "sustainableTourismDesc",
+                      "We promote responsible travel and care for the desert environment.",
+                    )}
                   </p>
                 </div>
               </div>
@@ -277,10 +280,13 @@ function AboutPage() {
                 </div>
                 <div>
                   <h4 className="font-serif text-lg font-bold text-[#1F2421] mb-1">
-                    Local Community
+                    {t("localCommunity", "Local Community")}
                   </h4>
                   <p className="text-xs text-[#6B655B] leading-relaxed">
-                    We support local people and showcase their traditions and culture.
+                    {t(
+                      "localCommunityDesc",
+                      "We support local people and showcase their traditions and culture.",
+                    )}
                   </p>
                 </div>
               </div>
@@ -292,10 +298,13 @@ function AboutPage() {
                 </div>
                 <div>
                   <h4 className="font-serif text-lg font-bold text-[#1F2421] mb-1">
-                    Unique Itineraries
+                    {t("uniqueItineraries", "Unique Itineraries")}
                   </h4>
                   <p className="text-xs text-[#6B655B] leading-relaxed">
-                    Customized tours for a truly unforgettable experience.
+                    {t(
+                      "uniqueItinerariesDesc",
+                      "Customized tours for a truly unforgettable experience.",
+                    )}
                   </p>
                 </div>
               </div>
@@ -307,10 +316,13 @@ function AboutPage() {
                 </div>
                 <div>
                   <h4 className="font-serif text-lg font-bold text-[#1F2421] mb-1">
-                    Passion for Travel
+                    {t("passionForTravel", "Passion for Travel")}
                   </h4>
                   <p className="text-xs text-[#6B655B] leading-relaxed">
-                    We love what we do, and it shows in every journey we create.
+                    {t(
+                      "passionForTravelDesc",
+                      "We love what we do, and it shows in every journey we create.",
+                    )}
                   </p>
                 </div>
               </div>
@@ -320,7 +332,7 @@ function AboutPage() {
             <div className="lg:col-span-4 relative rounded-none overflow-hidden shadow-lg border border-[#EDE7D9] min-h-[260px] flex items-center justify-center p-8 text-center bg-gradient-to-br from-[#FAF7F2] to-[#E8DFC8]">
               <div className="relative z-10">
                 <span className="font-script text-3xl sm:text-4xl text-[#C68A36] font-bold block mb-4 leading-tight">
-                  &ldquo;Explore the Desert Like Never Before&rdquo;
+                  &ldquo;{t("exploreDesertNeverBefore", "Explore the Desert Like Never Before")}&rdquo;
                 </span>
                 <p className="text-xs text-[#5A5449] max-w-xs mx-auto">
                   {t(

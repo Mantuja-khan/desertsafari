@@ -5,6 +5,7 @@ import { CITY_TOURS } from "../data/cityTours";
 import { DESERT_SAFARIS } from "../data/desertSafaris";
 import { LanguageSelector } from "./LanguageSelector";
 import { useLanguage } from "../lib/i18n";
+import { useBookingModal } from "../lib/BookingModalContext";
 
 // Unified Logo Component matching header aesthetics
 export function AppLogo({ className = "" }: { className?: string }) {
@@ -36,6 +37,7 @@ export function SiteHeader({ activeNav = "Home" }: { activeNav?: string }) {
   const [mobileSafariOpen, setMobileSafariOpen] = useState(false);
   const [mobileCityToursOpen, setMobileCityToursOpen] = useState(false);
   const { t } = useLanguage();
+  const { openBookingModal } = useBookingModal();
 
   const navItems = [
     { name: t("home", "Home"), href: "/", isRoute: true, key: "home" },
@@ -54,7 +56,7 @@ export function SiteHeader({ activeNav = "Home" }: { activeNav?: string }) {
       hasCityDropdown: true,
       key: "city-tours",
     },
-    { name: t("packages", "Packages"), href: "/#packages", isRoute: false, key: "packages" },
+    { name: t("packages", "Packages"), href: "/packages", isRoute: true, key: "packages" },
     { name: t("blogs", "Blogs"), href: "/blog", isRoute: true, key: "blogs" },
     { name: t("gallery", "Gallery"), href: "/#gallery", isRoute: false, key: "gallery" },
     { name: t("contact", "Contact"), href: "/contact", isRoute: true, key: "contact" },
@@ -181,13 +183,14 @@ export function SiteHeader({ activeNav = "Home" }: { activeNav?: string }) {
           {/* Language Selector matching uploaded UI */}
           <LanguageSelector />
 
-          <a
-            href="/#packages"
-            className="bg-[#E4B564] hover:bg-[#E8C88B] text-[#0D3B33] font-sans font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-none flex items-center gap-2 transition-all shadow-md active:scale-95"
+          <button
+            type="button"
+            onClick={() => openBookingModal({ tourTitle: "VIP Desert Safari" })}
+            className="bg-[#E4B564] hover:bg-[#E8C88B] text-[#0D3B33] font-sans font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-none flex items-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer"
           >
             <Calendar className="w-4 h-4" />
             {t("bookNow", "Book Now")}
-          </a>
+          </button>
         </div>
 
         {/* Mobile Header Controls */}
@@ -317,14 +320,17 @@ export function SiteHeader({ activeNav = "Home" }: { activeNav?: string }) {
               </div>
             );
           })}
-          <a
-            href="/#packages"
-            onClick={() => setMobileMenuOpen(false)}
-            className="bg-[#E4B564] text-[#0D3B33] font-bold uppercase text-center py-3 rounded-none mt-2 flex items-center justify-center gap-2"
+          <button
+            type="button"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              openBookingModal({ tourTitle: "VIP Desert Safari" });
+            }}
+            className="bg-[#E4B564] text-[#0D3B33] font-bold uppercase text-center py-3 rounded-none mt-2 flex items-center justify-center gap-2 cursor-pointer w-full"
           >
             <Calendar className="w-4 h-4" />
-            Book Now
-          </a>
+            {t("bookNow", "Book Now")}
+          </button>
         </div>
       )}
     </header>

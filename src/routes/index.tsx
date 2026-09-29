@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef, type ReactNode } from "react";
-import heroVideo from "../assets/Untitledvideo.mp4";
+import heroVideo from "../assets/Utitledvideo.mp4";
 import { BLOG_POSTS } from "../data/blogs";
 import { CITY_TOURS } from "../data/cityTours";
 import { DESERT_SAFARIS } from "../data/desertSafaris";
@@ -8,7 +8,11 @@ import { BlogCard } from "../components/BlogCard";
 import { TextReveal } from "../components/TextReveal";
 import { LanguageSelector } from "../components/LanguageSelector";
 import { SiteFooter } from "../components/SiteFooter";
+import { GuestReviewsCarousel } from "../components/GuestReviewsCarousel";
+import { ChooseExperienceCarousel } from "../components/ChooseExperienceCarousel";
+import { AttractionsCarousel } from "../components/AttractionsCarousel";
 import { useLanguage, getLocalizedPackage } from "../lib/i18n";
+import { useBookingModal } from "../lib/BookingModalContext";
 import {
   ArrowLeft,
   ArrowRight,
@@ -238,6 +242,22 @@ const testimonialsData = [
     photo: "/review_card_4.jpg",
     text: "Next Trip Travel LLC made our Dubai desert safari absolutely unforgettable. The dune bashing was thrilling but safe, and our guide was top notch...",
   },
+  {
+    name: "Marcus & Sarah Jenkins",
+    time: "6 months ago",
+    avatarBg: "bg-amber-600",
+    initial: "M",
+    photo: "/pkg_private.jpg",
+    text: "Outstanding private desert safari! The sunset photography over the red dunes was breathtaking, and the VIP majlis dinner with fire shows exceeded all expectations.",
+  },
+  {
+    name: "Elena Rostova",
+    time: "8 months ago",
+    avatarBg: "bg-purple-600",
+    initial: "E",
+    photo: "/pkg_quad.jpg",
+    text: "The quad bike adventure was super fun and safe. Professional instructors, clean camp, delicious BBQ and very polite staff. 10/10 recommended in Dubai!",
+  },
 ];
 
 // Attraction Tours Data
@@ -297,7 +317,7 @@ const toursData = [
 ];
 
 // Word-by-word hero title text reveal words
-const heroHeadlinePart1 = ["Dare", "the", "Dunes."];
+const heroHeadlinePart1 = ["Habibi, ", "Come to ", "Dubai."];
 const heroHeadlinePart2 = ["Experience", "the", "Magic!"];
 
 const googleMapsUrl =
@@ -399,6 +419,7 @@ function ScrollReveal({
 
 function Index() {
   const { t, currentLanguage, getLocalizedTourData, getLocalizedAttractionPackages } = useLanguage();
+  const { openBookingModal } = useBookingModal();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileCityToursOpen, setMobileCityToursOpen] = useState(false);
   const [mobileSafariOpen, setMobileSafariOpen] = useState(false);
@@ -447,7 +468,7 @@ function Index() {
       isRoute: true,
       hasCityDropdown: true,
     },
-    { name: t("packages", "Packages"), href: "/#packages", isRoute: false },
+    { name: t("packages", "Packages"), href: "/packages", isRoute: true },
     { name: t("blogs", "Blogs"), href: "/blog", isRoute: true },
     { name: t("gallery", "Gallery"), href: "/#gallery", isRoute: false },
     { name: t("contact", "Contact"), href: "/contact", isRoute: true },
@@ -498,11 +519,10 @@ function Index() {
                     <Link
                       to={item.href}
                       onClick={() => setActiveTab(item.name)}
-                      className={`relative transition-colors flex items-center gap-1 ${
-                        isActive
-                          ? "text-[#E4B564] font-semibold"
-                          : "text-white/80 hover:text-[#E4B564]"
-                      }`}
+                      className={`relative transition-colors flex items-center gap-1 ${isActive
+                        ? "text-[#E4B564] font-semibold"
+                        : "text-white/80 hover:text-[#E4B564]"
+                        }`}
                     >
                       <span>{item.name}</span>
                       {(item.hasSafariDropdown || item.hasCityDropdown) && (
@@ -516,11 +536,10 @@ function Index() {
                     <a
                       href={item.href}
                       onClick={() => setActiveTab(item.name)}
-                      className={`relative transition-colors flex items-center gap-1 ${
-                        isActive
-                          ? "text-[#E4B564] font-semibold"
-                          : "text-white/80 hover:text-[#E4B564]"
-                      }`}
+                      className={`relative transition-colors flex items-center gap-1 ${isActive
+                        ? "text-[#E4B564] font-semibold"
+                        : "text-white/80 hover:text-[#E4B564]"
+                        }`}
                     >
                       <span>{item.name}</span>
                       {isActive && (
@@ -604,13 +623,14 @@ function Index() {
           {/* Right Header Action Controls: Language Selector + Book Now */}
           <div className="hidden lg:flex items-center gap-3">
             <LanguageSelector />
-            <a
-              href="#packages"
-              className="bg-[#E4B564] text-[#0D3B33] font-sans font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-none flex items-center gap-2 hover:bg-[#E8C88B] transition-all shadow-md active:scale-95"
+            <button
+              type="button"
+              onClick={() => openBookingModal({ tourTitle: "VIP Desert Safari" })}
+              className="bg-[#E4B564] text-[#0D3B33] font-sans font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-none flex items-center gap-2 hover:bg-[#E8C88B] transition-all shadow-md active:scale-95 cursor-pointer"
             >
               <Calendar className="w-4 h-4" />
               {t("bookNow", "Book Now")}
-            </a>
+            </button>
           </div>
 
           {/* Mobile Menu Toggle & Language Selector */}
@@ -661,9 +681,8 @@ function Index() {
                       className="p-2 text-[#E4B564]"
                     >
                       <ChevronDown
-                        className={`w-4 h-4 transition-transform ${
-                          mobileSafariOpen ? "rotate-180" : ""
-                        }`}
+                        className={`w-4 h-4 transition-transform ${mobileSafariOpen ? "rotate-180" : ""
+                          }`}
                       />
                     </button>
                   )}
@@ -675,9 +694,8 @@ function Index() {
                       className="p-2 text-[#E4B564]"
                     >
                       <ChevronDown
-                        className={`w-4 h-4 transition-transform ${
-                          mobileCityToursOpen ? "rotate-180" : ""
-                        }`}
+                        className={`w-4 h-4 transition-transform ${mobileCityToursOpen ? "rotate-180" : ""
+                          }`}
                       />
                     </button>
                   )}
@@ -740,14 +758,17 @@ function Index() {
                 )}
               </div>
             ))}
-            <a
-              href="#packages"
-              onClick={() => setMobileMenuOpen(false)}
-              className="bg-[#E4B564] text-[#0D3B33] font-bold uppercase text-center py-3 rounded mt-2 flex items-center justify-center gap-2 shadow-md"
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                openBookingModal({ tourTitle: "VIP Desert Safari" });
+              }}
+              className="bg-[#E4B564] text-[#0D3B33] font-bold uppercase text-center py-3 rounded mt-2 flex items-center justify-center gap-2 shadow-md cursor-pointer w-full"
             >
               <Calendar className="w-4 h-4" />
               {t("bookNow", "Book Now")}
-            </a>
+            </button>
           </div>
         )}
 
@@ -1027,7 +1048,7 @@ function Index() {
           {/* Top Header Row (Scrolls from Left) */}
           <ScrollReveal
             direction="left"
-            className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6"
+            className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6"
           >
             <div>
               <span className="font-script text-2xl text-[#D4A353] block mb-1">
@@ -1051,135 +1072,15 @@ function Index() {
                 )}
               </p>
             </div>
-
-            {/* Carousel Controls */}
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <button className="w-10 h-10 rounded-full border border-[#D4A353]/40 flex items-center justify-center text-[#0D3B33] hover:bg-[#D4A353] hover:text-white transition-all">
-                  <ArrowLeft className="w-4 h-4" />
-                </button>
-                <button className="w-10 h-10 rounded-full border border-[#D4A353]/40 flex items-center justify-center text-[#0D3B33] hover:bg-[#D4A353] hover:text-white transition-all">
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-              <a
-                href="#attractions"
-                className="text-xs font-bold uppercase tracking-wider text-[#0D3B33] hover:text-[#D4A353] flex items-center gap-1 transition-colors"
-              >
-                {t("viewAllPackages", "View All Packages →")}
-              </a>
-            </div>
           </ScrollReveal>
 
-          {/* 3 Detailed Package Cards Grid (Scrolls from Right) */}
+          {/* Draggable Single Horizontal Line Carousel on Small Screens / 3 Grid on Desktop */}
           <ScrollReveal direction="right">
-            {/* 3 Detailed Package Cards Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {packagesData.map((rawPkg) => {
-                const pkg = getLocalizedPackage(rawPkg, currentLanguage.code);
-                return (
-                  <div
-                    key={pkg.id}
-                    className="bg-white rounded-md overflow-hidden shadow-lg border border-[#E5E0D6] flex flex-col hover:shadow-2xl transition-all duration-300 group"
-                  >
-                  {/* Package Image & Badges Header */}
-                  <div className="relative h-60 overflow-hidden">
-                    <img
-                      src={pkg.image}
-                      alt={pkg.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-
-                    {/* Top Left Tag */}
-                    <span className="absolute top-4 left-4 text-[9px] tracking-[0.2em] font-bold text-white uppercase bg-black/40 px-3 py-1 rounded-xs backdrop-blur-xs">
-                      {pkg.tag}
-                    </span>
-
-                    {/* Top Right Badge */}
-                    <span
-                      className={`absolute top-4 right-4 text-[9px] tracking-wider font-bold uppercase px-3 py-1 rounded-xs flex items-center gap-1.5 shadow-md ${
-                        pkg.badgeType === "green"
-                          ? "bg-[#145248] text-white"
-                          : pkg.badgeType === "gold"
-                            ? "bg-[#E4B564] text-[#0D3B33]"
-                            : "bg-[#0D3B33] text-white"
-                      }`}
-                    >
-                      {pkg.badgeType === "green" && <Sun className="w-3 h-3 text-[#E4B564]" />}
-                      {pkg.badgeType === "gold" && <Crown className="w-3 h-3 text-[#0D3B33]" />}
-                      {pkg.badgeType === "teal" && <Zap className="w-3 h-3 text-[#E4B564]" />}
-                      {pkg.badge}
-                    </span>
-                  </div>
-
-                  {/* Card Content Body */}
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      {/* Title */}
-                      <h3 className="font-serif text-2xl font-bold text-[#0D3B33] mb-3 leading-snug">
-                        {pkg.title}
-                      </h3>
-
-                      {/* Duration & Price Row */}
-                      <div className="flex items-center gap-4 py-3 border-y border-[#E5E0D6] mb-4 text-xs font-semibold text-[#0D3B33]">
-                        <span className="flex items-center gap-1.5">
-                          <Clock className="w-4 h-4 text-[#D4A353]" />
-                          {pkg.duration}
-                        </span>
-                        <span className="text-[#E5E0D6]">|</span>
-                        <span className="flex items-center gap-1.5 text-base font-serif font-bold text-[#D4A353]">
-                          {pkg.price}
-                        </span>
-                      </div>
-
-                      {/* Inclusion Bullets List */}
-                      <ul className="space-y-2 mb-6">
-                        {pkg.inclusions.map((item, index) => (
-                          <li key={index} className="inclusion-item">
-                            <Check className="w-4 h-4 text-[#D4A353] shrink-0" />
-                            <span>{item.text}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Entertainment Shows Highlight Box */}
-                    <div>
-                      <div className="bg-[#F8F5EF] p-3 rounded-xs border border-[#E5E0D6] text-center mb-6">
-                        <span className="text-[10px] font-bold text-[#6B7672] uppercase tracking-wider block mb-1">
-                          {t("entertainmentShows", "ENTERTAINMENT SHOWS:")}
-                        </span>
-                        <span className="text-xs font-semibold text-[#0D3B33]">{pkg.shows}</span>
-                      </div>
-
-                      {/* Action Button */}
-                      <a
-                        href="#map"
-                        className={`w-full py-4 px-6 rounded-xs text-xs font-bold uppercase tracking-wider flex items-center justify-between transition-all ${pkg.buttonColor}`}
-                      >
-                        <span>{t("viewMore", "VIEW MORE")} &nbsp; →</span>
-                        {pkg.buttonIcon === "camel" && (
-                          <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                            <path d="M19 13c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2s2-.9 2-2v-2c0-1.1-.9-2-2-2zM4 11c0-1.1.9-2 2-2h3.58l.71-2.13C10.59 6.28 11.23 6 11.92 6H15c.55 0 1 .45 1 1s-.45 1-1 1h-2.58l-1 3H16c1.1 0 2 .9 2 2v1c0 .55.45 1 1 1h1c.55 0 1 .45 1 1s-.45 1-1 1h-1.5c-1.38 0-2.5-1.12-2.5-2.5V13h-4v4c0 .55-.45 1-1 1s-1-.45-1-1v-4H8v4c0 .55-.45 1-1 1s-1-.45-1-1v-5.08C4.82 12.63 4 11.9 4 11z" />
-                          </svg>
-                        )}
-                        {pkg.buttonIcon === "mountain" && <Mountain className="w-5 h-5" />}
-                        {pkg.buttonIcon === "palm" && <Palmtree className="w-5 h-5" />}
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-            </div>
-
-            {/* Pagination Indicators */}
-            <div className="flex justify-center items-center gap-2 mt-12">
-              <span className="nav-dot active" />
-              <span className="nav-dot" />
-              <span className="nav-dot" />
-            </div>
+            <ChooseExperienceCarousel
+              packages={packagesData.map((rawPkg) =>
+                getLocalizedPackage(rawPkg, currentLanguage.code),
+              )}
+            />
 
             {/* Bottom Watermarks */}
             <div className="flex justify-between items-center text-[10px] tracking-[0.25em] text-[#6B7672] uppercase mt-8 border-t border-[#E5E0D6] pt-4">
@@ -1278,97 +1179,10 @@ function Index() {
             </div>
           </ScrollReveal>
 
-          {/* 4 Testimonial Cards Carousel Row (Scrolls from Right) */}
-          <ScrollReveal direction="right" className="relative my-8">
-            {/* Slider Navigation Arrows */}
-            <button
-              onClick={() =>
-                setReviewIndex(
-                  (reviewIndex - 1 + testimonialsData.length) % testimonialsData.length,
-                )
-              }
-              className="absolute left-[-20px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/20 hover:bg-[#E4B564] hover:text-[#0D3B33] text-white backdrop-blur-md flex items-center justify-center transition-all shadow-lg"
-              aria-label="Previous Review"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-
-            <button
-              onClick={() => setReviewIndex((reviewIndex + 1) % testimonialsData.length)}
-              className="absolute right-[-20px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/20 hover:bg-[#E4B564] hover:text-[#0D3B33] text-white backdrop-blur-md flex items-center justify-center transition-all shadow-lg"
-              aria-label="Next Review"
-            >
-              <ArrowRight className="w-5 h-5" />
-            </button>
-
-            {/* Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {testimonialsData.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="bg-[#FFFDF9] text-[#1D2523] rounded-xl p-6 shadow-xl flex flex-col justify-between border border-white/40 group hover:-translate-y-2 transition-transform duration-300"
-                >
-                  {/* Reviewer Meta Row */}
-                  <div className="flex-1 flex flex-col justify-between relative">
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`w-10 h-10 rounded-full ${item.avatarBg} text-white font-bold text-sm flex items-center justify-center shadow-md shrink-0`}
-                          >
-                            {item.initial}
-                          </div>
-                          <div>
-                            <h4 className="font-bold text-sm leading-tight text-[#0D3B33]">
-                              {item.name}
-                            </h4>
-                            <span className="text-[10px] text-[#6B7672]">{item.time}</span>
-                          </div>
-                        </div>
-
-                        {/* Google Verified Icon */}
-                        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
-                          <path
-                            fill="#4285F4"
-                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                          />
-                          <path
-                            fill="#34A853"
-                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                          />
-                        </svg>
-                      </div>
-
-                      {/* Stars & Verified Check */}
-                      <div className="flex items-center gap-1 text-[#FFD700] text-sm mb-3">
-                        {"★★★★★".split("").map((star, i) => (
-                          <span key={i}>{star}</span>
-                        ))}
-                        <span className="w-4 h-4 rounded-full bg-blue-500 text-white text-[10px] flex items-center justify-center ml-1 font-bold">
-                          ✓
-                        </span>
-                      </div>
-
-                      {/* Review Text */}
-                      <p className="text-xs text-[#4A5550] leading-relaxed italic">"{item.text}"</p>
-                    </div>
-
-                    {/* Bottom Quote Mark */}
-                    <div className="self-end text-3xl font-serif text-[#D4A353]/40 mt-4 leading-none">
-                      ”
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          {/* Testimonial Cards Carousel Row (Draggable & Single Horizontal Line on Small Screens) */}
+          <ScrollReveal direction="right" className="relative my-4">
+            <GuestReviewsCarousel testimonials={testimonialsData} />
           </ScrollReveal>
-
-          {/* Pagination Indicators */}
-          <div className="flex justify-center items-center gap-2 mb-8">
-            <span className="nav-dot active" />
-            <span className="nav-dot" />
-            <span className="nav-dot" />
-          </div>
 
           {/* Bottom 4 Stats Bar */}
           <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-6 py-6 border-t border-white/20 text-center">
@@ -1449,86 +1263,9 @@ function Index() {
             </div>
           </ScrollReveal>
 
-          {/* 3 Tall Attraction Cards Grid (Scrolls from Right) */}
+          {/* Draggable Attractions Carousel (Auto-Drag from right to left on Small Screens / 3 Grid on Desktop) */}
           <ScrollReveal direction="right">
-            {/* 3 Tall Attraction Cards Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {getLocalizedAttractionPackages().map((tour, idx) => {
-                const tourSlug = tour.slug || (
-                  idx === 0
-                    ? "sharing-dubai-city-tour"
-                    : idx === 1
-                      ? "sharing-abu-dhabi-city-tour"
-                      : "thrilling-hatta-tour"
-                );
-
-                return (
-                  <div
-                    key={idx}
-                    className="tour-card group flex flex-col justify-between p-8 text-white"
-                  >
-                    {/* Background Image */}
-                    <img
-                      src={tour.image}
-                      alt={tour.title}
-                      className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 z-0"
-                    />
-
-                    {/* Dark Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/30 z-1" />
-
-                    {/* Top Category Tag */}
-                    <div className="relative z-10">
-                      <span className="text-[9px] tracking-[0.2em] font-bold uppercase text-[#E4B564] bg-black/50 px-3 py-1 rounded-xs backdrop-blur-xs">
-                        {tour.tag}
-                      </span>
-                    </div>
-
-                    {/* Bottom Card Content Overlay */}
-                    <div className="relative z-10 flex flex-col justify-end mt-auto">
-                      <h3 className="font-serif text-3xl sm:text-4xl font-bold text-white mb-2">
-                        {tour.title}
-                      </h3>
-
-                      {/* Price Tag */}
-                      <div className="flex items-baseline gap-2 mb-6">
-                        <span className="text-xs uppercase text-white/70">
-                          {t("startingFrom", "starting from")}
-                        </span>
-                        <span className="font-serif text-4xl font-bold text-[#E4B564]">
-                          {tour.price}
-                        </span>
-                        <span className="text-xs text-white/80">AED / pax</span>
-                      </div>
-
-                      {/* Bullet Inclusions List */}
-                      <ul className="space-y-2 mb-8 border-t border-white/20 pt-4">
-                        {tour.inclusions.map((item, i) => (
-                          <li key={i} className="flex items-center gap-2 text-xs text-white/90">
-                            <Check className="w-4 h-4 text-[#E4B564] shrink-0" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      {/* Gold CTA Button */}
-                      <Link
-                        to="/city-tours/$slug"
-                        params={{ slug: tourSlug }}
-                        className="btn-gold w-full text-center justify-center py-4 text-xs font-bold uppercase tracking-wider mb-4 block"
-                      >
-                        {t("bookNow", "BOOK NOW")} &nbsp; →
-                      </Link>
-
-                      {/* Footer Tag */}
-                      <p className="text-[8px] tracking-[0.2em] uppercase text-center text-white/60 font-semibold border-t border-white/10 pt-3">
-                        {tour.footerTag}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <AttractionsCarousel tours={getLocalizedAttractionPackages()} />
 
             {/* Bottom Script Watermark */}
             <div className="text-left text-xs text-[#6B7672] font-script text-2xl text-[#D4A353] mt-8">

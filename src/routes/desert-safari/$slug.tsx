@@ -27,6 +27,7 @@ import { SiteHeader } from "../../components/SiteHeader";
 import { SiteFooter } from "../../components/SiteFooter";
 import { TextReveal } from "../../components/TextReveal";
 import { TourSectionTabs } from "../../components/TourSectionTabs";
+import { TourHeroIntroDemo } from "../../components/TourHeroIntroDemo";
 import { useLanguage } from "../../lib/i18n";
 import { AutoDragTourImages } from "../../components/AutoDragTourImages";
 
@@ -213,6 +214,19 @@ function DesertSafariDetailPage() {
           </div>
         </div>
       </section>
+
+      {/* =========================================================
+          INTRO HIGHLIGHT STORY & DEMO CONTENT (BELOW TOP CTA)
+      ========================================================= */}
+      <TourHeroIntroDemo
+        tag="AUTHENTIC ARABIAN LUXURY & ADVENTURE"
+        title={`Experience the Magic of ${tour.title}`}
+        description1={tour.description}
+        description2="Enjoy high dune bashing in top-tier 4x4 Land Cruisers, VIP majlis seating, 5 live cultural entertainment shows, and an international BBQ buffet with seamless doorstep transfers."
+        demoImage={tour.image || "/polaroid_camp.jpg"}
+        demoImageAlt={`${tour.title} Experience Demo`}
+        isCityTour={false}
+      />
 
       {/* =========================================================
           MAIN 2-COLUMN LAYOUT (LEFT DETAILS + RIGHT BOOKING FORM)

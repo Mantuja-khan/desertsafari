@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Gem, Compass, ShieldCheck, Camera, Layers, MapPin, UserCheck, Award } from "lucide-react";
 import { SiteHeader } from "../../components/SiteHeader";
 import { SiteFooter } from "../../components/SiteFooter";
+import { TourHeroIntroDemo } from "../../components/TourHeroIntroDemo";
 import { CityTourCard } from "../../components/CityTourCard";
 import { TextReveal } from "../../components/TextReveal";
 import { CITY_TOURS } from "../../data/cityTours";
@@ -115,6 +116,19 @@ function CityToursPage() {
           </div>
         </div>
       </section>
+
+      {/* =========================================================
+          INTRO STORY & DEMO CONTENT SECTION (BELOW TOP CTA)
+      ========================================================= */}
+      <TourHeroIntroDemo
+        tag="AUTHENTIC UAE CITY & HERITAGE EXPERIENCE"
+        title="Discover Iconic Landmarks & Cultural Treasures of the Emirates"
+        description1="Step beyond the ordinary with our meticulously crafted UAE city excursions. From the soaring modern heights of the Burj Khalifa and Dubai Marina to the historic heritage of Old Dubai and Abu Dhabi's majestic Sheikh Zayed Grand Mosque, explore with ultimate elegance."
+        description2="Travel in total comfort with our private luxury SUV fleet, certified multilingual guides, and seamless doorstep pickup and drop-off tailored to your schedule."
+        demoImage="/dubai-tour-bg.jpg"
+        demoImageAlt="Dubai City Tour Iconic Skyline Demo"
+        isCityTour={true}
+      />
 
       {/* =========================================================
           MAIN TOURS GRID

@@ -273,20 +273,6 @@ function BlogPostDetailPage() {
                 </span>
               </button>
             </div>
-
-            {/* =========================================================
-                RELATED POSTS SECTION WITH DRAGGABLE AUTO-SCROLL CAROUSEL
-            ========================================================= */}
-            <div className="w-full overflow-hidden">
-              <TextReveal
-                text={t("relatedPosts", "Related Posts")}
-                as="h3"
-                className="font-serif text-2xl sm:text-3xl font-bold text-[#1F2421] mb-4"
-              />
-
-              {/* Draggable and Auto-scrolling from Right to Left on Small Screens */}
-              <RelatedBlogsCarousel posts={relatedPosts} />
-            </div>
           </article>
 
           {/* Right / Sidebar Column (4 cols) */}
@@ -300,6 +286,33 @@ function BlogPostDetailPage() {
               showTags={true}
             />
           </div>
+        </div>
+
+        {/* =========================================================
+            RELATED POSTS SECTION (FULL CONTAINER WIDTH ON LARGE SCREENS)
+        ========================================================= */}
+        <div className="w-full mt-14 sm:mt-18 pt-10 sm:pt-14 border-t border-[#EDE7D9] overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-4">
+            <div>
+              <span className="text-xs uppercase tracking-[0.25em] text-[#C68A36] font-bold block mb-1">
+                {t("ourBlogGuides", "EXPLORE MORE STORIES")}
+              </span>
+              <TextReveal
+                text={t("relatedPosts", "Related Stories & Guides")}
+                as="h3"
+                className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1F2421]"
+              />
+            </div>
+            <Link
+              to="/blog"
+              className="text-xs font-bold uppercase tracking-wider text-[#C68A36] hover:text-[#9E6A23] transition-colors"
+            >
+              {t("viewMoreBlogs", "View All Blogs →")}
+            </Link>
+          </div>
+
+          {/* Full Width Draggable and Auto-scrolling Carousel */}
+          <RelatedBlogsCarousel posts={relatedPosts} />
         </div>
       </main>
 

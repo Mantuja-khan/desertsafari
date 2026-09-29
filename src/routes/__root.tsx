@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { LanguageProvider } from "../lib/i18n";
+import { BookingModalProvider } from "../lib/BookingModalContext";
 
 import appCss from "../styles.css?url";
 function NotFoundComponent() {
@@ -123,10 +124,12 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <div className="page-fade-in min-h-screen">
-          <Outlet />
-        </div>
+        <BookingModalProvider>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <div className="page-fade-in min-h-screen">
+            <Outlet />
+          </div>
+        </BookingModalProvider>
       </LanguageProvider>
     </QueryClientProvider>
   );

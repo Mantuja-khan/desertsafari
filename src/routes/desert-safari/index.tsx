@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Gem, Compass, ShieldCheck, Camera, Layers, MapPin, UserCheck, Award } from "lucide-react";
 import { DESERT_SAFARIS } from "../../data/desertSafaris";
 import { DesertSafariCard } from "../../components/DesertSafariCard";
+import { TourHeroIntroDemo } from "../../components/TourHeroIntroDemo";
 import { SiteHeader } from "../../components/SiteHeader";
 import { SiteFooter } from "../../components/SiteFooter";
 import { TextReveal } from "../../components/TextReveal";
@@ -111,6 +112,19 @@ function DesertSafariListPage() {
           </div>
         </div>
       </section>
+
+      {/* =========================================================
+          INTRO STORY & DEMO CONTENT SECTION (BELOW TOP CTA)
+      ========================================================= */}
+      <TourHeroIntroDemo
+        tag="AUTHENTIC ARABIAN LUXURY & ADVENTURE"
+        title="Experience the Pure Thrill & Royal Comfort of Dubai Dunes"
+        description1="Immerse yourself in an unforgettable desert expedition where golden dunes meet 5-star Arabian hospitality. Feel the heart-pounding rush of 4x4 dune bashing, glide across silky dunes on a sandboard, and unwind under the starlit sky at our luxury Bedouin majlis camp."
+        description2="Our experienced DTCM-licensed safari drivers, luxury air-conditioned SUV fleet, and private concierge ensure top-tier comfort, safety, and personalized hospitality from doorstep pickup to drop-off."
+        demoImage="/polaroid_camp.jpg"
+        demoImageAlt="Dubai Desert Safari Luxury Camp Demo"
+        isCityTour={false}
+      />
 
       {/* =========================================================
           PACKAGES GRID SECTION (7 DESERT SAFARI PACKAGES)

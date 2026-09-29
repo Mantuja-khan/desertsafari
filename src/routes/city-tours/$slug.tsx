@@ -25,6 +25,7 @@ import { SiteHeader } from "../../components/SiteHeader";
 import { SiteFooter } from "../../components/SiteFooter";
 import { TextReveal } from "../../components/TextReveal";
 import { TourSectionTabs } from "../../components/TourSectionTabs";
+import { TourHeroIntroDemo } from "../../components/TourHeroIntroDemo";
 import { AutoDragTourImages } from "../../components/AutoDragTourImages";
 import { CITY_TOURS, type CityTour } from "../../data/cityTours";
 import { useLanguage } from "../../lib/i18n";
@@ -179,6 +180,19 @@ function CityTourDetailPage() {
           </div>
         </div>
       </section>
+
+      {/* =========================================================
+          INTRO HIGHLIGHT STORY & DEMO CONTENT (BELOW TOP CTA)
+      ========================================================= */}
+      <TourHeroIntroDemo
+        tag="AUTHENTIC UAE CITY & HERITAGE EXPERIENCE"
+        title={`Explore the Landmarks & Grandeur of ${tour.title}`}
+        description1={tour.description}
+        description2="Experience world-renowned architectural landmarks, scenic photo stops, vibrant heritage markets, and air-conditioned luxury transport with experienced multilingual city guides."
+        demoImage={tour.image || "/dubai-tour-bg.jpg"}
+        demoImageAlt={`${tour.title} City Exploration Demo`}
+        isCityTour={true}
+      />
 
       {/* =========================================================
           MAIN 2-COLUMN LAYOUT (LEFT DETAILS + RIGHT BOOKING FORM)

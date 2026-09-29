@@ -2,9 +2,11 @@ import { Link } from "@tanstack/react-router";
 import { MapPin, Users, Flame, Star, Sparkles, Check } from "lucide-react";
 import type { DesertSafariTour } from "../data/desertSafaris";
 import { useLanguage } from "../lib/i18n";
+import { useBookingModal } from "../lib/BookingModalContext";
 
 export function DesertSafariCard({ tour }: { tour: DesertSafariTour }) {
   const { t, getLocalizedTourData } = useLanguage();
+  const { openBookingModal } = useBookingModal();
   const localized = getLocalizedTourData(tour.slug, tour);
 
   return (
@@ -93,13 +95,19 @@ export function DesertSafariCard({ tour }: { tour: DesertSafariTour }) {
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            <Link
-              to="/desert-safari/$slug"
-              params={{ slug: tour.slug }}
-              className="bg-[#C68A36] hover:bg-[#B3792B] text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded-none flex items-center justify-center gap-1.5 shadow-sm transition-all text-center"
+            <button
+              type="button"
+              onClick={() =>
+                openBookingModal({
+                  tourTitle: localized.title || tour.title,
+                  tourPrice: tour.price,
+                  packageId: tour.id,
+                })
+              }
+              className="bg-[#C68A36] hover:bg-[#B3792B] text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded-none flex items-center justify-center gap-1.5 shadow-sm transition-all text-center cursor-pointer"
             >
               {t("bookNow", "BOOK NOW")}
-            </Link>
+            </button>
 
             <Link
               to="/desert-safari/$slug"

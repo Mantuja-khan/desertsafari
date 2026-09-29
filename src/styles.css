@@ -447,3 +447,22 @@
   opacity: 1;
   transform: translate(0, 0) !important;
 }
+
+/* Hide Scrollbar for Chrome, Safari and Opera */
+.scrollbar-none::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Hide Scrollbar for IE, Edge and Firefox */
+.scrollbar-none {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* Responsive Container Refinements for Mobile and Small Screens */
+@media (max-width: 640px) {
+  .section-shell {
+    width: min(1280px, calc(100% - 24px));
+  }
+}
+

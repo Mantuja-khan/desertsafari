@@ -11,7 +11,7 @@ function MiniRelatedCard({ post }: { post: BlogPost }) {
   const { views } = useBlogStats(post.slug, post.likes, post.views);
 
   return (
-    <div className="w-[280px] sm:w-[320px] shrink-0 bg-white rounded-2xl overflow-hidden border border-[#EDE7D9] shadow-xs hover:shadow-lg transition-all flex flex-col select-none group">
+    <div className="w-[280px] xs:w-[310px] sm:w-[340px] md:w-[360px] lg:w-[380px] shrink-0 bg-white rounded-2xl overflow-hidden border border-[#EDE7D9] shadow-xs hover:shadow-xl transition-all flex flex-col select-none group hover:-translate-y-1 duration-300">
       <Link to="/blog/$slug" params={{ slug: localized.slug }} className="block">
         <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
           <img
@@ -27,18 +27,18 @@ function MiniRelatedCard({ post }: { post: BlogPost }) {
           </div>
         </div>
 
-        <div className="p-4 flex flex-col justify-between">
-          <h4 className="font-serif text-base font-bold text-[#1F2421] group-hover:text-[#C68A36] transition-colors line-clamp-2 leading-snug mb-3">
+        <div className="p-5 flex flex-col justify-between">
+          <h4 className="font-serif text-base sm:text-lg font-bold text-[#1F2421] group-hover:text-[#C68A36] transition-colors line-clamp-2 leading-snug mb-3">
             {localized.title}
           </h4>
 
-          <div className="flex items-center justify-between text-[11px] text-[#8A857B] font-sans pt-2 border-t border-stone-100">
+          <div className="flex items-center justify-between text-[11px] text-[#8A857B] font-sans pt-3 border-t border-stone-100">
             <div className="flex items-center gap-1.5">
-              <Calendar className="w-3 h-3 text-[#C68A36]" />
+              <Calendar className="w-3.5 h-3.5 text-[#C68A36]" />
               <span>{localized.date}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <Eye className="w-3 h-3 text-[#C68A36]" />
+              <Eye className="w-3.5 h-3.5 text-[#C68A36]" />
               <span>{views}</span>
             </div>
           </div>

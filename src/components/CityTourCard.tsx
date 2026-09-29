@@ -2,9 +2,11 @@ import { Link } from "@tanstack/react-router";
 import { MapPin, Users, Calendar, ArrowRight, Award, Flame } from "lucide-react";
 import type { CityTour } from "../data/cityTours";
 import { useLanguage } from "../lib/i18n";
+import { useBookingModal } from "../lib/BookingModalContext";
 
 export function CityTourCard({ tour }: { tour: CityTour }) {
   const { t, getLocalizedTourData } = useLanguage();
+  const { openBookingModal } = useBookingModal();
   const localized = getLocalizedTourData(tour.slug, tour);
 
   return (
@@ -67,14 +69,20 @@ export function CityTourCard({ tour }: { tour: CityTour }) {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
-              to="/city-tours/$slug"
-              params={{ slug: tour.slug }}
-              className="bg-[#C68A36] hover:bg-[#B3792A] text-white font-sans font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-none flex items-center gap-2 transition-all shadow-sm active:scale-95 shrink-0"
+            <button
+              type="button"
+              onClick={() =>
+                openBookingModal({
+                  tourTitle: localized.title || tour.title,
+                  tourPrice: tour.price,
+                  packageId: tour.id,
+                })
+              }
+              className="bg-[#C68A36] hover:bg-[#B3792A] text-white font-sans font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-none flex items-center gap-2 transition-all shadow-sm active:scale-95 shrink-0 cursor-pointer"
             >
               <Calendar className="w-3.5 h-3.5" />
               <span>{t("bookNow", "BOOK NOW")}</span>
-            </Link>
+            </button>
 
             <Link
               to="/city-tours/$slug"
