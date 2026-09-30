@@ -351,13 +351,13 @@ export function SiteFooter() {
                 </a>
               </li>
               <li>
-                <a
-                  href="/#gallery"
+                <Link
+                  to="/gallery"
                   className="hover:text-[#E4B564] transition-colors flex items-center gap-2"
                 >
                   <span className="text-[#E4B564] font-bold">›</span>{" "}
-                  {t("gallery", "Photo Gallery")}
-                </a>
+                  {t("gallery", "Photo & Video Gallery")}
+                </Link>
               </li>
             </ul>
           </div>

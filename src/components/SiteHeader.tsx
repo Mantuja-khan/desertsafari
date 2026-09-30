@@ -58,7 +58,7 @@ export function SiteHeader({ activeNav = "Home" }: { activeNav?: string }) {
     },
     { name: t("packages", "Packages"), href: "/packages", isRoute: true, key: "packages" },
     { name: t("blogs", "Blogs"), href: "/blog", isRoute: true, key: "blogs" },
-    { name: t("gallery", "Gallery"), href: "/#gallery", isRoute: false, key: "gallery" },
+    { name: t("gallery", "Gallery"), href: "/gallery", isRoute: true, key: "gallery" },
     { name: t("contact", "Contact"), href: "/contact", isRoute: true, key: "contact" },
   ];
 

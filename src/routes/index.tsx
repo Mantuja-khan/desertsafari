@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef, type ReactNode } from "react";
-import heroVideo from "../assets/Utitledvideo.mp4";
+import heroVideo from "../assets/untitledvideo.mp4";
 import { BLOG_POSTS } from "../data/blogs";
+
 import { CITY_TOURS } from "../data/cityTours";
 import { DESERT_SAFARIS } from "../data/desertSafaris";
 import { BlogCard } from "../components/BlogCard";
@@ -11,6 +12,8 @@ import { SiteFooter } from "../components/SiteFooter";
 import { GuestReviewsCarousel } from "../components/GuestReviewsCarousel";
 import { ChooseExperienceCarousel } from "../components/ChooseExperienceCarousel";
 import { AttractionsCarousel } from "../components/AttractionsCarousel";
+import { GallerySection } from "../components/GallerySection";
+import { HERO_GALLERY_PREVIEW } from "../data/galleryData";
 import { useLanguage, getLocalizedPackage } from "../lib/i18n";
 import { useBookingModal } from "../lib/BookingModalContext";
 import {
@@ -344,25 +347,29 @@ const cityToursSubmenu = [
 // User-Uploaded Hero Desert Video Background (Camel Riding, Safari Riding & Bike Riding)
 function HeroVideoBackground() {
   return (
-    <video
-      autoPlay
-      loop
-      muted
-      playsInline
-      poster="/hero_bg.jpg"
-      className="absolute inset-0 w-full h-full object-cover object-center z-0 scale-105 transition-transform duration-1000"
-    >
-      <source src={heroVideo} type="video/mp4" />
-      <source
-        src="https://assets.mixkit.co/videos/preview/mixkit-riding-a-quad-bike-in-the-desert-41584-large.mp4"
-        type="video/mp4"
-      />
-      <img
-        src="/hero_bg.jpg"
-        alt="Dubai Desert Sunset background"
-        className="w-full h-full object-cover"
-      />
-    </video>
+    <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        // @ts-ignore
+        webkit-playsinline="true"
+        poster="/hero_bg.jpg"
+        className="w-full h-full object-cover object-[center_35%] sm:object-center scale-100 sm:scale-105 transition-transform duration-1000"
+      >
+        <source src={heroVideo} type="video/mp4" />
+        <source
+          src="https://assets.mixkit.co/videos/preview/mixkit-riding-a-quad-bike-in-the-desert-41584-large.mp4"
+          type="video/mp4"
+        />
+        <img
+          src="/hero_bg.jpg"
+          alt="Dubai Desert Sunset background"
+          className="w-full h-full object-cover object-[center_35%] sm:object-center"
+        />
+      </video>
+    </div>
   );
 }
 
@@ -470,7 +477,7 @@ function Index() {
     },
     { name: t("packages", "Packages"), href: "/packages", isRoute: true },
     { name: t("blogs", "Blogs"), href: "/blog", isRoute: true },
-    { name: t("gallery", "Gallery"), href: "/#gallery", isRoute: false },
+    { name: t("gallery", "Gallery"), href: "/gallery", isRoute: true },
     { name: t("contact", "Contact"), href: "/contact", isRoute: true },
   ];
 
@@ -496,16 +503,16 @@ function Index() {
       {/* ==========================================
           SECTION 1: HERO SECTION WITH VIDEO BACKGROUND
       ========================================== */}
-      <section className="relative min-h-[100vh] max-h-[1080px] flex flex-col justify-between text-white overflow-hidden">
+      <section className="relative min-h-[100svh] min-h-[100dvh] sm:min-h-screen max-h-none sm:max-h-[1080px] flex flex-col justify-between text-white overflow-hidden">
         {/* Background Video showing Desert Activities (Camel Riding, Safari Dune Bashing, Quad Bike) */}
         <HeroVideoBackground />
 
-        {/* Dark Vignette Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0D3B33]/85 via-[#0D3B33]/45 to-black/35 z-1" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/55 z-1" />
+        {/* Responsive Overlay with Balanced Contrast */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0D3B33]/80 via-[#0D3B33]/40 to-black/30 sm:from-[#0D3B33]/85 sm:via-[#0D3B33]/45 sm:to-black/35 z-1" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 sm:via-transparent sm:to-black/55 z-1" />
 
         {/* Header Navigation */}
-        <header className="relative z-50 w-full max-w-[1340px] mx-auto px-6 h-24 flex items-center justify-between border-b border-white/20 animate-fade-in-up delay-100">
+        <header className="relative z-50 w-full max-w-[1340px] mx-auto px-4 sm:px-6 h-20 sm:h-24 flex items-center justify-between border-b border-white/20 animate-fade-in-up delay-100">
           <Logo />
 
           {/* Desktop Nav Links */}
@@ -782,19 +789,19 @@ function Index() {
         </div>
 
         {/* Hero Central Content */}
-        <div className="relative z-10 w-full max-w-[1280px] mx-auto px-6 py-12 flex-1 flex flex-col justify-center items-center text-center">
+        <div className="relative z-10 w-full max-w-[1280px] mx-auto px-4 sm:px-6 py-6 sm:py-12 flex-1 flex flex-col justify-center items-center text-center">
           {/* Subtitle */}
-          <span className="text-xs uppercase tracking-[0.35em] text-[#E4B564] font-semibold mb-4 animate-fade-in-up delay-200">
+          <span className="text-[11px] sm:text-xs uppercase tracking-[0.25em] sm:tracking-[0.35em] text-[#E4B564] font-semibold mb-2 sm:mb-4 animate-fade-in-up delay-200">
             {t("adventureAwaits", "A D V E N T U R E   A W A I T S")}
           </span>
 
           {/* Animated Headline: Word-by-Word Reveal */}
-          <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight max-w-5xl mb-4 drop-shadow-lg">
+          <h1 className="font-serif text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] sm:leading-[1.05] tracking-tight max-w-5xl mb-3 sm:mb-4 drop-shadow-lg">
             <span className="inline-block">
               {heroHeadlinePart1.map((word, i) => (
                 <span
                   key={i}
-                  className="reveal-word font-bold inline-block mr-3 text-white"
+                  className="reveal-word font-bold inline-block mr-2 sm:mr-3 text-white"
                   style={{ animationDelay: `${0.3 + i * 0.15}s` }}
                 >
                   {word}
@@ -806,7 +813,7 @@ function Index() {
               {heroHeadlinePart2.map((word, i) => (
                 <span
                   key={i}
-                  className="reveal-word font-bold inline-block mr-3 text-[#E4B564]"
+                  className="reveal-word font-bold inline-block mr-2 sm:mr-3 text-[#E4B564]"
                   style={{ animationDelay: `${0.8 + i * 0.18}s` }}
                 >
                   {word}
@@ -816,16 +823,16 @@ function Index() {
           </h1>
 
           {/* Camel Divider Motif */}
-          <div className="flex items-center justify-center gap-4 my-3 text-[#E4B564]/80 animate-fade-in-up delay-600">
-            <span className="w-12 h-[1px] bg-[#E4B564]/50" />
-            <svg className="w-6 h-6 fill-current animate-pulse" viewBox="0 0 24 24">
+          <div className="flex items-center justify-center gap-3 sm:gap-4 my-2 sm:my-3 text-[#E4B564]/80 animate-fade-in-up delay-600">
+            <span className="w-8 sm:w-12 h-[1px] bg-[#E4B564]/50" />
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 fill-current animate-pulse" viewBox="0 0 24 24">
               <path d="M19 13c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2s2-.9 2-2v-2c0-1.1-.9-2-2-2zM4 11c0-1.1.9-2 2-2h3.58l.71-2.13C10.59 6.28 11.23 6 11.92 6H15c.55 0 1 .45 1 1s-.45 1-1 1h-2.58l-1 3H16c1.1 0 2 .9 2 2v1c0 .55.45 1 1 1h1c.55 0 1 .45 1 1s-.45 1-1 1h-1.5c-1.38 0-2.5-1.12-2.5-2.5V13h-4v4c0 .55-.45 1-1 1s-1-.45-1-1v-4H8v4c0 .55-.45 1-1 1s-1-.45-1-1v-5.08C4.82 12.63 4 11.9 4 11z" />
             </svg>
-            <span className="w-12 h-[1px] bg-[#E4B564]/50" />
+            <span className="w-8 sm:w-12 h-[1px] bg-[#E4B564]/50" />
           </div>
 
           {/* Subtext */}
-          <p className="font-sans text-sm md:text-base text-white/95 max-w-3xl font-medium leading-relaxed mt-3 mb-8 animate-fade-in-up delay-700 drop-shadow-md">
+          <p className="font-sans text-xs sm:text-sm md:text-base text-white/95 max-w-3xl font-medium leading-relaxed mt-2 sm:mt-3 mb-6 sm:mb-8 animate-fade-in-up delay-700 drop-shadow-md">
             {t(
               "heroSubtitle",
               "Indulge in the untamed beauty of the desert with our exclusive safaris where opulence meets adventure. Glide over the dunes in a private 4×4, sip champagne under a fiery sunset, and unwind in a royal-style camp with gourmet dining.",
@@ -833,20 +840,22 @@ function Index() {
           </p>
 
           {/* Call to Actions */}
-          <div className="flex flex-wrap items-center justify-center gap-5 animate-fade-in-up delay-800">
-            <a href="#packages" className="btn-gold text-xs px-8 py-4">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5 animate-fade-in-up delay-800">
+            <a href="#packages" className="btn-gold text-xs px-6 sm:px-8 py-3.5 sm:py-4">
               {t("bookSafariNow", "BOOK YOUR SAFARI NOW")} &nbsp; →
             </a>
             <button
               onClick={() => alert("Playing Virtual Experience Trailer...")}
-              className="flex items-center gap-3 text-xs tracking-wider uppercase font-semibold text-white/90 hover:text-[#E4B564] transition-colors group"
+              className="flex items-center gap-2.5 sm:gap-3 text-xs tracking-wider uppercase font-semibold text-white/90 hover:text-[#E4B564] transition-colors group cursor-pointer"
             >
-              <span className="w-11 h-11 rounded-full border border-white/40 flex items-center justify-center group-hover:border-[#E4B564] group-hover:scale-105 transition-all">
-                <Play className="w-4 h-4 fill-current ml-0.5" />
+              <span className="w-9 h-9 sm:w-11 sm:h-11 rounded-full border border-white/40 flex items-center justify-center group-hover:border-[#E4B564] group-hover:scale-105 transition-all">
+                <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current ml-0.5" />
               </span>
               {t("watchExperience", "WATCH THE EXPERIENCE")}
             </button>
           </div>
+
+          {/* Featured Live Gallery Showcase in Hero (Requested Images: 6, 3, 2, 1, 9 + View More Button) */}
         </div>
 
         {/* Left Side Number Indicator */}
@@ -866,7 +875,7 @@ function Index() {
         </div>
 
         {/* Hero Bottom Bar Service Highlights (Desert Dune Wave Curve Style) */}
-        <div className="relative z-10 w-full py-8 bg-gradient-to-t from-black/85 via-black/50 to-transparent border-t border-white/15 animate-fade-in-up delay-800">
+        <div className="relative z-10 w-full py-4 sm:py-8 bg-gradient-to-t from-black/85 via-black/50 to-transparent border-t border-white/15 animate-fade-in-up delay-800">
           {/* Desert Dune Wave Line Background Graphic */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden hidden lg:block">
             <svg
@@ -1271,6 +1280,20 @@ function Index() {
             <div className="text-left text-xs text-[#6B7672] font-script text-2xl text-[#D4A353] mt-8">
               Explore Discover Experience
             </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ==========================================
+          SECTION: OFFICIAL PHOTO & VIDEO GALLERY (10 Photos + 10 Live Videos)
+      ========================================== */}
+      <section
+        id="gallery"
+        className="py-24 bg-[#FAF7F2] border-t border-[#E5E0D6] relative overflow-hidden"
+      >
+        <div className="section-shell relative z-10">
+          <ScrollReveal direction="up">
+            <GallerySection />
           </ScrollReveal>
         </div>
       </section>

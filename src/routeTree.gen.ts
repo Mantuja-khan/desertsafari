@@ -20,6 +20,7 @@ import { Route as CityToursSlugRouteImport } from './routes/city-tours/$slug'
 import { Route as ContactIndexRouteImport } from './routes/contact/index'
 import { Route as DesertSafariIndexRouteImport } from './routes/desert-safari/index'
 import { Route as DesertSafariSlugRouteImport } from './routes/desert-safari/$slug'
+import { Route as GalleryIndexRouteImport } from './routes/gallery/index'
 import { Route as PackagesIndexRouteImport } from './routes/packages/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -77,6 +78,11 @@ const DesertSafariSlugRoute = DesertSafariSlugRouteImport.update({
   path: '/desert-safari/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GalleryIndexRoute = GalleryIndexRouteImport.update({
+  id: '/gallery/',
+  path: '/gallery/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PackagesIndexRoute = PackagesIndexRouteImport.update({
   id: '/packages/',
   path: '/packages/',
@@ -95,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/city-tours/': typeof CityToursIndexRoute
   '/contact/': typeof ContactIndexRoute
   '/desert-safari/': typeof DesertSafariIndexRoute
+  '/gallery/': typeof GalleryIndexRoute
   '/packages/': typeof PackagesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/city-tours': typeof CityToursIndexRoute
   '/contact': typeof ContactIndexRoute
   '/desert-safari': typeof DesertSafariIndexRoute
+  '/gallery': typeof GalleryIndexRoute
   '/packages': typeof PackagesIndexRoute
 }
 export interface FileRoutesById {
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/city-tours/': typeof CityToursIndexRoute
   '/contact/': typeof ContactIndexRoute
   '/desert-safari/': typeof DesertSafariIndexRoute
+  '/gallery/': typeof GalleryIndexRoute
   '/packages/': typeof PackagesIndexRoute
 }
 export interface FileRouteTypes {
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
     | '/city-tours/'
     | '/contact/'
     | '/desert-safari/'
+    | '/gallery/'
     | '/packages/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/city-tours'
     | '/contact'
     | '/desert-safari'
+    | '/gallery'
     | '/packages'
   id:
     | '__root__'
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
     | '/city-tours/'
     | '/contact/'
     | '/desert-safari/'
+    | '/gallery/'
     | '/packages/'
   fileRoutesById: FileRoutesById
 }
@@ -183,6 +195,7 @@ export interface RootRouteChildren {
   CityToursIndexRoute: typeof CityToursIndexRoute
   ContactIndexRoute: typeof ContactIndexRoute
   DesertSafariIndexRoute: typeof DesertSafariIndexRoute
+  GalleryIndexRoute: typeof GalleryIndexRoute
   PackagesIndexRoute: typeof PackagesIndexRoute
 }
 
@@ -265,6 +278,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DesertSafariSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/gallery/': {
+      id: '/gallery/'
+      path: '/gallery'
+      fullPath: '/gallery/'
+      preLoaderRoute: typeof GalleryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/packages/': {
       id: '/packages/'
       path: '/packages'
@@ -287,6 +307,7 @@ const rootRouteChildren: RootRouteChildren = {
   CityToursIndexRoute: CityToursIndexRoute,
   ContactIndexRoute: ContactIndexRoute,
   DesertSafariIndexRoute: DesertSafariIndexRoute,
+  GalleryIndexRoute: GalleryIndexRoute,
   PackagesIndexRoute: PackagesIndexRoute,
 }
 export const routeTree = rootRouteImport

@@ -24,7 +24,6 @@ export function AutoDragTourImages({
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-
     let animFrame: number;
     let lastTime = performance.now();
 
@@ -46,7 +45,7 @@ export function AutoDragTourImages({
     animFrame = requestAnimationFrame(step);
     return () => cancelAnimationFrame(animFrame);
   }, [isAutoScrolling, isDragging]);
-
+  
   // Mouse drag handlers
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!containerRef.current) return;
