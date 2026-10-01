@@ -1,7 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "@tanstack/react-router";
-import { Play, X, ChevronLeft, ChevronRight, Image as ImageIcon, Video, Sparkles, Eye, Maximize2, ArrowRight } from "lucide-react";
-import { ALL_GALLERY_IMAGES, ALL_GALLERY_VIDEOS, type GalleryImageItem, type GalleryVideoItem } from "../data/galleryData";
+import { Play, X, ChevronLeft, ChevronRight, Image as ImageIcon, Video, Sparkles, Maximize2, ArrowRight } from "lucide-react";
+import {
+  ALL_GALLERY_IMAGES,
+  ALL_GALLERY_VIDEOS,
+  HOME_GALLERY_IMAGES,
+  HOME_GALLERY_VIDEOS,
+  type GalleryImageItem,
+  type GalleryVideoItem,
+} from "../data/galleryData";
 import { useLanguage } from "../lib/i18n";
 import { TextReveal } from "./TextReveal";
 
@@ -12,6 +20,44 @@ interface GallerySectionProps {
   isHomePage?: boolean;
 }
 
+// Dedicated Lightbox Video component with audio playback
+function LightboxVideo({ src, poster }: { src: string; poster?: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = false;
+      videoRef.current.volume = 1;
+      videoRef.current.currentTime = 0;
+      const promise = videoRef.current.play();
+      if (promise !== undefined) {
+        promise.catch((err) => {
+          console.log("Autoplay with audio handled:", err);
+        });
+      }
+    }
+  }, [src]);
+
+  return (
+    <div className="relative w-full max-h-[80vh] flex items-center justify-center bg-black rounded-2xl overflow-hidden shadow-2xl">
+      <video
+        ref={videoRef}
+        key={src}
+        src={src}
+        poster={poster}
+        controls
+        autoPlay
+        playsInline
+        preload="auto"
+        className="max-h-[80vh] max-w-full w-auto h-auto rounded-xl shadow-2xl bg-black object-contain focus:outline-none"
+      >
+        <source src={src} type="video/mp4" />
+        Your browser does not support HTML5 video playback.
+      </video>
+    </div>
+  );
+}
+
 export function GallerySection({ 
   showTitle = true, 
   limit, 
@@ -19,22 +65,22 @@ export function GallerySection({
   isHomePage = false,
 }: GallerySectionProps) {
   const { t } = useLanguage();
+  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<"all" | "photos" | "videos">(initialTab);
   const [lightboxItem, setLightboxItem] = useState<{
     type: "image" | "video";
     src: string;
-    title: string;
-    category: string;
     index: number;
     poster?: string | undefined;
   } | null>(null);
 
-  // On Home Page: 2 images and 2 videos
-  const homeImages = ALL_GALLERY_IMAGES.slice(0, 2);
-  const homeVideos = ALL_GALLERY_VIDEOS.slice(0, 2);
-  
-  const images = isHomePage ? homeImages : ALL_GALLERY_IMAGES;
-  const videos = isHomePage ? homeVideos : ALL_GALLERY_VIDEOS;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // On Home Page: specifically gallery_img_6.jpg, gallery_img_9.jpg, tour_ivideo_1.mp4, tour_ivideo_10.mp4
+  const images = isHomePage ? HOME_GALLERY_IMAGES : ALL_GALLERY_IMAGES;
+  const videos = isHomePage ? HOME_GALLERY_VIDEOS : ALL_GALLERY_VIDEOS;
 
   // Combined items for "all" tab
   type CombinedItem = 
@@ -42,15 +88,21 @@ export function GallerySection({
     | { type: "video"; item: GalleryVideoItem };
 
   const combinedItems: CombinedItem[] = [
-    ...ALL_GALLERY_IMAGES.map(img => ({ type: "image" as const, item: img })),
-    ...ALL_GALLERY_VIDEOS.map(vid => ({ type: "video" as const, item: vid })),
+    ...ALL_GALLERY_IMAGES.map((img) => ({ type: "image" as const, item: img })),
+    ...ALL_GALLERY_VIDEOS.map((vid) => ({ type: "video" as const, item: vid })),
   ];
 
-  const handleOpenLightbox = (type: "image" | "video", src: string, title: string, category: string, index: number, poster?: string) => {
-    setLightboxItem({ type, src, title, category, index, poster });
+  const handleOpenLightbox = (e: React.MouseEvent, type: "image" | "video", src: string, index: number, poster?: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setLightboxItem({ type, src, index, poster });
   };
 
-  const handleNext = () => {
+  const handleNext = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (!lightboxItem) return;
     if (lightboxItem.type === "image") {
       const currentList = images;
@@ -60,8 +112,6 @@ export function GallerySection({
         setLightboxItem({
           type: "image",
           src: nextImg.src,
-          title: nextImg.title,
-          category: nextImg.category,
           index: nextIdx,
         });
       }
@@ -73,8 +123,6 @@ export function GallerySection({
         setLightboxItem({
           type: "video",
           src: nextVid.src,
-          title: nextVid.title,
-          category: nextVid.category,
           index: nextIdx,
           poster: nextVid.poster,
         });
@@ -82,7 +130,11 @@ export function GallerySection({
     }
   };
 
-  const handlePrev = () => {
+  const handlePrev = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (!lightboxItem) return;
     if (lightboxItem.type === "image") {
       const currentList = images;
@@ -92,8 +144,6 @@ export function GallerySection({
         setLightboxItem({
           type: "image",
           src: prevImg.src,
-          title: prevImg.title,
-          category: prevImg.category,
           index: prevIdx,
         });
       }
@@ -105,8 +155,6 @@ export function GallerySection({
         setLightboxItem({
           type: "video",
           src: prevVid.src,
-          title: prevVid.title,
-          category: prevVid.category,
           index: prevIdx,
           poster: prevVid.poster,
         });
@@ -201,85 +249,61 @@ export function GallerySection({
         </div>
       )}
 
-      {/* When isHomePage: Show exactly 2 Images and 2 Videos, with View More button below */}
+      {/* When isHomePage: Show exactly 2 Images and 2 Videos in square style without border */}
       {isHomePage ? (
         <div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* 2 Preview Images */}
-            {homeImages.map((img, idx) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {/* 2 Preview Images (gallery_img_6.jpg, gallery_img_9.jpg) - Pure Square, No Border */}
+            {images.map((img, idx) => (
               <div
                 key={img.id}
-                onClick={() => handleOpenLightbox("image", img.src, img.title, img.category, idx)}
-                className="relative group rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 bg-[#EFECE6] cursor-pointer h-[320px] sm:h-[360px]"
+                onClick={(e) => handleOpenLightbox(e, "image", img.src, idx)}
+                className="relative group aspect-square rounded-none border-0 overflow-hidden bg-[#EFECE6] cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500"
               >
                 <img
                   src={img.src}
-                  alt={img.title}
+                  alt="Desert Safari Dubai"
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-5 text-white">
-                  <div className="self-end">
-                    <span className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/40">
-                      <Maximize2 className="w-4 h-4" />
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#E4B564] mb-1 block">
-                      {img.category}
-                    </span>
-                    <h4 className="font-serif text-base sm:text-lg font-bold leading-tight">{img.title}</h4>
-                  </div>
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/25 transition-colors duration-300 flex items-center justify-center">
+                  <span className="w-11 h-11 rounded-none bg-black/40 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110">
+                    <Maximize2 className="w-5 h-5" />
+                  </span>
                 </div>
               </div>
             ))}
 
-            {/* 2 Preview Videos */}
-            {homeVideos.map((vid, idx) => (
+            {/* 2 Preview Videos (tour_ivideo_1.mp4, tour_ivideo_10.mp4) - Pure Square, No Border, Running continuously */}
+            {videos.map((vid, idx) => (
               <div
                 key={vid.id}
-                onClick={() => handleOpenLightbox("video", vid.src, vid.title, vid.category, idx, vid.poster)}
-                className="relative group rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 bg-[#0D3B33] cursor-pointer h-[320px] sm:h-[360px]"
+                onClick={(e) => handleOpenLightbox(e, "video", vid.src, idx, vid.poster)}
+                className="relative group aspect-square rounded-none border-0 overflow-hidden bg-[#0F221E] cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500"
               >
                 <video
                   src={vid.src}
                   poster={vid.poster}
                   muted
-                  playsInline
-                  preload="metadata"
+                  autoPlay
                   loop
-                  onMouseEnter={(e) => {
-                    const v = e.currentTarget;
-                    v.play().catch(() => {});
-                  }}
-                  onMouseLeave={(e) => {
-                    const v = e.currentTarget;
-                    v.pause();
-                    v.currentTime = 0;
-                  }}
+                  playsInline
+                  preload="auto"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 >
                   <source src={vid.src} type="video/mp4" />
                 </video>
 
                 {/* Video Play Button Badge */}
-                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center pointer-events-none">
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors flex items-center justify-center pointer-events-none">
                   <div className="w-14 h-14 rounded-full bg-[#E4B564] text-[#0D3B33] flex items-center justify-center shadow-2xl group-hover:scale-115 transition-transform duration-300">
                     <Play className="w-6 h-6 fill-current ml-1" />
                   </div>
                 </div>
 
                 {/* Duration Badge */}
-                <div className="absolute top-3 right-3 px-2.5 py-1 rounded bg-black/70 backdrop-blur-xs text-[10px] font-mono text-white/90 pointer-events-none">
+                <div className="absolute top-3 right-3 px-2.5 py-1 rounded-none bg-black/60 backdrop-blur-xs text-[10px] font-mono text-white/90 pointer-events-none">
                   {vid.duration}
-                </div>
-
-                {/* Video Info Bottom */}
-                <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent text-white pointer-events-none">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#E4B564] block mb-0.5">
-                    {vid.category} (Video)
-                  </span>
-                  <h4 className="font-serif text-base font-semibold truncate">{vid.title}</h4>
                 </div>
               </div>
             ))}
@@ -289,7 +313,7 @@ export function GallerySection({
           <div className="flex justify-center mt-10">
             <Link
               to="/gallery"
-              className="bg-[#C68A36] hover:bg-[#B3792A] text-white font-sans font-bold text-xs uppercase tracking-wider px-8 py-4 rounded-xl flex items-center gap-2.5 transition-all shadow-md hover:shadow-xl active:scale-95 cursor-pointer"
+              className="bg-[#C68A36] hover:bg-[#B3792A] text-white font-sans font-bold text-xs uppercase tracking-wider px-8 py-4 rounded-none flex items-center gap-2.5 transition-all shadow-md hover:shadow-xl active:scale-95 cursor-pointer"
             >
               <span>{t("viewMoreMoments", "View More Moments & Videos")}</span>
               <ArrowRight className="w-4 h-4" />
@@ -297,41 +321,28 @@ export function GallerySection({
           </div>
         </div>
       ) : (
-        /* Full Gallery page display with masonry/grid without border style */
+        /* Full Gallery page display in square style without border */
         <>
           {activeTab === "photos" && (
-            <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {images.map((img, idx) => (
                 <div
                   key={img.id}
-                  onClick={() => handleOpenLightbox("image", img.src, img.title, img.category, idx)}
-                  className="break-inside-avoid relative group rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 bg-[#EFECE6] cursor-pointer"
+                  onClick={(e) => handleOpenLightbox(e, "image", img.src, idx)}
+                  className="relative group aspect-square rounded-none border-0 overflow-hidden bg-[#EFECE6] cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500"
                 >
-                  <div className="overflow-hidden">
-                    <img
-                      src={img.src}
-                      alt={img.title}
-                      loading="lazy"
-                      className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
-                      style={{
-                        aspectRatio: `${img.width} / ${img.height}`,
-                      }}
-                    />
-                  </div>
+                  <img
+                    src={img.src}
+                    alt="Desert Safari Dubai"
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
 
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-5 text-white">
-                    <div className="self-end">
-                      <span className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/40">
-                        <Maximize2 className="w-4 h-4" />
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#E4B564] mb-1 block">
-                        {img.category}
-                      </span>
-                      <h4 className="font-serif text-lg font-bold leading-tight">{img.title}</h4>
-                    </div>
+                  {/* Clean Subtle Overlay */}
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                    <span className="w-12 h-12 rounded-none bg-black/50 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110">
+                      <Maximize2 className="w-5 h-5" />
+                    </span>
                   </div>
                 </div>
               ))}
@@ -339,55 +350,37 @@ export function GallerySection({
           )}
 
           {activeTab === "videos" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {videos.map((vid, idx) => (
                 <div
                   key={vid.id}
-                  onClick={() => handleOpenLightbox("video", vid.src, vid.title, vid.category, idx, vid.poster)}
-                  className="relative group rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 bg-[#0D3B33] cursor-pointer"
+                  onClick={(e) => handleOpenLightbox(e, "video", vid.src, idx, vid.poster)}
+                  className="relative group aspect-square rounded-none border-0 overflow-hidden bg-[#0F221E] cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500"
                 >
-                  {/* Video Player / Thumbnail Preview */}
-                  <div className="relative aspect-video w-full overflow-hidden bg-black flex items-center justify-center">
-                    <video
-                      src={vid.src}
-                      poster={vid.poster}
-                      muted
-                      playsInline
-                      preload="metadata"
-                      loop
-                      onMouseEnter={(e) => {
-                        const v = e.currentTarget;
-                        v.play().catch(() => {});
-                      }}
-                      onMouseLeave={(e) => {
-                        const v = e.currentTarget;
-                        v.pause();
-                        v.currentTime = 0;
-                      }}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    >
-                      <source src={vid.src} type="video/mp4" />
-                    </video>
+                  {/* Video Player running continuously muted */}
+                  <video
+                    src={vid.src}
+                    poster={vid.poster}
+                    muted
+                    autoPlay
+                    loop
+                    playsInline
+                    preload="auto"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  >
+                    <source src={vid.src} type="video/mp4" />
+                  </video>
 
-                    {/* Video Play Button Badge */}
-                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center pointer-events-none">
-                      <div className="w-14 h-14 rounded-full bg-[#E4B564] text-[#0D3B33] flex items-center justify-center shadow-2xl group-hover:scale-115 transition-transform duration-300">
-                        <Play className="w-6 h-6 fill-current ml-1" />
-                      </div>
-                    </div>
-
-                    {/* Duration Badge */}
-                    <div className="absolute bottom-3 right-3 px-2 py-0.5 rounded bg-black/70 backdrop-blur-xs text-[10px] font-mono text-white/90 pointer-events-none">
-                      {vid.duration}
+                  {/* Video Play Button Badge */}
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors flex items-center justify-center pointer-events-none">
+                    <div className="w-14 h-14 rounded-full bg-[#E4B564] text-[#0D3B33] flex items-center justify-center shadow-2xl group-hover:scale-115 transition-transform duration-300">
+                      <Play className="w-6 h-6 fill-current ml-1" />
                     </div>
                   </div>
 
-                  {/* Video Info Bottom */}
-                  <div className="p-4 bg-gradient-to-t from-[#0D3B33] to-[#0A2E28] text-white">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#E4B564] block mb-0.5">
-                      {vid.category}
-                    </span>
-                    <h4 className="font-serif text-base font-semibold truncate">{vid.title}</h4>
+                  {/* Duration Badge */}
+                  <div className="absolute top-3 right-3 px-2.5 py-1 rounded-none bg-black/60 backdrop-blur-xs text-[10px] font-mono text-white/90 pointer-events-none">
+                    {vid.duration}
                   </div>
                 </div>
               ))}
@@ -395,7 +388,7 @@ export function GallerySection({
           )}
 
           {activeTab === "all" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {combinedItems.map((entry) => {
                 if (entry.type === "image") {
                   const img = entry.item;
@@ -403,27 +396,19 @@ export function GallerySection({
                   return (
                     <div
                       key={img.id}
-                      onClick={() => handleOpenLightbox("image", img.src, img.title, img.category, imgIndex)}
-                      className="relative group rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 bg-[#EFECE6] cursor-pointer h-[280px] sm:h-[320px]"
+                      onClick={(e) => handleOpenLightbox(e, "image", img.src, imgIndex >= 0 ? imgIndex : 0)}
+                      className="relative group aspect-square rounded-none border-0 overflow-hidden bg-[#EFECE6] cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500"
                     >
                       <img
                         src={img.src}
-                        alt={img.title}
+                        alt="Desert Safari Dubai"
                         loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-5 text-white">
-                        <div className="self-end">
-                          <span className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/40">
-                            <Eye className="w-4 h-4" />
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-[10px] font-bold uppercase tracking-widest text-[#E4B564] mb-1 block">
-                            {img.category}
-                          </span>
-                          <h4 className="font-serif text-base sm:text-lg font-bold leading-tight">{img.title}</h4>
-                        </div>
+                      <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                        <span className="w-11 h-11 rounded-none bg-black/40 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110">
+                          <Maximize2 className="w-5 h-5" />
+                        </span>
                       </div>
                     </div>
                   );
@@ -433,39 +418,28 @@ export function GallerySection({
                   return (
                     <div
                       key={vid.id}
-                      onClick={() => handleOpenLightbox("video", vid.src, vid.title, vid.category, vidIndex, vid.poster)}
-                      className="relative group rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 bg-[#0D3B33] cursor-pointer h-[280px] sm:h-[320px]"
+                      onClick={(e) => handleOpenLightbox(e, "video", vid.src, vidIndex >= 0 ? vidIndex : 0, vid.poster)}
+                      className="relative group aspect-square rounded-none border-0 overflow-hidden bg-[#0F221E] cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500"
                     >
                       <video
                         src={vid.src}
                         poster={vid.poster}
                         muted
-                        playsInline
-                        preload="metadata"
+                        autoPlay
                         loop
-                        onMouseEnter={(e) => {
-                          const v = e.currentTarget;
-                          v.play().catch(() => {});
-                        }}
-                        onMouseLeave={(e) => {
-                          const v = e.currentTarget;
-                          v.pause();
-                          v.currentTime = 0;
-                        }}
+                        playsInline
+                        preload="auto"
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       >
                         <source src={vid.src} type="video/mp4" />
                       </video>
-                      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center pointer-events-none">
+                      <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors flex items-center justify-center pointer-events-none">
                         <div className="w-14 h-14 rounded-full bg-[#E4B564] text-[#0D3B33] flex items-center justify-center shadow-2xl group-hover:scale-115 transition-transform duration-300">
                           <Play className="w-6 h-6 fill-current ml-1" />
                         </div>
                       </div>
-                      <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent text-white pointer-events-none">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#E4B564] block mb-0.5">
-                          {vid.category} (Video)
-                        </span>
-                        <h4 className="font-serif text-base font-semibold truncate">{vid.title}</h4>
+                      <div className="absolute top-3 right-3 px-2.5 py-1 rounded-none bg-black/60 backdrop-blur-xs text-[10px] font-mono text-white/90 pointer-events-none">
+                        {vid.duration}
                       </div>
                     </div>
                   );
@@ -476,11 +450,12 @@ export function GallerySection({
         </>
       )}
 
-      {/* Interactive Lightbox / Modal */}
-      {lightboxItem && (
+      {/* Interactive Lightbox / Modal Rendered via React Portal at Root Document Body */}
+      {mounted && lightboxItem && createPortal(
         <div
-          className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 select-none"
+          className="fixed inset-0 z-[999999] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 select-none"
           onClick={() => setLightboxItem(null)}
+          style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0 }}
         >
           <div
             className="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center justify-center"
@@ -489,7 +464,7 @@ export function GallerySection({
             {/* Close Button */}
             <button
               onClick={() => setLightboxItem(null)}
-              className="absolute -top-12 right-0 sm:-right-4 text-white hover:text-[#E4B564] p-2.5 rounded-full bg-white/10 hover:bg-white/20 transition-all cursor-pointer z-50 shadow-lg"
+              className="absolute -top-12 right-0 sm:-right-4 text-white hover:text-[#E4B564] p-2.5 rounded-none bg-white/10 hover:bg-white/20 transition-all cursor-pointer z-50 shadow-lg border-0"
               aria-label="Close Preview"
             >
               <X className="w-6 h-6" />
@@ -498,7 +473,7 @@ export function GallerySection({
             {/* Prev Button */}
             <button
               onClick={handlePrev}
-              className="absolute left-2 sm:-left-14 top-1/2 -translate-y-1/2 text-white hover:text-[#E4B564] p-3 rounded-full bg-black/70 sm:bg-white/10 hover:bg-white/20 transition-all cursor-pointer z-50 shadow-xl border border-white/10"
+              className="absolute left-2 sm:-left-14 top-1/2 -translate-y-1/2 text-white hover:text-[#E4B564] p-3 rounded-none bg-black/70 sm:bg-white/10 hover:bg-white/20 transition-all cursor-pointer z-50 shadow-xl border-0"
               aria-label="Previous Media"
             >
               <ChevronLeft className="w-6 h-6" />
@@ -507,56 +482,34 @@ export function GallerySection({
             {/* Next Button */}
             <button
               onClick={handleNext}
-              className="absolute right-2 sm:-right-14 top-1/2 -translate-y-1/2 text-white hover:text-[#E4B564] p-3 rounded-full bg-black/70 sm:bg-white/10 hover:bg-white/20 transition-all cursor-pointer z-50 shadow-xl border border-white/10"
+              className="absolute right-2 sm:-right-14 top-1/2 -translate-y-1/2 text-white hover:text-[#E4B564] p-3 rounded-none bg-black/70 sm:bg-white/10 hover:bg-white/20 transition-all cursor-pointer z-50 shadow-xl border-0"
               aria-label="Next Media"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
 
-            {/* Content Container */}
-            <div className="w-full max-h-[75vh] flex items-center justify-center rounded-xl overflow-hidden bg-black/80 border border-white/20 shadow-2xl">
+            {/* Pure Media Content Container (Without Border Style) */}
+            <div className="w-full max-h-[82vh] flex items-center justify-center rounded-none overflow-hidden bg-black/90 border-0 shadow-2xl">
               {lightboxItem.type === "image" ? (
                 <img
                   key={lightboxItem.src}
                   src={lightboxItem.src}
-                  alt={lightboxItem.title}
-                  className="max-h-[75vh] max-w-full w-auto h-auto object-contain rounded-lg"
+                  alt="Dubai Desert Safari Gallery"
+                  className="max-h-[82vh] max-w-full w-auto h-auto object-contain rounded-none"
                 />
               ) : (
-                <video
-                  key={lightboxItem.src}
+                <LightboxVideo
                   src={lightboxItem.src}
                   poster={lightboxItem.poster}
-                  controls
-                  autoPlay
-                  playsInline
-                  preload="auto"
-                  className="max-h-[75vh] max-w-full w-auto h-auto rounded-lg shadow-2xl bg-black object-contain"
-                >
-                  <source src={lightboxItem.src} type="video/mp4" />
-                  Your browser does not support HTML5 video playback.
-                </video>
+                />
               )}
             </div>
-
-            {/* Title & Metadata Footer */}
-            <div className="w-full mt-4 flex items-center justify-between text-white px-2">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#E4B564] block">
-                  {lightboxItem.category}
-                </span>
-                <h3 className="font-serif text-xl font-bold">{lightboxItem.title}</h3>
-              </div>
-              <div className="text-xs font-mono text-white/60">
-                {lightboxItem.type === "image"
-                  ? `${lightboxItem.index + 1} / ${images.length} Photos`
-                  : `${lightboxItem.index + 1} / ${videos.length} Videos`}
-              </div>
-            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
 }
+
 

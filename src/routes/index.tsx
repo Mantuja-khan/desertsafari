@@ -319,10 +319,6 @@ const toursData = [
   },
 ];
 
-// Word-by-word hero title text reveal words
-const heroHeadlinePart1 = ["Habibi, ", "Come to ", "Dubai."];
-const heroHeadlinePart2 = ["Experience", "the", "Magic!"];
-
 const googleMapsUrl =
   "https://www.google.com/maps/dir/28.2036569,76.8400441/Micron+Technical+Services,+Karama+Zabeel+Street,+Montana+Building,304+-+Dubai+-+United+Arab+Emirates/@25.7002877,54.9813683,217541m/data=!3m1!1e3!4m10!4m9!1m1!4e1!1m5!1m1!1s0x3e5f439b006db4eb:0x1e44c164c9e8c2b1!2m2!1d55.3094818!2d25.2491884!3e0?entry=ttu&g_ep=EgoyMDI2MDkwOS4wIKXMDSoASAFQAw%3D%3D";
 
@@ -432,6 +428,11 @@ function Index() {
   const [mobileSafariOpen, setMobileSafariOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Home");
   const [reviewIndex, setReviewIndex] = useState(0);
+
+  const heroPart1 = t("heroHabibiTitle", "Habibi, Come to Dubai.");
+  const heroPart2 = t("heroMagicTitle", "Experience the Magic!");
+  const heroHeadlinePart1 = heroPart1.split(" ");
+  const heroHeadlinePart2 = heroPart2.split(" ");
 
   const heroFeatures = [
     {
@@ -800,7 +801,7 @@ function Index() {
             <span className="inline-block">
               {heroHeadlinePart1.map((word, i) => (
                 <span
-                  key={i}
+                  key={`${currentLanguage}-h1-${i}-${word}`}
                   className="reveal-word font-bold inline-block mr-2 sm:mr-3 text-white"
                   style={{ animationDelay: `${0.3 + i * 0.15}s` }}
                 >
@@ -812,7 +813,7 @@ function Index() {
             <em className="gold-italic font-bold not-italic inline-block text-[#E4B564]">
               {heroHeadlinePart2.map((word, i) => (
                 <span
-                  key={i}
+                  key={`${currentLanguage}-h2-${i}-${word}`}
                   className="reveal-word font-bold inline-block mr-2 sm:mr-3 text-[#E4B564]"
                   style={{ animationDelay: `${0.8 + i * 0.18}s` }}
                 >

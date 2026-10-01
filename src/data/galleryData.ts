@@ -26,6 +26,17 @@ export const HERO_GALLERY_PREVIEW = [
   { id: "hero-9", src: "/gallery/gallery_img_9.jpg", title: "Traditional Bedouin Camp", width: 1280, height: 960, aspect: "landscape" as const },
 ];
 
+// Specifically requested for Home Page: gallery_img_6.jpg, gallery_img_9.jpg, tour_ivideo_1.mp4, tour_ivideo_10.mp4
+export const HOME_GALLERY_IMAGES: GalleryImageItem[] = [
+  { id: "img-6", src: "/gallery/gallery_img_6.jpg", title: "High Dune Quad Biking Action", category: "Quad & Buggy", width: 1280, height: 960, aspect: "landscape" },
+  { id: "img-9", src: "/gallery/gallery_img_9.jpg", title: "Traditional Tanoura & Fire Show", category: "Camp & Shows", width: 1280, height: 960, aspect: "landscape" },
+];
+
+export const HOME_GALLERY_VIDEOS: GalleryVideoItem[] = [
+  { id: "vid-1", src: "/videos/tour_ivideo_1.mp4", poster: "/gallery/gallery_img_6.jpg", title: "Dune Bashing & Sandboarding Highlights", category: "Desert Safari", duration: "0:30" },
+  { id: "vid-10", src: "/videos/tour_ivideo_10.mp4", poster: "/gallery/gallery_img_9.jpg", title: "Exclusive Private Falconry Showcase", category: "Desert Safari", duration: "0:55" },
+];
+
 export const ALL_GALLERY_IMAGES: GalleryImageItem[] = [
   { id: "img-1", src: "/gallery/gallery_img_1.jpg", title: "Golden Dune Thrills", category: "Dune Bashing", width: 1280, height: 853, aspect: "landscape" },
   { id: "img-2", src: "/gallery/gallery_img_2.jpg", title: "Extreme Safari Adventure", category: "Desert Safari", width: 1280, height: 719, aspect: "landscape" },

@@ -435,11 +435,13 @@ export function SiteFooter() {
             </span>
           </div>
 
-          {/* Secure Badges & Payment */}
+          {/* Secure Badges, Payment & Admin */}
           <div className="flex items-center gap-4 text-white/50 text-[10px]">
             <span>🔒 256-Bit SSL Encrypted</span>
             <span className="w-1 h-1 rounded-full bg-white/40" />
-            <span>Apple Pay • Visa • MC</span>
+            <Link to="/admin" className="hover:text-[#E4B564] transition-colors font-mono">
+              Admin Portal
+            </Link>
           </div>
         </div>
       </div>

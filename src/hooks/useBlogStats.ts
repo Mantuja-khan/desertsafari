@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { BLOG_POSTS, type BlogPost } from "../data/blogs";
+import { getBlogsApi } from "../lib/api";
 
 interface BlogStatsState {
   views: string;
@@ -133,12 +134,9 @@ export function useAllBlogsWithStats(initialBlogs: BlogPost[] = BLOG_POSTS) {
 
     async function fetchBlogs() {
       try {
-        const res = await fetch("/api/blogs");
-        if (res.ok) {
-          const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            setBlogs(data);
-          }
+        const data = await getBlogsApi();
+        if (Array.isArray(data) && data.length > 0) {
+          setBlogs(data);
         }
       } catch (err) {
         console.error("Failed to load blogs from backend API:", err);
@@ -150,3 +148,4 @@ export function useAllBlogsWithStats(initialBlogs: BlogPost[] = BLOG_POSTS) {
 
   return blogs;
 }
+

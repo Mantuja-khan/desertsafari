@@ -3,7 +3,7 @@ import type { BlogPost, BlogCategory } from "../data/blogs";
 import type { DesertSafariTour } from "../data/desertSafaris";
 import type { CityTour } from "../data/cityTours";
 
-export type LanguageCode = "en" | "de" | "it" | "pt" | "ru" | "es" | "ar" | "zh" | "nl" | "fr" | "hi";
+export type LanguageCode = "en" | "ar" | "ur" | "de" | "fr" | "es" | "it" | "pt" | "ru" | "nl" | "zh" | "hi";
 
 export interface LanguageOption {
   code: LanguageCode;
@@ -16,6 +16,7 @@ export interface LanguageOption {
 export const LANGUAGES: LanguageOption[] = [
   { code: "en", name: "English", nativeName: "English", flag: "gb", flagEmoji: "🇬🇧" },
   { code: "ar", name: "Arabic", nativeName: "العربية", flag: "sa", flagEmoji: "🇸🇦" },
+  { code: "ur", name: "Urdu", nativeName: "اردو", flag: "pk", flagEmoji: "🇵🇰" },
   { code: "de", name: "German", nativeName: "Deutsch", flag: "de", flagEmoji: "🇩🇪" },
   { code: "fr", name: "French", nativeName: "Français", flag: "fr", flagEmoji: "🇫🇷" },
   { code: "es", name: "Spanish", nativeName: "Español", flag: "es", flagEmoji: "🇪🇸" },
@@ -24,6 +25,7 @@ export const LANGUAGES: LanguageOption[] = [
   { code: "ru", name: "Russian", nativeName: "Русский", flag: "ru", flagEmoji: "🇷🇺" },
   { code: "nl", name: "Dutch", nativeName: "Nederlands", flag: "nl", flagEmoji: "🇳🇱" },
   { code: "zh", name: "Chinese", nativeName: "简体中文", flag: "cn", flagEmoji: "🇨🇳" },
+  { code: "hi", name: "Hindi", nativeName: "हिन्दी", flag: "in", flagEmoji: "🇮🇳" },
 ];
 
 export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
@@ -51,6 +53,8 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
 
     // Hero Section
     adventureAwaits: "A D V E N T U R E   A W A I T S",
+    heroHabibiTitle: "Habibi, Come to Dubai.",
+    heroMagicTitle: "Experience the Magic!",
     heroHeadline1: "WHERE LUXURY MEETS THE",
     heroHeadline2: "GOLDEN DUNES",
     heroSubtitle:
@@ -1253,6 +1257,8 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
 
     // Hero Section
     adventureAwaits: "المغامرة في انتظارك",
+    heroHabibiTitle: "حبيبي، تعال إلى دبي.",
+    heroMagicTitle: "عش سحر التجربة!",
     heroHeadline1: "حيث تلتقي الفخامة مع",
     heroHeadline2: "الكثبان الذهبية",
     heroSubtitle:
@@ -1936,6 +1942,160 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     dubaiOfficeConcierge: "दुबई मुख्यालय और 24/7 वीआईपी कंसीयज",
     rightsReserved: "सर्वाधिकार सुरक्षित",
     switchingLanguage: "भाषा अपडेट हो रही है...",
+  },
+  ur: {
+    // Navigation
+    home: "ہوم",
+    aboutUs: "ہمارے متعلق",
+    desertSafari: "صحرا سفاری",
+    cityTours: "شہر کے دورے",
+    packages: "پیکیجز",
+    blogs: "بلاگز",
+    gallery: "گیلری",
+    contact: "رابطہ کریں",
+    bookNow: "ابھی بک کریں",
+    readMore: "مزید پڑھیں",
+    allDesertSafari: "تمام صحرا سفاری پیکیجز ←",
+    allCityTours: "تمام سٹی ٹور پیکیجز ←",
+    search: "تلاش کریں",
+    from: "سے",
+    bestseller: "سب سے مقبول",
+    popular: "مقبول",
+    travellerChoice: "2025 مسافروں کا انتخاب",
+    viewMore: "مزید دیکھیں",
+    viewAllToursBtn: "تمام ٹورز دیکھیں ←",
+
+    // Hero Section
+    adventureAwaits: "ایڈونچر آپ کا منتظر ہے",
+    heroHabibiTitle: "حبیبی، دبئی آئیں۔",
+    heroMagicTitle: "جادو کا تجربہ کریں!",
+    heroHeadline1: "جہاں لگژری ملتی ہے",
+    heroHeadline2: "سنہری ریت کے ٹیلوں سے",
+    heroSubtitle:
+      "ہماری خصوصی سفاری کے ساتھ صحرا کے بے مثال حسن سے لطف اندوز ہوں جہاں شان و شوکت اور ایڈونچر کا سنگم ہوتا ہے۔ نجی 4x4 میں ٹیلوں پر دوڑیں اور پرتعیش کیمپ میں شاہی کھانے کا لطف اٹھائیں۔",
+    bookSafariNow: "اپنی سفاری ابھی بک کریں",
+    watchExperience: "ویڈیو دیکھیں",
+    exploreDiscoverExperience: "دریافت کریں • جانیے • تجربہ کریں",
+    dubaiBeyondOrdinary: "دبئی روایات سے بلند",
+    scrollToExplore: "نیچے سکرول کریں",
+
+    // Hero 4 Tags
+    thrillingSafari: "سنسنی خیز ڈیزرٹ سفاری",
+    thrillingSafariSub: "4x4 ڈیون بیشنگ اور ریت پر سکیٹنگ",
+    authenticCamel: "روایتی اونٹ کی سواری",
+    authenticCamelSub: "غروب آفتاب کا قافلہ",
+    bedouinCamp: "روایتی بدو کیمپ",
+    bedouinCampSub: "باربی کیو ڈنر اور لائیو شوز",
+    exploreCityTours: "دبئی سٹی ٹورز دیکھیں",
+    exploreCityToursSub: "اہم یادگاریں اور ثقافت",
+
+    // About Section
+    moreThanTrip: "سفر سے بڑھ کر",
+    aStoryToTell: "ایک یادگار کہانی",
+    feelTheDesert: "صحرا کو محسوس کریں",
+    authenticExperiences: "حقیقی تجربات",
+    arabianHospitality: "عرب مہمان نوازی",
+    aboutTag: "ڈیزرٹ جرنی ڈی ایکس بی کے بارے میں",
+    aboutHeading1: "آپ کا راستہ ایک",
+    aboutHeading2: "غیر معمولی",
+    aboutHeading3: "دبئی ایڈونچر کی طرف",
+    aboutBody1:
+      "ڈیزرٹ جرنی ڈی ایکس بی میں ہمارا ماننا ہے کہ سفر صرف ایک منزل نہیں بلکہ ایک ایسا تجربہ ہے جو ہمیشہ یاد رہتا ہے۔ سنسنی خیز صحرا سفاری سے لے کر عرب مہمان نوازی تک، ہم ناقابل فراموش لمحات بناتے ہیں۔",
+    aboutBody2:
+      "ہمارے ساتھ ایک ایسے سفر میں شامل ہوں جہاں ایڈونچر، ثقافت اور لگژری ایک ساتھ ملتے ہیں۔",
+    discoverStory: "ہماری کہانی جانیے",
+
+    // Choose Experience Section
+    popularPackages: "مقبول ترین پیکیجز",
+    chooseDesertExp: "اپنا منتخب کریں",
+    desertExperience: "صحرا کا تجربہ",
+    chooseExpSubtitle: "سنسنی خیز مہم جوئی، روایتی ثقافت اور یادگار لمحات۔",
+    viewAllPackages: "تمام پیکیجز دیکھیں ←",
+    entertainmentShows: "تفریحی لائیو شوز:",
+
+    // Testimonials
+    whatOurGuestsSay: "ہمارے مہمان کیا کہتے ہیں",
+    guestsSayTag: "حقیقی تجربات۔ حقیقی ایڈونچر۔ سچی یادیں۔",
+    googleRating: "628 سے زائد جائزوں کی بنیاد پر",
+    excellent: "بہترین",
+    happyTravelers: "خوشگوار مسافر",
+    googleRatingBadge: "گوگل ریٹنگ",
+    trustedPartner: "قابل اعتماد سفری پارٹنر",
+    memorableExp: "یادگار تجربات",
+
+    // Attractions
+    exclusiveAttractions: "خصوصی سٹی اٹریکشن پیکیجز",
+    exploreBeyondDesert: "صحرا سے آگے دیکھیں",
+    attractionsSub: "ہمارے منتخب کردہ ٹورز کے ساتھ دبئی کے مشہور مقامات اور ثقافت دیکھیں۔",
+    viewAllTours: "تمام ٹورز دیکھیں ←",
+    startingFrom: "شروعات",
+
+    // Blog
+    ourBlogGuides: "ہمارے بلاگز اور گائیڈز",
+    blogHeading: "صحرا سفاری بلاگ اور ٹریول ٹپس",
+    blogSub: "سفری تجاویز، گائیڈز اور جادوئی صحرا کے بارے میں معلومات۔",
+    viewMoreBlogs: "مزید بلاگز دیکھیں",
+
+    // Location
+    ourDubaiLocation: "ہمارا دبئی آفس",
+    visitOurOffice: "دبئی میں ہمارے دفتر تشریف لائیں",
+
+    // 7 Tour Detail Tabs
+    tabAbout: "متعلق",
+    tabOverview: "جائزہ",
+    tabItinerary: "پروگرام",
+    tabHighlights: "اہم جھلکیاں",
+    tabKnowBeforeYouGo: "ضروری معلومات",
+    tabAgePolicy: "عمر کی پالیسی",
+    tabCancellationPolicy: "منسوخی پالیسی",
+    exploreInfo: "تفصیلات جانیے",
+    tourDetailsPolicies: "ٹور کی تفصیلات اور پالیسیاں",
+    freeCancellation24h: "24 گھنٹے پہلے مفت منسوخی",
+    instantWhatsAppConcierge: "واٹس ایپ پر فوری رابطہ",
+    yourInfoSecure: "آپ کی معلومات 100% محفوظ ہیں۔",
+    bookingRequestSent: "بکنگ کی درخواست موصول ہو گئی!",
+    bookTourNow: "ابھی بک کریں",
+
+    // Booking & Details Common
+    tourOverview: "ٹور کا جائزہ",
+    topAttractions: "اہم مقامات",
+    topItinerary: "تفصیلی شیڈول",
+    inclusions: "شامل سہولیات",
+    exclusions: "غیر شامل سہولیات",
+    bookYourTour: "اپنا ٹور بک کریں",
+    bookYourSafari: "اپنی سفاری بک کریں",
+    yourName: "آپ کا پورا نام *",
+    yourEmail: "آپ کا ای میل پتہ *",
+    yourPhone: "آپ کا فون / واٹس ایپ نمبر *",
+    streetAddress: "ہوٹل کا نام یا پتہ *",
+    adults: "بالغ افراد",
+    infants: "بچے (0-3 سال)",
+    needCustomizedTour: "خصوصی کسٹمائزڈ ٹور چاہیے؟",
+    enquireNow: "ابھی معلومات حاصل کریں",
+    frequentlyAskedQuestions: "اکثر پوچھے جانے والے سوالات",
+    exploreMoreTours: "مزید ٹورز دیکھیں",
+    recentPosts: "تازہ ترین پوسٹس",
+    blogCategories: "بلاگ کیٹگریز",
+    subscribeNewsletter: "نیوز لیٹر سبسکرائب کریں",
+    subscribe: "سبسکرائب کریں",
+    searchBlog: "بلاگ تلاش کریں...",
+    shareThisPost: "اس پوسٹ کو شیئر کریں:",
+    relatedPosts: "متعلقہ پوسٹس",
+    dtcmLicensed: "ڈی ٹی سی ایم دبئی لائسنس یافتہ",
+    dtcmDesc: "دبئی کا سرکاری تصدیق شدہ ٹور آپریٹر",
+    verifiedReviews: "628+ تصدیق شدہ جائزے",
+    bestPriceGuarantee: "بہترین قیمت کی ضمانت",
+    bestPriceDesc: "100% شفاف قیمتیں، کوئی پوشیدہ فیس نہیں",
+    freeCancellationDesc: "مکمل رقم کی واپسی کی گارنٹی",
+    topExperiences: "اعلیٰ ترین تجربات",
+    quickLinks: "فوری لنکس",
+    joinVipClub: "وی آئی پی کلب میں شامل ہوں",
+    joinBtn: "شامل ہوں",
+    welcomeVip: "خوش آمدید! اپنی خصوصی رعایت کے لیے ای میل چیک کریں۔",
+    enterEmail: "اپنا ای میل درج کریں",
+    dubaiOfficeConcierge: "دبئی ہیڈ کوارٹر اور 24/7 وی آئی پی سپورٹ",
+    rightsReserved: "جملہ حقوق محفوظ ہیں",
+    switchingLanguage: "زبان تبدیل ہو رہی ہے...",
   },
 };
 

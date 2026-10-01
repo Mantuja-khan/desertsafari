@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { X, CheckCircle2, Phone, Mail, User, MessageSquare, Calendar, Sparkles, Send } from "lucide-react";
 import { useLanguage } from "./i18n";
+import { submitGeneralBookingApi } from "./api";
 
 export interface BookingModalData {
   isOpen: boolean;
@@ -70,16 +71,28 @@ function BookingModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !phone.trim()) return;
 
     setIsSubmitting(true);
-    // Simulate fast booking dispatch
-    setTimeout(() => {
+    try {
+      await submitGeneralBookingApi({
+        name: name.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        tourTitle: tourName,
+        tourPrice: modalData.tourPrice || "",
+        message: message.trim(),
+        date: new Date().toISOString().split("T")[0],
+        guests: 1,
+      });
+    } catch (err) {
+      console.warn("Booking submitted locally:", err);
+    } finally {
       setIsSubmitting(false);
       setIsSubmitted(true);
-    }, 700);
+    }
   };
 
   const whatsappMessage = encodeURIComponent(

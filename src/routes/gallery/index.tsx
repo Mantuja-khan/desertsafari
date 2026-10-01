@@ -19,7 +19,6 @@ export const Route = createFileRoute("/gallery/")({
   }),
   component: GalleryPage,
 });
-
 function GalleryPage() {
   const { t } = useLanguage();
 
@@ -45,7 +44,6 @@ function GalleryPage() {
             <Sparkles className="w-3.5 h-3.5" />
             <span>{t("galleryBadge", "EXPERIENCES IN PICTURES & CLIPS")}</span>
           </div>
-
           <TextReveal
             as="h1"
             className="font-serif text-4xl sm:text-5xl md:text-6xl text-white font-bold tracking-tight mb-4"

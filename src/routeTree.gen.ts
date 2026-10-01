@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as BlogsIndexRouteImport } from './routes/blogs/index'
@@ -31,6 +32,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutIndexRoute = AboutIndexRouteImport.update({
   id: '/about/',
   path: '/about/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/city-tours/$slug': typeof CityToursSlugRoute
   '/desert-safari/$slug': typeof DesertSafariSlugRoute
   '/about/': typeof AboutIndexRoute
+  '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/blogs/': typeof BlogsIndexRoute
   '/city-tours/': typeof CityToursIndexRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/city-tours/$slug': typeof CityToursSlugRoute
   '/desert-safari/$slug': typeof DesertSafariSlugRoute
   '/about': typeof AboutIndexRoute
+  '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
   '/blogs': typeof BlogsIndexRoute
   '/city-tours': typeof CityToursIndexRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/city-tours/$slug': typeof CityToursSlugRoute
   '/desert-safari/$slug': typeof DesertSafariSlugRoute
   '/about/': typeof AboutIndexRoute
+  '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/blogs/': typeof BlogsIndexRoute
   '/city-tours/': typeof CityToursIndexRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/city-tours/$slug'
     | '/desert-safari/$slug'
     | '/about/'
+    | '/admin/'
     | '/blog/'
     | '/blogs/'
     | '/city-tours/'
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/city-tours/$slug'
     | '/desert-safari/$slug'
     | '/about'
+    | '/admin'
     | '/blog'
     | '/blogs'
     | '/city-tours'
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/city-tours/$slug'
     | '/desert-safari/$slug'
     | '/about/'
+    | '/admin/'
     | '/blog/'
     | '/blogs/'
     | '/city-tours/'
@@ -190,6 +202,7 @@ export interface RootRouteChildren {
   CityToursSlugRoute: typeof CityToursSlugRoute
   DesertSafariSlugRoute: typeof DesertSafariSlugRoute
   AboutIndexRoute: typeof AboutIndexRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
   BlogsIndexRoute: typeof BlogsIndexRoute
   CityToursIndexRoute: typeof CityToursIndexRoute
@@ -213,6 +226,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about/'
       preLoaderRoute: typeof AboutIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -302,6 +322,7 @@ const rootRouteChildren: RootRouteChildren = {
   CityToursSlugRoute: CityToursSlugRoute,
   DesertSafariSlugRoute: DesertSafariSlugRoute,
   AboutIndexRoute: AboutIndexRoute,
+  AdminIndexRoute: AdminIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
   BlogsIndexRoute: BlogsIndexRoute,
   CityToursIndexRoute: CityToursIndexRoute,

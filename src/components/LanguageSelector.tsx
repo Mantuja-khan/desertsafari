@@ -167,6 +167,33 @@ export function FlagIcon({
           <circle cx="20" cy="20" r="1.5" fill="#FFDE00" />
         </svg>
       );
+    case "ur":
+      // Pakistan Flag (Urdu)
+      return (
+        <svg
+          viewBox="0 0 60 40"
+          className={`${className} shadow-xs object-cover overflow-hidden shrink-0`}
+        >
+          <rect width="60" height="40" fill="#01411C" />
+          <rect width="15" height="40" fill="#FFFFFF" />
+          <circle cx="37" cy="20" r="9" fill="#FFFFFF" />
+          <circle cx="40" cy="18" r="8" fill="#01411C" />
+          <polygon points="41,13 42,16 45,16 43,18 44,21 41,19 38,21 39,18 37,16 40,16" fill="#FFFFFF" />
+        </svg>
+      );
+    case "hi":
+      // India Flag (Hindi)
+      return (
+        <svg
+          viewBox="0 0 60 40"
+          className={`${className} shadow-xs object-cover overflow-hidden shrink-0`}
+        >
+          <rect width="60" height="13.33" y="0" fill="#FF9933" />
+          <rect width="60" height="13.33" y="13.33" fill="#FFFFFF" />
+          <rect width="60" height="13.34" y="26.66" fill="#138808" />
+          <circle cx="30" cy="20" r="4.5" fill="none" stroke="#000080" strokeWidth="1.2" />
+        </svg>
+      );
     default:
       return <span className="text-base">🌐</span>;
   }

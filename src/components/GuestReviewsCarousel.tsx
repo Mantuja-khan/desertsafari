@@ -11,7 +11,6 @@ export interface TestimonialItem {
   text: string;
   rating?: number;
 }
-
 interface GuestReviewsCarouselProps {
   testimonials: TestimonialItem[];
   className?: string;

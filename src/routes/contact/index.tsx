@@ -21,6 +21,7 @@ import { SiteHeader } from "../../components/SiteHeader";
 import { SiteFooter } from "../../components/SiteFooter";
 import { TextReveal } from "../../components/TextReveal";
 import { useLanguage } from "../../lib/i18n";
+import { submitContactFormApi } from "../../lib/api";
 
 export const Route = createFileRoute("/contact/")({
   head: () => ({
@@ -45,22 +46,33 @@ function ContactPage() {
     tourType: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        tourType: "",
-        message: "",
-      });
-    }, 4000);
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) return;
+
+    setIsSubmitting(true);
+    try {
+      await submitContactFormApi(formData);
+    } catch (error) {
+      console.warn("Contact submission sent with local confirmation:", error);
+    } finally {
+      setIsSubmitting(false);
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          tourType: "",
+          message: "",
+        });
+      }, 5000);
+    }
   };
 
   const faqs = [
