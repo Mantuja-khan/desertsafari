@@ -397,7 +397,7 @@ function ScrollReveal({
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.1 },
+      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" },
     );
     if (ref.current) {
       observer.observe(ref.current);
@@ -855,7 +855,6 @@ function Index() {
             </button>
           </div>
 
-          {/* Featured Live Gallery Showcase in Hero (Requested Images: 6, 3, 2, 1, 9 + View More Button) */}
         </div>
 
         {/* Left Side Number Indicator */}
@@ -1293,7 +1292,7 @@ function Index() {
       >
         <div className="section-shell relative z-10">
           <ScrollReveal direction="up">
-            <GallerySection />
+            <GallerySection isHomePage={true} />
           </ScrollReveal>
         </div>
       </section>
